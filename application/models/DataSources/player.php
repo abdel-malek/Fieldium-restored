@@ -1,6 +1,6 @@
 <?php
 
-class user extends CI_Model {
+class player extends CI_Model {
 
     public function __construct() {
         $this->load->database();

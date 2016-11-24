@@ -3,6 +3,6 @@
 class ROLE {
 
     const ADMIN = 1;
-    const USER = 2;
+    const SUPPORT = 2;
 
 }

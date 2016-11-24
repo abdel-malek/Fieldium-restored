@@ -180,7 +180,7 @@ $config['auth_library_function'] = 'check_user';
  */
 
 $config['auth_override_class_method']['site']['index'] = 'none';
-$config['auth_override_class_method']['categories']['load_category'] = 'none';
+$config['auth_override_class_method']['companies']['create'] = 'none';
 //Users
 $config['auth_override_class_method']['users']['login'] = 'none';
 $config['auth_override_class_method']['tickets']['scan_ticket'] = 'none';

@@ -3,11 +3,11 @@
 /**
  * @author Farah Etmeh
  */
-class user_service extends CI_Model {
+class player_service extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('DataSources/user');
+        $this->load->model('DataSources/player');
     }
 
     public function login($email, $password) {
