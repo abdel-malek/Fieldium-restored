@@ -34,9 +34,14 @@ class bookings extends REST_Controller {
             $user_id = null;
             $booking = $this->booking_service
                     ->create(
-                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually
+                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $booking, 'message' => "The booking has been succesfully created."));
+            $this->response(array(
+                'status' => true, 
+                'data' => $booking, 
+                'message' => $this->lang->line('created')
+                    )
+                    );
         }
     }
     
@@ -65,12 +70,12 @@ class bookings extends REST_Controller {
             $user_id = $this->current_user->user_id;
             $booking = $this->booking_service
                     ->create(
-                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually
+                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
             );
             $sms = $this->post('sms_option') ? true : false;
             if($sms == true)
                 $this->send_sms->send_sms($phone, "");
-            $this->response(array('status' => true, 'data' => $booking, 'message' => "The booking has been succesfully created."));
+            $this->response(array('status' => true, 'data' => $booking, 'message' =>  $this->lang->line('created')));
         }
     }
 
@@ -104,55 +109,55 @@ class bookings extends REST_Controller {
             $logo = "";
             $field = $this->booking_service
                     ->update(
-                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually
+                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $field, 'message' => "The informations has been updated."));
+            $this->response(array('status' => true, 'data' => $field, 'message' =>  $this->lang->line('updated')));
         }
     }
 
     public function delete_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The booking id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
         else {
             $this->booking_service->delete($this->get('booking_id'));
-            $this->response(array('status' => true, 'data' => null, 'message' => "The booking has been deleted."));
+            $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
         }
     }
 
     public function decline_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The booking id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
         else {
             $this->booking_service->decline($this->get('booking_id'));
-            $this->response(array('status' => true, 'data' => null, 'message' => "The booking has been declined."));
+            $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('declined')));
         }
     }
 
     public function approve_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The booking id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
         else {
-            $booking = $this->booking_service->approve($this->get('booking_id'));
-            $this->response(array('status' => true, 'data' => $booking, 'message' => "The booking has been approved."));
+            $booking = $this->booking_service->approve($this->get('booking_id'), $this->response->lang);
+            $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('approved')));
         }
     }
 
     public function show_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The booking id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
         else {
-            $booking = $this->booking_service->get($this->get('booking_id'));
+            $booking = $this->booking_service->get($this->get('booking_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $booking, 'message' => ""));
         }
     }
 
     public function my_bookings_get() {
-        $bookings = $this->booking_service->get_my_bookings(1);//$this->current_user->player_id);
+        $bookings = $this->booking_service->get_my_bookings(1, $this->response->lang);//$this->current_user->player_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
     
     public function company_bookings_get() {
-        $bookings = $this->booking_service->company_bookings(2);//$this->current_user->company_id);
+        $bookings = $this->booking_service->company_bookings(2, $this->response->lang);//$this->current_user->company_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 

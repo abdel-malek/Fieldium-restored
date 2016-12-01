@@ -6,11 +6,12 @@ class booking extends CI_Model {
         $this->load->database();
     }
 
-    public function get($booking_id) {
-        return $this->db->select("*")
+    public function get($booking_id, $lang="en") {
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
                         ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
                         ->where('booking_id', $booking_id)
-                        ->where('deleted', 0)
+                        ->where('booking.deleted', 0)
                         ->get()->row();
     }
 
@@ -34,16 +35,17 @@ class booking extends CI_Model {
         }
     }
 
-    public function get_my_bookings($player_id) {
-        return $this->db->select("*")
+    public function get_my_bookings($player_id, $lang="en") {
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
                         ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
                         ->where('player_id', $player_id)
-                        ->where('deleted', 0)
+                        ->where('booking.deleted', 0)
                         ->get()->result();
     }
 
-    public function company_bookings($company_id) {
-        return $this->db->select("booking.*")
+    public function company_bookings($company_id, $lang="en") {
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('company', 'field.company_id = company.company_id')

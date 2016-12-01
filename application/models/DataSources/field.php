@@ -6,23 +6,32 @@ class field extends CI_Model {
         $this->load->database();
     }
 
-    public function get_all() {
-        return $this->db->select("*")
+    public function get_all($lang="en") {
+        return $this->db->select(ENTITY::FIELD.", "
+                .$lang."_name as name, "
+                .$lang."_description as description"
+                )
                         ->from('field')
                         ->where('deleted', 0)
                         ->get()->result();
     }
 
-    public function get($field_id) {
-        return $this->db->select("*")
+    public function get($field_id, $lang="en") {
+        return $this->db->select(ENTITY::FIELD.", "
+                .$lang."_name as name, "
+                .$lang."_description as description"
+                )
                         ->from('field')
                         ->where('field_id', $field_id)
                         ->where('deleted', false)
                         ->get()->row();
     }
 
-    public function get_by_company($company_id, $lon, $lat) {
-        $this->db->select("field.*, sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance", false)
+    public function get_by_company($company_id, $lon, $lat, $lang="en") {
+        $this->db->select(ENTITY::FIELD.", "
+                ."field.".$lang."_name as name, "
+                ."field.".$lang."_description as description, "
+                ."sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance", false)
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
                 ->where('field.deleted', 0)

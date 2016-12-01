@@ -7,8 +7,7 @@
 
 class Invalid_Activation_Code_Exception extends Parent_Exception {
 
-    public function __construct($message="Invalid activation code") {
-        parent::__construct($message);
+    public function __construct($lang = "en") { // [Error code # , line #] 
+        parent::__construct(($lang == "en") ? 'Invalid activation code' : 'رمز التحقيق غير صالح');
     }
- 
 }

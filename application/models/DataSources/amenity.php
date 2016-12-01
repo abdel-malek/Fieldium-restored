@@ -15,23 +15,23 @@ class amenity extends CI_Model {
         }
     }
 
-    public function get_field_amenities($field_id) {
-        return $this->db->select("*")
+    public function get_field_amenities($field_id, $lang="en") {
+        return $this->db->select("field_amenity.amenity_id, ".$lang."_name as name, image")
                         ->from('field_amenity')
                         ->join('amenity', 'amenity.amenity_id = field_amenity.amenity_id')
                         ->where('field_id', $field_id)
                         ->get()->result();
     }
 
-    public function get($amenity_id) {
-        return $this->db->select("*")
+    public function get($amenity_id, $lang="en") {
+        return $this->db->select("amenity_id, ".$lang."_name as name, image")
                         ->from('amenity')
                         ->where('amenity_id', $amenity_id)
                         ->get()->row();
     }
     
-    public function get_all() {
-        return $this->db->select("*")
+    public function get_all($lang="en") {
+        return $this->db->select("amenity_id, ".$lang."_name as name, image")
                         ->from('amenity')
                         ->get()->result();
     }

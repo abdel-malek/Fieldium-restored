@@ -28,17 +28,17 @@ class user_service extends CI_Model {
         return $user;
     }
 
-    public function get($id) {
-        $res = $this->user->get($id);
+    public function get($id, $lang= "en") {
+        $res = $this->user->get($id, $lang);
         if (!$res)
-            throw new User_Not_Found_Exception ();
+            throw new User_Not_Found_Exception ($lang);
         return $res;
     }
 
     public function update(
-                    $user_id, $name, $phone, $email, $role_id
+                    $user_id, $name, $phone, $email, $role_id, $lang
                     ) {
-        $this->get($user_id);
+        $this->get($user_id, $lang);
         $user = $this->user->update( $user_id,
                 array(
                     'name' => $name,
@@ -47,7 +47,7 @@ class user_service extends CI_Model {
                     'role_id' => $role_id
                 )
         );
-        $user = $this->get($user_id);
+        $user = $this->get($user_id, $lang);
         return $user;
     }
     
@@ -102,13 +102,13 @@ class user_service extends CI_Model {
         $this->email->send();
     }
 
-    public function change_password($user_id, $new_password) {
-        $user = $this->get($user_id);
+    public function change_password($user_id, $new_password, $lang) {
+        $user = $this->get($user_id, $lang);
 
         $this->user->update($user_id, array(
             'password' => $new_password
         ));
-        $user = $this->get($user_id);
+        $user = $this->get($user_id, $lang);
         return $user;
     }
 

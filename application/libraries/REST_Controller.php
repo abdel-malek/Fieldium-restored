@@ -199,12 +199,7 @@ abstract class REST_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
-        ///Language
-        $this->load->helper('language');
-       // $this->lang->load('views', 'arabic');
-       // $this->lang->load('controllers', 'arabic');
-        //$this->session->set_userdata(array('language' => 'arabic'));
-
+        
 //        if($_SERVER['SERVER_PORT'] !== 443 &&
 //            (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off')) {
 //           header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -289,9 +284,8 @@ abstract class REST_Controller extends CI_Controller {
             $this->_check_whitelist_auth();
         }
 
-       // $this->response->lang = $this->_detect_lang();
-//        $this->load->language(array('exception', 'controllers', 'menu', 'notification', 'restaurant', 'table'), $this->response->lang);
-
+        $this->response->lang = $this->_detect_lang();
+        $this->load->language(array('controllers', 'views'), ($this->response->lang=="en")?"english":"arabic");
 
         $this->rest = new StdClass();
         // Load DB if its enabled
@@ -420,7 +414,7 @@ abstract class REST_Controller extends CI_Controller {
             if ($this->response->format == "json")
                 $this->response(array('status' => false, 'message' => $e->getMessage(), 'data' => array()));
             else
-                redirect ();
+                redirect();
         }
     }
 

@@ -35,7 +35,7 @@ class users extends REST_Controller {
             $user = $this->user_service->create(
                     $username, $name, md5($password), $phone, $email, $company_id, $role_id
                     );
-            $this->response(array('status' => true, 'data' => $user, "message" => "User has been created."));
+            $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('created')));
         }
     }
     
@@ -55,9 +55,9 @@ class users extends REST_Controller {
             $role_id = $this->input->post('role_id');
             $user_id = $this->input->post('user_id');
             $user = $this->user_service->update(
-                   $user_id, $name, $phone, $email, $role_id
+                   $user_id, $name, $phone, $email, $role_id, $this->response->lang
                     );
-            $this->response(array('status' => true, 'data' => $user, "message" => "User informations has been updated."));
+            $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('updated')));
         }
     }
     
@@ -74,9 +74,9 @@ class users extends REST_Controller {
             $password = $this->input->post('password');
             $user_id = $this->input->post('user_id');
             $user = $this->user_service->change_password(
-                   $user_id, md5($password)
+                   $user_id, md5($password), $this->response->lang
                     );
-            $this->response(array('status' => true, 'data' => $user, "message" => "User informations has been updated."));
+            $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('updated')));
         }
     }
     
@@ -103,19 +103,19 @@ class users extends REST_Controller {
     public function delete_get() {
         //   $this->user_permissions->support_permission($this->current_user);
         if (!$this->get('user_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The user id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('user_id')." ".$this->lang->line('required')));
         else {
             $this->user_service->deactive($this->get('user_id'));
-            $this->response(array('status' => true, 'data' => null, 'message' => "The user has been deleted."));
+            $this->response(array('status' => true, 'data' => null, 'message' =>$this->lang->line('deleted')));
         }
     }
     
     public function show_get() {
         //   $this->user_permissions->support_permission($this->current_user);
         if (!$this->get('user_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The user id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('user_id')." ".$this->lang->line('required')));
         else {
-            $user = $this->user_service->get($this->get('user_id'));
+            $user = $this->user_service->get($this->get('user_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $user, 'message' => ""));
         }
     }

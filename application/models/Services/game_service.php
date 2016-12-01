@@ -10,15 +10,15 @@ class game_service extends CI_Model {
         $this->load->model('DataSources/game');
     }
   
-    public function get_all() {
-        $games = $this->game->get_all();
+    public function get_all($lang="en") {
+        $games = $this->game->get_all($lang);
         return $games;
     }
 
-    public function get($game_id) {
-        $game = $this->game->get($game_id);
+    public function get($game_id, $lang="en") {
+        $game = $this->game->get($game_id, $lang);
         if (!$game)
-            throw new Game_Not_Found_Exception ();
+            throw new Game_Not_Found_Exception ($lang);
         return $game;
     }
 }

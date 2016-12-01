@@ -27,12 +27,15 @@ class companies extends REST_Controller {
         } else {
             //   $this->user_permissions->support_permission($this->current_user);
             $name = $this->input->post('name');
+            $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
             $address = $this->input->post('address');
+            $ar_address = $this->input->post('address');
             $longitude = $this->input->post('longitude');
             $latitude = $this->input->post('latitude');
             $area_id = $this->input->post('area_id');
             $description = $this->input->post('description');
+            $ar_description = $this->input->post('description');
             $image_name = "";
             $logo = "";
             try {
@@ -46,9 +49,9 @@ class companies extends REST_Controller {
             }
             $company = $this->company_service
                     ->create(
-                    $name, $phone, $address, $longitude, $latitude, $area_id, $description, $image_name, $logo
+                    $name, $ar_name, $phone, $address, $ar_address, $longitude, $latitude, $area_id, $description, $ar_description, $image_name, $logo, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $company, 'message' => "The company has been created."));
+            $this->response(array('status' => true, 'data' => $company, 'message' => $this->lang->line('created')));
         }
     }
 
@@ -69,12 +72,15 @@ class companies extends REST_Controller {
             $company_id = $this->input->post('company_id');
             // $this->user_permissions->management_permission($this->current_user, $company_id);
             $name = $this->input->post('name');
+            $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
             $address = $this->input->post('address');
+            $ar_address = $this->input->post('address');
             $longitude = $this->input->post('longitude');
             $latitude = $this->input->post('latitude');
             $area_id = $this->input->post('area_id');
             $description = $this->input->post('description');
+            $ar_description = $this->input->post('description');
             $image_name = "";
             $logo = "";
             try {
@@ -88,17 +94,17 @@ class companies extends REST_Controller {
             }
             $company = $this->company_service
                     ->update(
-                    $company_id, $name, $phone, $address, $longitude, $latitude, $area_id, $description, $image_name, $logo
+                    $company_id, $name, $ar_name, $phone, $address, $ar_address, $longitude, $latitude, $area_id, $description, $ar_description, $image_name, $logo, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $company, 'message' => "The informations has been updated."));
+            $this->response(array('status' => true, 'data' => $company, 'message' => $this->lang->line('updated')));
         }
     }
 
     public function show_get() {
         if (!$this->get('company_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The company id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id')." ".$this->lang->line('required')));
         else {
-            $company = $this->company_service->get($this->get('company_id'));
+            $company = $this->company_service->get($this->get('company_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $company, 'message' => ""));
         }
     }
@@ -106,17 +112,17 @@ class companies extends REST_Controller {
     public function get_all_get() {
         $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
         $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
-        $companies = $this->company_service->get_all($lon, $lat);
+        $companies = $this->company_service->get_all($lon, $lat, $this->response->lang);
         $this->response(array('status' => true, 'data' => $companies, 'message' => ""));
     }
 
     public function get_nearby_companies_get() {
         if (!$this->get('longitude') || !$this->get('latitude'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The longitude and latitude are required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('long_lat_req')));
         else {
             $lon = $this->get('longitude');
             $lat = $this->get('latitude');
-            $companies = $this->company_service->get_all($lon, $lat);
+            $companies = $this->company_service->get_all($lon, $lat, $this->response->lang);
             $this->response(array('status' => true, 'data' => $companies, 'message' => ""));
         }
     }

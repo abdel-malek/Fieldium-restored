@@ -6,8 +6,8 @@ class area extends CI_Model {
         $this->load->database();
     }
 
-    public function get_all() {
-        return $this->db->select("*")
+    public function get_all($lang="en") {
+        return $this->db->select("area_id, ".$lang."_name as name")
                         ->from('area')
                         ->get()->result();
     }

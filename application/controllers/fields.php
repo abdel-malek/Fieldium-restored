@@ -32,6 +32,7 @@ class fields extends REST_Controller {
             $company_id = $this->input->post('company_id');
             //   $this->user_permissions->management_permission($this->current_user, $company_id);
             $name = $this->input->post('name');
+            $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
             $hour_rate = $this->input->post('hour_rate');
             $open_time = $this->input->post('open_time');
@@ -40,14 +41,15 @@ class fields extends REST_Controller {
             $area_y = $this->input->post('area_y');
             $max_capacity = $this->input->post('max_capacity');
             $description = $this->input->post('description');
+            $ar_description = $this->input->post('description');
             $amenities = $this->input->post('amenities');
             $images = $this->input->post('images');
             $games_types = $this->input->post('games_types');
             $field = $this->field_service
                     ->create(
-                    $company_id, $name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $images, $amenities, $games_types
+                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $field, 'message' => "The field has been created."));
+            $this->response(array('status' => true, 'data' => $field, 'message' => $this->lang->line('created')));
         }
     }
 
@@ -72,6 +74,7 @@ class fields extends REST_Controller {
             $company_id = $this->input->post('company_id');
             // $this->user_permissions->management_permission($this->current_user, $field_id);
             $name = $this->input->post('name');
+            $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
             $hour_rate = $this->input->post('hour_rate');
             $open_time = $this->input->post('open_time');
@@ -80,42 +83,43 @@ class fields extends REST_Controller {
             $area_y = $this->input->post('area_y');
             $max_capacity = $this->input->post('max_capacity');
             $description = $this->input->post('description');
+            $ar_description = $this->input->post('description');
             $amenities = $this->input->post('amenities');
             $images = $this->input->post('images');
             $games_types = $this->input->post('games_types');
             $field = $this->field_service
                     ->update(
-                    $field_id, $name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $images, $amenities, $games_types
+                    $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $field, 'message' => "The informations has been updated."));
+            $this->response(array('status' => true, 'data' => $field, 'message' => $this->lang->line('updated')));
         }
     }
 
     public function delete_get() {
         if (!$this->get('field_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The field id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id')." ".$this->lang->line('required')));
         else {
             $this->field_service->delete($this->get('field_id'));
-            $this->response(array('status' => true, 'data' => null, 'message' => "The field has been deleted."));
+            $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
         }
     }
 
     public function show_get() {
         if (!$this->get('field_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The field id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id')." ".$this->lang->line('required')));
         else {
-            $field = $this->field_service->get($this->get('field_id'));
+            $field = $this->field_service->get($this->get('field_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $field, 'message' => ""));
         }
     }
 
     public function get_by_company_get() {
         if (!$this->get('company_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => "The company id is required"));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id')." ".$this->lang->line('required')));
         else {
             $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
             $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
-            $fields = $this->field_service->get_by_company($this->get('company_id'), $lon, $lat);
+            $fields = $this->field_service->get_by_company($this->get('company_id'), $lon, $lat, $this->response->lang);
             $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
         }
     }
@@ -128,7 +132,7 @@ class fields extends REST_Controller {
         $this->load->model('Services/image_service');
         $image = $this->image_service->save_image($image_name);
 
-        $this->response(array('status' => true, 'data' => array("image_id" => $image), "message" => "The image has been saved on the server."));
+        $this->response(array('status' => true, 'data' => array("image_id" => $image), "message" => $this->lang->line('image_saved')));
     }
 
 }

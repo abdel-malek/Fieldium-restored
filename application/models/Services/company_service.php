@@ -11,58 +11,64 @@ class company_service extends CI_Model {
     }
 
     public function create(
-    $name, $phone, $address, $longitude, $latitude, $area_id, $description, $image_name, $logo
+    $name, $ar_name, $phone, $address, $ar_address, $longitude, $latitude, $area_id, $description, $ar_description, $image_name, $logo, $lang
     ) {
         $company_id = $this->company->add(array(
-            'name' => $name,
+            'en_name' => $name,
+            'ar_name' => $ar_name,
             'phone' => $phone,
-            'description' => $description,
-            'address' => $address,
+            'en_description' => $description,
+            'ar_description' => $ar_description,
+            'en_address' => $address,
+            'ar_address' => $ar_address,
             'longitude' => $longitude,
             'latitude' => $latitude,
             'area_id' => $area_id,
             'image' => $image_name,
             'logo' => $logo
         ));
-        $company = $this->company->get($company_id);
+        $company = $this->get($company_id, $lang);
         return $company;
     }
 
-    public function get($company_id) {
-        $company = $this->company->get($company_id);
+    public function get($company_id, $lang="en") {
+        $company = $this->company->get($company_id, $lang);
         if (!$company)
-            throw new Company_Not_Found_Exception ();
+            throw new Company_Not_Found_Exception ($lang);
         return $company;
     }
 
-    public function get_all($lon=0.0, $lat=0.0) {
-        $companies = $this->company->get_all($lon, $lat);
+    public function get_all($lon = 0.0, $lat = 0.0, $lang="en") {
+        $companies = $this->company->get_all($lon, $lat, $lang);
         return $companies;
     }
 
     public function update(
-    $company_id, $name, $phone, $address, $longitude, $latitude, $area_id, $description, $image_name, $logo
+    $company_id, $name, $ar_name, $phone, $address, $ar_address, $longitude, $latitude, $area_id, $description, $ar_description, $image_name, $logo, $lang
     ) {
-        $this->get($company_id);
+        $this->get($company_id, $lang);
         $r = $this->company->update($company_id, array(
-            'name' => $name,
+            'en_name' => $name,
+            'ar_name' => $ar_name,
             'phone' => $phone,
-            'description' => $description,
-            'address' => $address,
+            'en_description' => $description,
+            'ar_description' => $ar_description,
+            'en_address' => $address,
+            'ar_address' => $ar_address,
             'longitude' => $longitude,
             'latitude' => $latitude,
             'area_id' => $area_id,
             'image' => $image_name,
             'logo' => $logo
         ));
-        $company = $this->company->get($company_id);
+        $company = $this->get($company_id, $lang);
         return $company;
     }
 
     public function delete($company_id) {
-        $this->get($company_id);
+        $this->get($company_id, "en");
 
-        $fields = $this->field->get_by_company($company_id);
+        $fields = $this->field->get_by_company($company_id, "en");
         foreach ($fields as $field) {
             $this->field->update($field->field_id, array('deleted' => 1));
         }

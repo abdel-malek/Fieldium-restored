@@ -12,7 +12,7 @@ class areas extends REST_Controller {
     }
 
     public function get_all_get() {
-        $areas = $this->area_service->get_all();
+        $areas = $this->area_service->get_all($this->response->lang);
         $this->response(array('status' => true, 'data' => $areas, 'message' => ""));
     }
 

@@ -10,15 +10,15 @@ class amenity_service extends CI_Model {
         $this->load->model('DataSources/amenity');
     }
 
-    public function get($amenity_id) {
-        $amenity = $this->amenity->get($amenity_id);
+    public function get($amenity_id, $lang="en") {
+        $amenity = $this->amenity->get($amenity_id, $lang);
         if (!$amenity)
-            throw new Amenity_Not_Found_Exception ();
+            throw new Amenity_Not_Found_Exception ($lang);
         return $amenity;
     }
 
-    public function get_all() {
-        $amenities = $this->amenity->get_all();
+    public function get_all($lang="en") {
+        $amenities = $this->amenity->get_all($lang);
         return $amenities;
     }
 }

@@ -6,8 +6,13 @@ class company extends CI_Model {
         $this->load->database();
     }
 
-    public function get_all($lon, $lat) {
-        $this->db->select("c.*, sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance, "
+    public function get_all($lon, $lat, $lang="en") {
+        
+        $this->db->select(ENTITY::COMPANY.", "
+                .$lang."_name as name, "
+                .$lang."_description as description, "
+                .$lang."_address as address, "
+                . " sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance, "
                         . "(SELECT count(field_id) FROM field "
                         . "where c.company_id = field.company_id AND field.deleted = 0"
                         . ") as fields_number", false)
@@ -20,8 +25,11 @@ class company extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function get($company_id) {
-        return $this->db->select("c.*, "
+    public function get($company_id, $lang="en") {
+        return $this->db->select(ENTITY::COMPANY.", "
+                .$lang."_name as name, "
+                .$lang."_description as description, "
+                .$lang."_address as address, "
                                 . "(SELECT count(field_id) FROM field "
                                 . "where c.company_id = field.company_id AND field.deleted = 0"
                                 . ") as fields_number")

@@ -12,7 +12,7 @@ class booking_service extends CI_Model {
     }
 
     public function create(
-    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually
+    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
     ) {
         $field = $this->field_service->get($field_id);
         $total = ($duration * $field->hour_rate);
@@ -29,12 +29,12 @@ class booking_service extends CI_Model {
             'manually' => $manually
         ));
 
-        $booking = $this->get($booking_id);
+        $booking = $this->get($booking_id, $lang);
         return $booking;
     }
 
     public function update(
-    $booking_id, $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually
+    $booking_id, $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
     ) {
         $field = $this->field_service->get($field_id);
         $total = ($duration * $field->hour_rate);
@@ -51,19 +51,19 @@ class booking_service extends CI_Model {
             'manually' => $manually
         ));
 
-        $booking = $this->get($booking_id);
+        $booking = $this->get($booking_id, $lang);
         return $booking;
     }
 
-    public function get($booking_id) {
-        $booking = $this->booking->get($booking_id);
+    public function get($booking_id, $lang="en") {
+        $booking = $this->booking->get($booking_id, $lang);
         if (!$booking)
-            throw new Booking_Not_Found_Exception ();
+            throw new Booking_Not_Found_Exception ($lang);
         return $booking;
     }
 
     public function delete($booking_id) {
-        $booking = $this->get($booking_id);
+        $booking = $this->get($booking_id, "en");
         $this->booking->update($booking_id, array('deleted' => 1));
         $this->load->model('Services/notification_service');
         $message = "Your booking No." . $booking_id . " has been cancelled. ";
@@ -79,22 +79,22 @@ class booking_service extends CI_Model {
         $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_declined_message");
     }
 
-    public function approve($booking_id) {
-        $this->get($booking_id);
+    public function approve($booking_id, $lang) {
+        $this->get($booking_id, $lang);
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::APPROVED));
-        $booking = $this->get($booking_id);
+        $booking = $this->get($booking_id, $lang);
         $this->load->model('Services/notification_service');
         $message = "Your booking No." . $booking_id . " has been approved. ";
         $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_confirmed_message");
-        return $this->get($booking_id);
+        return $booking;
     }
 
-    public function get_my_bookings($palyer_id) {
-        return $this->booking->get_my_bookings($palyer_id);
+    public function get_my_bookings($palyer_id, $lang) {
+        return $this->booking->get_my_bookings($palyer_id, $lang);
     }
 
-    public function company_bookings($company_id) {
-        return $this->booking->company_bookings($company_id);
+    public function company_bookings($company_id, $lang) {
+        return $this->booking->company_bookings($company_id, $lang);
     }
 
 }

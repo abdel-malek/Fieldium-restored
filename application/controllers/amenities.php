@@ -12,7 +12,7 @@ class amenities extends REST_Controller {
     }
 
     public function get_all_get() {
-        $amenities = $this->amenity_service->get_all();
+        $amenities = $this->amenity_service->get_all($this->response->lang);
         $this->response(array('status' => true, 'data' => $amenities, 'message' => ""));
     }
 

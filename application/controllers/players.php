@@ -37,7 +37,7 @@ class players extends REST_Controller {
             $token = $this->input->post('token');
             $os = $this->input->post('os');
             $user = $this->player_service->register($phone, $device_id, $token, $os);
-            $this->response(array('status' => true, 'data' => $user, "message" => "The account has been created."));
+            $this->response(array('status' => true, 'data' => $user, "message" =>$this->lang->line('created')));
         }
     }
 
@@ -53,7 +53,7 @@ class players extends REST_Controller {
             $phone = $this->input->post('phone');
             $code = $this->input->post('verification_code');
             $player = $this->player_service->verify($phone, $code);
-            $this->response(array('status' => true, 'data' => $player, "message" => "The account has been activated."));
+            $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('account_confirmed')));
         }
     }
 
@@ -67,7 +67,7 @@ class players extends REST_Controller {
         } else {
             $phone = $this->input->post('phone');
             $player = $this->player_service->request_verification_code($phone);
-            $this->response(array('status' => true, 'data' => $player, "message" => "A new verification code has been sent."));
+            $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('new_code')));
         }
     }
 
@@ -82,13 +82,13 @@ class players extends REST_Controller {
             $email = $this->input->post('email');
             $address = $this->input->post('address');
             $player = $this->player_service->update($this->current_user->player_id, $name, $email, $address);
-            $this->response(array('status' => true, 'data' => $player, "message" => "The informations has been updated."));
+            $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('updated')));
         }
     }
 
     public function delete_get() {
         $this->player_service->deactive($this->current_user->player_id);
-        $this->response(array('status' => true, 'data' => null, 'message' => "The account has been deleted."));
+        $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('account_deleted')));
     }
 
 }

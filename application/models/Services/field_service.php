@@ -16,14 +16,16 @@ class field_service extends CI_Model {
     }
 
     public function create(
-    $company_id, $name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $images, $amenities, $games_types
+    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $lang
     ) {
 
         $field_id = $this->field->add(array(
             'company_id' => $company_id,
-            'name' => $name,
+            'en_name' => $name,
+            'ar_name' => $ar_name,
             'phone' => $phone,
-            'description' => $description,
+            'en_description' => $description,
+            'ar_description' => $ar_description,
             'hour_rate' => $hour_rate,
             'open_time' => $open_time,
             'close_time' => $cloes_time,
@@ -36,7 +38,7 @@ class field_service extends CI_Model {
             foreach ($amenities as $am) {
                 if (!is_array($am)) {
                     try {
-                        $amenity = $this->amenity_service->get($am);
+                        $amenity = $this->amenity_service->get($am, $lang);
                         $this->amenity->add_field_amenity(array(
                             'field_id' => $field_id,
                             'amenity_id' => $amenity->amenity_id
@@ -52,7 +54,7 @@ class field_service extends CI_Model {
             foreach ($games_types as $type) {
                 if (!is_array($type)) {
                     try {
-                        $games_type = $this->game_service->get($type);
+                        $games_type = $this->game_service->get($type, $lang);
                         $this->game->add_field_game(array(
                             'field_id' => $field_id,
                             'game_type_id' => $games_type->game_type_id
@@ -72,19 +74,21 @@ class field_service extends CI_Model {
             }
         }
 
-        $field = $this->get($field_id);
+        $field = $this->get($field_id, $lang);
         return $field;
     }
 
     public function update(
-    $field_id, $name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $images, $amenities, $games_types
+    $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $lang
     ) {
-        $this->get($field_id);
+        $this->get($field_id, $lang);
 
         $field = $this->field->update($field_id, array(
-            'name' => $name,
+            'en_name' => $name,
+            'ar_name' => $ar_name,
             'phone' => $phone,
-            'description' => $description,
+            'en_description' => $description,
+            'ar_description' => $ar_description,
             'hour_rate' => $hour_rate,
             'open_time' => $open_time,
             'close_time' => $cloes_time,
@@ -98,7 +102,7 @@ class field_service extends CI_Model {
             foreach ($amenities as $am) {
                 if (!is_array($am)) {
                     try {
-                        $amenity = $this->amenity_service->get($am);
+                        $amenity = $this->amenity_service->get($am, $lang);
                         $this->amenity->add_field_amenity(array(
                             'field_id' => $field_id,
                             'amenity_id' => $amenity->amenity_id
@@ -115,7 +119,7 @@ class field_service extends CI_Model {
             foreach ($games_types as $type) {
                 if (!is_array($type)) {
                     try {
-                        $games_type = $this->game_service->get($type);
+                        $games_type = $this->game_service->get($type, $lang);
                         $this->game->add_field_game(array(
                             'field_id' => $field_id,
                             'game_type_id' => $games_type->game_type_id
@@ -135,58 +139,58 @@ class field_service extends CI_Model {
                 ));
             }
         }
-        $field = $this->get($field_id);
+        $field = $this->get($field_id, $lang);
         return $field;
     }
 
     function decodeAmenities($json) {
         $data = json_decode($json, true);
         if (!is_array($data))
-            throw new Invalid_Amenities_Exception();
+            throw new Invalid_Amenities_Exception($lang);
 
         for ($i = 0; $i < count($data); $i++) {
             if (!array_key_exists("amenity", $data[$i]))
-                throw new Invalid_Amenities_Exception();
+                throw new Invalid_Amenities_Exception($lang);
         }
         return $data;
     }
 
-    public function get($field_id) {
-        $field = $this->field->get($field_id);
+    public function get($field_id, $lang="en") {
+        $field = $this->field->get($field_id, $lang);
         if (!$field)
-            throw new Field_Not_Found_Exception ();
-        $field->amenities = $this->amenity->get_field_amenities($field_id);
+            throw new Field_Not_Found_Exception ($lang);
+        $field->amenities = $this->amenity->get_field_amenities($field_id, $lang);
         $field->images = $this->image->get_images($field_id);
-        $field->games = $this->game->get_field_games($field_id);
+        $field->games = $this->game->get_field_games($field_id, $lang);
         return $field;
     }
 
-    public function get_all() {
-        $fields = $this->field->get_all();
+    public function get_all($lang="en") {
+        $fields = $this->field->get_all($lang);
         $result = array();
         foreach ($fields as $field) {
             $result[] = $field;
-            $result->amenities = $this->amenity->get_field_amenities($field->field_id);
+            $result->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
             $result->images = $this->image->get_images($field->field_id);
-            $result->games = $this->game->get_field_games($field->field_id);
+            $result->games = $this->game->get_field_games($field->field_id, $lang);
         }
         return $result;
     }
 
-    public function get_by_company($company_id, $lon, $lat) {
-        $fields = $this->field->get_by_company($company_id, $lon, $lat);
+    public function get_by_company($company_id, $lon, $lat, $lang="en") {
+        $fields = $this->field->get_by_company($company_id, $lon, $lat, $lang);
         $result = array();
         foreach ($fields as $field) {
-            $field->amenities = $this->amenity->get_field_amenities($field->field_id);
+            $field->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
             $field->images = $this->image->get_images($field->field_id);
-            $field->games = $this->game->get_field_games($field->field_id);
+            $field->games = $this->game->get_field_games($field->field_id, $lang);
             $result[] = $field;
         }
         return $result;
     }
 
     public function delete($field_id) {
-        $this->get($field_id);
+        $this->get($field_id, "en");
         $this->field->update($field_id, array('deleted' => 1));
     }
 

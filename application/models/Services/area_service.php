@@ -10,8 +10,8 @@ class area_service extends CI_Model {
         $this->load->model('DataSources/area');
     }
   
-    public function get_all() {
-        $areas = $this->area->get_all();
+    public function get_all($lang="en") {
+        $areas = $this->area->get_all($lang);
         return $areas;
     }
 

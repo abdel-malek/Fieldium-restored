@@ -12,7 +12,7 @@ class games extends REST_Controller {
     }
 
     public function get_all_get() {
-        $games = $this->game_service->get_all();
+        $games = $this->game_service->get_all($this->response->lang);
         $this->response(array('status' => true, 'data' => $games, 'message' => ""));
     }
 
