@@ -13,6 +13,7 @@ class field_service extends CI_Model {
         $this->load->model('DataSources/game');
         $this->load->model('Services/amenity_service');
         $this->load->model('Services/game_service');
+        $this->load->model('Services/booking_service');
     }
 
     public function create(
@@ -155,17 +156,17 @@ class field_service extends CI_Model {
         return $data;
     }
 
-    public function get($field_id, $lang="en") {
+    public function get($field_id, $lang = "en") {
         $field = $this->field->get($field_id, $lang);
         if (!$field)
-            throw new Field_Not_Found_Exception ($lang);
+            throw new Field_Not_Found_Exception($lang);
         $field->amenities = $this->amenity->get_field_amenities($field_id, $lang);
         $field->images = $this->image->get_images($field_id);
         $field->games = $this->game->get_field_games($field_id, $lang);
         return $field;
     }
 
-    public function get_all($lang="en") {
+    public function get_all($lang = "en") {
         $fields = $this->field->get_all($lang);
         $result = array();
         foreach ($fields as $field) {
@@ -177,7 +178,7 @@ class field_service extends CI_Model {
         return $result;
     }
 
-    public function get_by_company($company_id, $lon, $lat, $lang="en") {
+    public function get_by_company($company_id, $lon, $lat, $lang = "en") {
         $fields = $this->field->get_by_company($company_id, $lon, $lat, $lang);
         $result = array();
         foreach ($fields as $field) {
@@ -192,6 +193,25 @@ class field_service extends CI_Model {
     public function delete($field_id) {
         $this->get($field_id, "en");
         $this->field->update($field_id, array('deleted' => 1));
+    }
+
+    public function check_availability($field_id, $date) {
+        $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
+        $field = $this->get($field_id);
+        $time = $field->open_time;
+        $end = $field->close_time;
+        $result = array();
+        foreach ($bookings as $booking) {
+            if ($booking->start != $time)
+                $result[] = $time;
+            $result[] = $booking->start;
+            $time = time($booking->start) + doubleval($booking->duration) * 60;
+        }
+        if($time < $end){
+            $result[] = $time;
+            $result[] = $end;
+        }
+        return $result;
     }
 
 }

@@ -8,6 +8,8 @@ class player_service extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->model('DataSources/player');
+        $this->load->model('DataSources/game');
+        $this->load->model('Services/game_service');
         $this->load->library('send_sms');
     }
 
@@ -24,20 +26,37 @@ class player_service extends CI_Model {
         return $player;
     }
 
-    public function get($id) {
-        $res = $this->player->get($id);
+    public function get($id, $lang="en") {
+        $res = $this->player->get($id, $lang);
         if (!$res)
-            throw new Player_Not_Found_Exception ();
+            throw new Player_Not_Found_Exception ($lang);
+        $res->prefered_games = $this->game->get_player_games($id, $lang);
         return $res;
     }
 
-    public function update($player_id, $name, $email, $address) {
+    public function update($player_id, $name, $email, $address,$games_types, $lang) {
         $this->player->update($player_id, array(
             'name' => $name,
             'email' => $email,
             'address' => $address
         ));
-        $player = $this->player->get($player_id);
+        $this->game->delete_player_games($player_id);
+        if ($games_types) {
+            foreach ($games_types as $type) {
+                if (!is_array($type)) {
+                    try {
+                        $games_type = $this->game_service->get($type);
+                        $this->game->add_player_game(array(
+                            'player_id' => $player_id,
+                            'game_type_id' => $games_type->game_type_id
+                        ));
+                    } catch (Game_Not_Found_Exception $e) {
+                        
+                    }
+                }
+            }
+        }
+        $player = $this->get($player_id, $lang);
         return $player;
     }
 

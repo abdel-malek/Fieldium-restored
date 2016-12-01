@@ -23,7 +23,7 @@ class player extends CI_Model {
             throw new DatabaseException();
     }
 
-    public function get($id) {
+    public function get($id, $lang="en") {
         return $this->db->select("player.*")
                         ->from('player')
                         ->where('player_id', $id)

@@ -81,7 +81,8 @@ class players extends REST_Controller {
             $name = $this->input->post('name');
             $email = $this->input->post('email');
             $address = $this->input->post('address');
-            $player = $this->player_service->update($this->current_user->player_id, $name, $email, $address);
+            $games = $this->input->post('prefered_games');
+            $player = $this->player_service->update(1, $name, $email, $address,$games, $this->response->lang);
             $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('updated')));
         }
     }

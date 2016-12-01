@@ -6,7 +6,7 @@ class booking extends CI_Model {
         $this->load->database();
     }
 
-    public function get($booking_id, $lang="en") {
+    public function get($booking_id, $lang = "en") {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
@@ -35,7 +35,7 @@ class booking extends CI_Model {
         }
     }
 
-    public function get_my_bookings($player_id, $lang="en") {
+    public function get_my_bookings($player_id, $lang = "en") {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
@@ -44,12 +44,31 @@ class booking extends CI_Model {
                         ->get()->result();
     }
 
-    public function company_bookings($company_id, $lang="en") {
+    public function company_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('company', 'field.company_id = company.company_id')
                         ->where('company.company_id', $company_id)
+                        ->where('booking.deleted', 0)
+                        ->get()->result();
+    }
+
+    public function field_bookings($field_id, $lang = "en") {
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->where('booking.field_id', $field_id)
+                        ->where('booking.deleted', 0)
+                        ->get()->result();
+    }
+
+    public function field_bookings_by_date($field_id, $date, $lang = "en") {
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->where('booking.field_id', $field_id)
+                        ->where('booking.date', $date)
                         ->where('booking.deleted', 0)
                         ->get()->result();
     }

@@ -75,8 +75,10 @@ class booking_service extends CI_Model {
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
         $booking = $this->get($booking_id);
         $this->load->model('Services/notification_service');
-        $message = "Your booking No." . $booking_id . " has been declined. ";
-        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_declined_message");
+        $message =  array();
+        $message["en"] = "Your booking No." . $booking_id . " has been declined. ";
+        $message["ar"] = "تم رفض الطلب رقم ".$booking_id;
+       // $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_declined_message");
     }
 
     public function approve($booking_id, $lang) {
@@ -84,8 +86,10 @@ class booking_service extends CI_Model {
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::APPROVED));
         $booking = $this->get($booking_id, $lang);
         $this->load->model('Services/notification_service');
-        $message = "Your booking No." . $booking_id . " has been approved. ";
-        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_confirmed_message");
+        $message =  array();
+        $message["en"] = "Your booking No." . $booking_id . " has been approved. ";
+        $message["ar"] = "تم قبول الطلب رقم ".$booking_id;
+       // $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_confirmed_message");
         return $booking;
     }
 
@@ -95,6 +99,16 @@ class booking_service extends CI_Model {
 
     public function company_bookings($company_id, $lang) {
         return $this->booking->company_bookings($company_id, $lang);
+    }
+
+    
+    public function field_bookings($field_id, $lang) {
+        return $this->booking->field_bookings($field_id, $lang);
+    }
+
+    
+    public function field_bookings_by_date($field_id, $date, $lang = "en") {
+        return $this->booking->field_bookings_by_date($field_id, $date, $lang);
     }
 
 }

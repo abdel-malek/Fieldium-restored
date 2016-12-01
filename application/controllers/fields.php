@@ -112,6 +112,17 @@ class fields extends REST_Controller {
             $this->response(array('status' => true, 'data' => $field, 'message' => ""));
         }
     }
+    
+    public function check_availability_get() {
+//        if (!$this->get('field_id'))
+//            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id')." ".$this->lang->line('required')));
+//        else {
+//            $date = $this->get('date');
+//            if(empty($date)) $date = date('y-m-d');
+//            $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
+//            $this->response(array('status' => true, 'data' => $available_times, 'message' => ""));
+//        }
+    }
 
     public function get_by_company_get() {
         if (!$this->get('company_id'))
