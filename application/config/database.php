@@ -92,20 +92,5 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-//template to connect to clients databases
-$db['template']['hostname'] = 'localhost'; //'85.25.235.197';
-$db['template']['username'] = 'root';
-$db['template']['password'] = '';
-$db['template']['database'] = 'mariacc';
-$db['template']['dbdriver'] = 'mysqli';
-$db['template']['dbprefix'] = '';
-$db['template']['pconnect'] = TRUE;
-$db['template']['db_debug'] = TRUE;
-$db['template']['cache_on'] = FALSE;
-$db['template']['cachedir'] = '';
-$db['template']['char_set'] = 'utf8';
-$db['template']['dbcollat'] = 'utf8_general_ci';
-$db['template']['swap_pre'] = '';
-$db['template']['autoinit'] = FALSE;
-$db['template']['stricton'] = FALSE;
+
 

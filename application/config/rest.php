@@ -180,11 +180,50 @@ $config['auth_library_function'] = 'check_user';
  */
 
 $config['auth_override_class_method']['site']['index'] = 'none';
+
+//Companies
 $config['auth_override_class_method']['companies']['create'] = 'none';
+$config['auth_override_class_method']['companies']['update'] = 'none';
+$config['auth_override_class_method']['companies']['show'] = 'none';
+$config['auth_override_class_method']['companies']['get_all'] = 'none';
+$config['auth_override_class_method']['companies']['get_nearby_companies'] = 'none';
+
+//Fields
+$config['auth_override_class_method']['fields']['create'] = 'none';
+$config['auth_override_class_method']['fields']['update'] = 'none';
+$config['auth_override_class_method']['fields']['show'] = 'none';
+$config['auth_override_class_method']['fields']['get_by_company'] = 'none';
+$config['auth_override_class_method']['fields']['delete'] = 'none';
+$config['auth_override_class_method']['fields']['upload_image'] = 'none';
+
+//Bookings
+$config['auth_override_class_method']['bookings']['create'] = 'none';
+$config['auth_override_class_method']['bookings']['create_manually'] = 'none';
+$config['auth_override_class_method']['bookings']['update'] = 'none';
+$config['auth_override_class_method']['bookings']['my_bookings'] = 'none';
+$config['auth_override_class_method']['bookings']['company_bookings'] = 'none';
+$config['auth_override_class_method']['bookings']['decline'] = 'none';
+$config['auth_override_class_method']['bookings']['approve'] = 'none';
+$config['auth_override_class_method']['bookings']['delete'] = 'none';
+$config['auth_override_class_method']['bookings']['show'] = 'none';
+
 //Users
 $config['auth_override_class_method']['users']['login'] = 'none';
-$config['auth_override_class_method']['tickets']['scan_ticket'] = 'none';
+$config['auth_override_class_method']['users']['logout'] = 'none';
+$config['auth_override_class_method']['users']['create'] = 'none';
+$config['auth_override_class_method']['users']['update'] = 'none';
+$config['auth_override_class_method']['users']['delete'] = 'none';
+//$config['auth_override_class_method']['users']['show'] = 'none';
+$config['auth_override_class_method']['users']['change_password'] = 'none';
 
+//Games
+$config['auth_override_class_method']['games']['get_all'] = 'none';
+
+//Amenities
+$config['auth_override_class_method']['amenities']['get_all'] = 'none';
+
+//Areas
+$config['auth_override_class_method']['areas']['get_all'] = 'none';
 
 // ---Uncomment list line for the wildard unit test
 // $config['auth_override_class_method']['wildcard_test_cases']['*'] = 'basic';

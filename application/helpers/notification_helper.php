@@ -3,7 +3,7 @@
 /**
  * Description of GCM
  *
- * @author Farah Etmeh
+ * @author Amal Abdulraouf
  */
 class NotificationHelper {
 

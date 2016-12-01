@@ -84,7 +84,7 @@ $autoload['drivers'] = array();
   |
   |	$autoload['helper'] = array('url', 'file');
  */
-$autoload['helper'] = array("url", "role");
+$autoload['helper'] = array("url", "role", "booking_state");
 
 /*
   | -------------------------------------------------------------------
@@ -135,4 +135,12 @@ $autoload['model'] = array('Exceptions/Parent_Exception',
     "Exceptions/Permission_Denied_Exception",
     "Exceptions/Uploading_Image_Exception",
     "Exceptions/Invalid_Password_Exception",
+    "Exceptions/Invalid_Amenities_Exception",
+    "Exceptions/Company_not_found_exception",
+    "Exceptions/Field_not_found_exception",
+    "Exceptions/Amenity_not_found_exception",
+    "Exceptions/Booking_Not_Found_Exception",
+    "Exceptions/User_Not_Found_Exception",
+    "Exceptions/Player_Not_Found_Exception",
+    "Exceptions/Game_Not_Found_Exception",
     "Exceptions/SQL_Exception");

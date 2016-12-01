@@ -5,9 +5,9 @@
  * @author Amal Abdulraouf
  */
 
-class Invalid_Login_Exception extends Parent_Exception {
+class Invalid_Amenities_Exception extends Parent_Exception {
 
-    public function __construct($message="Invalid username or password") {
+    public function __construct($message="Invalid Amenities") {
         parent::__construct($message);
     }
  
