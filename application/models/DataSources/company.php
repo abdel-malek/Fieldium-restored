@@ -14,10 +14,10 @@ class company extends CI_Model {
                 .$lang."_address as address, "
                 . " sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance, "
                         . "(SELECT count(field_id) FROM field "
-                        . "where c.company_id = field.company_id AND field.deleted = 0"
+                        . "where company.company_id = field.company_id AND field.deleted = 0"
                         . ") as fields_number", false)
-                ->from('company c')
-                ->where('c.deleted', 0);
+                ->from('company ')
+                ->where('company.deleted', 0);
         if ($lat == 0 || $lon == 0)
             $this->db->order_by("fields_number desc");
         else
@@ -31,11 +31,11 @@ class company extends CI_Model {
                 .$lang."_description as description, "
                 .$lang."_address as address, "
                                 . "(SELECT count(field_id) FROM field "
-                                . "where c.company_id = field.company_id AND field.deleted = 0"
+                                . "where company.company_id = field.company_id AND field.deleted = 0"
                                 . ") as fields_number")
-                        ->from('company c')
-                        ->where('c.company_id', $company_id)
-                        ->where('c.deleted', false)
+                        ->from('company')
+                        ->where('company.company_id', $company_id)
+                        ->where('company.deleted', false)
                         ->get()->row();
     }
 

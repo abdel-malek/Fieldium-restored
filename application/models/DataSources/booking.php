@@ -41,6 +41,7 @@ class booking extends CI_Model {
                         ->join('field', 'field.field_id = booking.field_id')
                         ->where('player_id', $player_id)
                         ->where('booking.deleted', 0)
+                        ->order_by('booking.field_id, booking.date ASC')
                         ->get()->result();
     }
 
@@ -51,6 +52,7 @@ class booking extends CI_Model {
                         ->join('company', 'field.company_id = company.company_id')
                         ->where('company.company_id', $company_id)
                         ->where('booking.deleted', 0)
+                        ->order_by('booking.field_id, booking.date ASC')
                         ->get()->result();
     }
 

@@ -195,6 +195,7 @@ $config['auth_override_class_method']['fields']['show'] = 'none';
 $config['auth_override_class_method']['fields']['get_by_company'] = 'none';
 $config['auth_override_class_method']['fields']['delete'] = 'none';
 $config['auth_override_class_method']['fields']['upload_image'] = 'none';
+$config['auth_override_class_method']['fields']['get_featured_places'] = 'none';
 $config['auth_override_class_method']['fields']['check_availability'] = 'none';
 
 //Bookings
@@ -209,8 +210,12 @@ $config['auth_override_class_method']['bookings']['delete'] = 'none';
 $config['auth_override_class_method']['bookings']['show'] = 'none';
 
 //Players
-//$config['auth_override_class_method']['players']['update'] = 'none';
-//
+$config['auth_override_class_method']['players']['register'] = 'none';
+$config['auth_override_class_method']['players']['show'] = 'none';
+$config['auth_override_class_method']['players']['update'] = 'none';
+$config['auth_override_class_method']['players']['request_verification_code'] = 'none';
+$config['auth_override_class_method']['players']['refresh_token'] = 'none';
+
 ////Users
 //$config['auth_override_class_method']['users']['login'] = 'none';
 //$config['auth_override_class_method']['users']['logout'] = 'none';
@@ -219,6 +224,9 @@ $config['auth_override_class_method']['bookings']['show'] = 'none';
 //$config['auth_override_class_method']['users']['delete'] = 'none';
 //$config['auth_override_class_method']['users']['show'] = 'none';
 $config['auth_override_class_method']['users']['change_password'] = 'none';
+
+//Searches
+//$config['auth_override_class_method']['searches']['get_searches'] = 'none';
 
 //Games
 $config['auth_override_class_method']['games']['get_all'] = 'none';

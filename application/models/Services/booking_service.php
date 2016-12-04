@@ -8,13 +8,13 @@ class booking_service extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->model('DataSources/booking');
-        $this->load->model('Services/field_service');
+        $this->load->model('DataSources/field');
     }
 
     public function create(
     $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
     ) {
-        $field = $this->field_service->get($field_id);
+        $field = $this->field->get($field_id);
         $total = ($duration * $field->hour_rate);
 
         $booking_id = $this->booking->add(array(
@@ -36,7 +36,7 @@ class booking_service extends CI_Model {
     public function update(
     $booking_id, $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
     ) {
-        $field = $this->field_service->get($field_id);
+        $field = $this->field->get($field_id);
         $total = ($duration * $field->hour_rate);
 
         $booking = $this->booking->update($booking_id, array(

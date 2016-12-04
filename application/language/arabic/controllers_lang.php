@@ -15,3 +15,4 @@ $lang['image_saved'] = "تم حفظ الصورة على المخدم";
 $lang['new_code'] = "تم إرسال رمز تحقيق جديد";
 $lang["account_confirmed"] = "تم تفعيل الحساب بنجاح";
 $lang["account_deleted"] = "تم إلغاء تفعيل الحساب بنجاح";
+$lang['verification_sms'] = "رمز التحقيق الخاص بك هو:";

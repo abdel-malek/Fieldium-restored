@@ -725,8 +725,10 @@ abstract class REST_Controller extends CI_Controller {
         $header = $this->input->request_headers();
 
         if (isset($header['Lang'])) {
+            $this->session->set_userdata(array('language'=>$header['Lang']));
             return $header['Lang'];
         }
+        $this->session->set_userdata(array('language'=>'en'));
         return $this->session->userdata('language');
         //return "en-US";
         $this->load->model('DataSources/user');

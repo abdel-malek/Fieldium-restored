@@ -13,10 +13,46 @@ class player_service extends CI_Model {
         $this->load->library('send_sms');
     }
 
+    public function register($phone, $os) {
+
+        $player = $this->player->get_by_phone($phone);
+        if ($player) {
+            $player_id = $player->player_id;
+            $code = $this->generate_activation_code();
+            $server_id = uniqid();
+            while ($this->player->check_server_id(md5($server_id))) {
+                $server_id = uniqid();
+            }
+            $this->player->update($player_id, array(
+                'phone' => $phone,
+                'os' => $os,
+                'server_id' => md5($server_id),
+                'verification_code' => $code
+            ));
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+        } else {
+            $code = $this->generate_activation_code();
+            $server_id = uniqid();
+            while ($this->player->check_server_id($server_id)) {
+                $server_id = uniqid();
+            }
+            $player_id = $this->player->register(array(
+                'phone' => $phone,
+                'os' => $os,
+                'server_id' => md5($server_id),
+                'verification_code' => $code
+            ));
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+        }
+        $player = $this->player->get($player_id);
+        $player->server_id = $server_id;
+        return $player;
+    }
+
     public function verify($phone, $code) {
         $player = $this->player->verify($phone, $code);
-        if (!$user) {
-            throw new Invalid_Activation_Code_Exception ();
+        if (!$player) {
+            throw new Invalid_Activation_Code_Exception ($this->session->userdata('language'));
         }
 
         $this->player->update($player->player_id, array(
@@ -26,18 +62,19 @@ class player_service extends CI_Model {
         return $player;
     }
 
-    public function get($id, $lang="en") {
+    public function get($id, $lang = "en") {
         $res = $this->player->get($id, $lang);
         if (!$res)
-            throw new Player_Not_Found_Exception ($lang);
+            throw new Player_Not_Found_Exception($lang);
         $res->prefered_games = $this->game->get_player_games($id, $lang);
         return $res;
     }
 
-    public function update($player_id, $name, $email, $address,$games_types, $lang) {
+    public function update($player_id, $name, $email, $address, $games_types, $profile_picture, $lang) {
         $this->player->update($player_id, array(
             'name' => $name,
             'email' => $email,
+            'profile_picture' => $profile_picture,
             'address' => $address
         ));
         $this->game->delete_player_games($player_id);
@@ -63,62 +100,37 @@ class player_service extends CI_Model {
     public function deactive($player_id) {
         $this->get($player_id);
         $this->player->update($player_id, array(
-            'active' => 0
+            'active' => 0,
+            'server_id' => ''
         ));
     }
 
     public function request_verification_code($phone) {
 
         $player = $this->player->get_by_phone($phone);
-        if ($player) {
+        if ($player && $player->server_id !='') {
             $player_id = $player->player_id;
 
             $code = $this->generate_activation_code();
-            $this->send_sms->send_sms($phone, "Your activation code is: " . $code);
+            
             $this->player->update($player->player_id, array(
                 'verification_code' => $code
             ));
+            
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
             $player = $this->player->get_by_phone($phone);
             return $player;
         } else {
-            throw Player_Not_Found_Exception();
+            throw new Player_Not_Found_Exception($this->session->userdata('language'));
         }
-    }
-
-    public function register($phone, $device_id, $token, $os) {
-
-        $player = $this->player->get_by_phone($phone);
-        if ($player) {
-            $player_id = $player->player_id;
-            $code = $this->generate_activation_code();
-            $this->send_sms->send_sms($phone, "Your activation code is: " . $code);
-            $this->player->update($player->player_id, array(
-                'phone' => $phone,
-                'token' => $token,
-                'device_id' => $device_id,
-                'os' => $os,
-                'verification_code' => $code
-            ));
-        } else {
-            $code = $this->generate_activation_code();
-            $this->send_sms->send_sms($phone, "Your activation code is: " . $code);
-            $player_id = $this->player->register(array(
-                'phone' => $phone,
-                'token' => $token,
-                'device_id' => $device_id,
-                'os' => $os,
-                'verification_code' => $code
-            ));
-        }
-        $player = $this->player->get($player_id);
-        return $player;
     }
 
     public function refresh_token($player_id, $token) {
+        
         $this->player->update($player_id, array(
             'token' => $token
         ));
-        $player = $this->get($player_id);
+        $player = $this->get($player_id, $this->session->userdata('language'));
         return $player;
     }
 

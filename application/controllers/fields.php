@@ -7,6 +7,7 @@ class fields extends REST_Controller {
 
     function __construct() {
         parent::__construct();
+
         $this->load->model("Services/field_service");
         $this->load->model('Permissions/user_permissions');
         $this->load->library('grocery_CRUD');
@@ -97,7 +98,7 @@ class fields extends REST_Controller {
 
     public function delete_get() {
         if (!$this->get('field_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
         else {
             $this->field_service->delete($this->get('field_id'));
             $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
@@ -106,27 +107,28 @@ class fields extends REST_Controller {
 
     public function show_get() {
         if (!$this->get('field_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
         else {
             $field = $this->field_service->get($this->get('field_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $field, 'message' => ""));
         }
     }
-    
+
     public function check_availability_get() {
-//        if (!$this->get('field_id'))
-//            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id')." ".$this->lang->line('required')));
-//        else {
-//            $date = $this->get('date');
-//            if(empty($date)) $date = date('y-m-d');
-//            $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
-//            $this->response(array('status' => true, 'data' => $available_times, 'message' => ""));
-//        }
+        if (!$this->get('field_id'))
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
+        else {
+            $date = $this->get('date');
+            if (empty($date))
+                $date = date('y-m-d');
+            $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
+            $this->response(array('status' => true, 'data' => $available_times, 'message' => ""));
+        }
     }
 
     public function get_by_company_get() {
         if (!$this->get('company_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));
         else {
             $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
             $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
@@ -144,6 +146,12 @@ class fields extends REST_Controller {
         $image = $this->image_service->save_image($image_name);
 
         $this->response(array('status' => true, 'data' => array("image_id" => $image), "message" => $this->lang->line('image_saved')));
+    }
+
+    public function get_featured_places_get() {
+
+        $fields = $this->field_service->get_featured_places($this->response->lang);
+        $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
     }
 
 }

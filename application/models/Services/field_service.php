@@ -201,15 +201,30 @@ class field_service extends CI_Model {
         $time = $field->open_time;
         $end = $field->close_time;
         $result = array();
-        foreach ($bookings as $booking) {
-            if ($booking->start != $time)
+
+        foreach ($bookings as $key => $booking) {
+            if ($booking->start != $time) {
                 $result[] = $time;
-            $result[] = $booking->start;
-            $time = time($booking->start) + doubleval($booking->duration) * 60;
+                $result[] = $booking->start;
+            }
+            $time = strftime('%H:%M:%S', (strtotime($booking->start) + doubleval($booking->duration) * 3600));
         }
-        if($time < $end){
+
+        if ($time < $end) {
             $result[] = $time;
             $result[] = $end;
+        }
+        return $result;
+    }
+    
+    public function get_featured_places($lang = "en") {
+        $fields = $this->field->get_featured_places($lang);
+        $result = array();
+        foreach ($fields as $field) {
+            $field->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+            $field->images = $this->image->get_images($field->field_id);
+            $field->games = $this->game->get_field_games($field->field_id, $lang);
+            $result[] = $field;
         }
         return $result;
     }

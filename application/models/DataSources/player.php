@@ -7,7 +7,7 @@ class player extends CI_Model {
     }
 
     public function verify($phone, $code) {
-        return $this->db->select("player.*")
+        return $this->db->select(ENTITY::PLAYER)
                         ->from('player')
                         ->where('phone', $phone)
                         ->where('verification_code', $code)
@@ -23,18 +23,18 @@ class player extends CI_Model {
             throw new DatabaseException();
     }
 
-    public function get($id, $lang="en") {
-        return $this->db->select("player.*")
+    public function get($id, $lang = "en") {
+        return $this->db->select(ENTITY::PLAYER)
                         ->from('player')
                         ->where('player_id', $id)
                         ->get()->row();
     }
 
-    public function check_authentication($phone, $device_id) {
-        $user = $this->db->select('*')
+    public function check_authentication($phone, $server_id) {
+        $user = $this->db->select(ENTITY::PLAYER)
                         ->from('player')
                         ->where('phone', $phone)
-                        ->where('device_id', $device_id)
+                        ->where('server_id', $server_id)
                         ->where('active', 1)
                         ->get()->row();
         if ($user)
@@ -44,7 +44,7 @@ class player extends CI_Model {
     }
 
     public function get_by_phone($phone) {
-        return $this->db->select("*")
+        return $this->db->select('*')
                         ->from('player')
                         ->where('phone', $phone)
                         ->get()->row();
@@ -56,6 +56,13 @@ class player extends CI_Model {
             return $id;
         } else
             throw new Database_Exception();
+    }
+
+    public function check_server_id($server_id) {
+        return $this->db->select("*")
+                        ->from('player')
+                        ->where('server_id', $server_id)
+                        ->get()->row();
     }
 
 }
