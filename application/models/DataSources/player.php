@@ -24,7 +24,7 @@ class player extends CI_Model {
     }
 
     public function get($id, $lang = "en") {
-        return $this->db->select(ENTITY::PLAYER)
+        return $this->db->select(ENTITY::PLAYER.", player.token")
                         ->from('player')
                         ->where('player_id', $id)
                         ->get()->row();

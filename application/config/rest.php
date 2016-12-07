@@ -226,7 +226,8 @@ $config['auth_override_class_method']['players']['refresh_token'] = 'none';
 $config['auth_override_class_method']['users']['change_password'] = 'none';
 
 //Searches
-//$config['auth_override_class_method']['searches']['get_searches'] = 'none';
+$config['auth_override_class_method']['searches']['get_searches'] = 'none';
+$config['auth_override_class_method']['searches']['search'] = 'none';
 
 //Games
 $config['auth_override_class_method']['games']['get_all'] = 'none';

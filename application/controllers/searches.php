@@ -15,14 +15,35 @@ class searches extends REST_Controller {
             $searches = $this->search_service->get_searches_by_user($this->current_user->player_id);
             $this->response(array('status' => true, 'data' => $searches, 'message' => ""));
         } else {
-            $searches = $this->search_service->get_searches_by_token($this->get('token'));
-            $this->response(array('status' => true, 'data' => $searches, 'message' => ""));
+            if (!$this->get('token'))
+                $this->response(array('status' => false, 'data' => NULL, 'message' => "The token is required."));
+            else {
+                $searches = $this->search_service->get_searches_by_token($this->get('token'));
+                $this->response(array('status' => true, 'data' => $searches, 'message' => ""));
+            }
         }
     }
 
     public function get_searches_by_user_get() {
         $searches = $this->search_service->get_searches_by_user($this->current_user->player_id);
         $this->response(array('status' => true, 'data' => $searches, 'message' => ""));
+    }
+    
+    public function search_get() {
+        $name = $this->get('name');
+        $game = $this->get('game_type');
+        $area = $this->get('area_id');
+        $timing = $this->get('timing');
+        if($timing == 'true' || $timing == true) {
+            if (!$this->get('start') || !$this->get('duration') || !$this->get('date'))
+            $this->response(array('status' => false, 'data' => null, 'message' => 'The date and time details are required.'));
+        }
+        $start = $this->get('start');
+        $duration = $this->get('duration');
+        $date = $this->get('date');
+        $results = $this->search_service->search($name, $game, $area, $timing, $start, $duration, $date, $this->response->lang);
+        $this->search_service->save_search($name, $game, $area, $timing, $start, $duration, $date,($this->current_user)?$this->current_user->player_id:null, $this->get('token'));
+        $this->response(array('status' => true, 'data' => $results, 'message' => ""));
     }
 
 }
