@@ -25,7 +25,7 @@ class companies extends REST_Controller {
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
-            //   $this->user_permissions->support_permission($this->current_user);
+            $this->user_permissions->support_permission($this->current_user);
             $name = $this->input->post('name');
             $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
@@ -70,7 +70,7 @@ class companies extends REST_Controller {
             throw new Validation_Exception(validation_errors());
         } else {
             $company_id = $this->input->post('company_id');
-            // $this->user_permissions->management_permission($this->current_user, $company_id);
+            $this->user_permissions->management_permission($this->current_user, $company_id);
             $name = $this->input->post('name');
             $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
@@ -127,4 +127,13 @@ class companies extends REST_Controller {
         }
     }
 
+    public function delete_get() {
+        if (!$this->get('company_id'))
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));
+        else {
+            $this->user_permissions->management_permission($this->current_user, $this->get('company_id'));
+            $this->company_service->delete($this->get('company_id'));
+            $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
+        }
+    }
 }

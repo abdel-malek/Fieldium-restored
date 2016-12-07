@@ -47,21 +47,22 @@ class players extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('phone', 'Phone', 'required');
-
+        $this->form_validation->set_rules('server_id', 'Server id', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
             $phone = $this->input->post('phone');
-            $player = $this->player_service->request_verification_code($phone);
+            $server_id = $this->input->post('server_id');
+            $player = $this->player_service->request_verification_code($phone, $server_id);
             $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('new_code')));
         }
     }
 
     public function refresh_token_post() {
-        $player_id = $this->post('player_id');
+        $player_id = $this->current_user->player_id;
         $token = $this->post('token');
         $player = $this->player_service->refresh_token($player_id, $token);
-        $this->response(array('status' => true, 'data' => $player, "message"=>''));
+        $this->response(array('status' => true, 'data' => $player, "message" => ''));
     }
 
     public function update_post() {

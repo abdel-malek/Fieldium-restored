@@ -31,7 +31,7 @@ class fields extends REST_Controller {
         } else {
 
             $company_id = $this->input->post('company_id');
-            //   $this->user_permissions->management_permission($this->current_user, $company_id);
+            $this->user_permissions->management_permission($this->current_user, $company_id);
             $name = $this->input->post('name');
             $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
@@ -73,7 +73,7 @@ class fields extends REST_Controller {
         } else {
             $field_id = $this->input->post('field_id');
             $company_id = $this->input->post('company_id');
-            // $this->user_permissions->management_permission($this->current_user, $field_id);
+            $this->user_permissions->management_permission($this->current_user, $company_id);
             $name = $this->input->post('name');
             $ar_name = $this->input->post('name');
             $phone = $this->input->post('phone');
@@ -100,6 +100,8 @@ class fields extends REST_Controller {
         if (!$this->get('field_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
         else {
+            $field = $this->field_service->get($this->get('field_id'));
+            $this->user_permissions->management_permission($this->current_user, $field->company_id);
             $this->field_service->delete($this->get('field_id'));
             $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
         }

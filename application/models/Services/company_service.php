@@ -8,6 +8,7 @@ class company_service extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->model('DataSources/company');
+        $this->load->model('DataSources/field');
     }
 
     public function create(
@@ -68,7 +69,7 @@ class company_service extends CI_Model {
     public function delete($company_id) {
         $this->get($company_id, "en");
 
-        $fields = $this->field->get_by_company($company_id, "en");
+        $fields = $this->field->get_by_company($company_id,0,0, "en");
         foreach ($fields as $field) {
             $this->field->update($field->field_id, array('deleted' => 1));
         }

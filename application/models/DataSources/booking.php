@@ -75,4 +75,17 @@ class booking extends CI_Model {
                         ->get()->result();
     }
 
+    public function field_bookings_by_timing($field_id, $date, $start, $duration) {
+        return $this->db->query("SELECT booking.* FROM booking
+                    WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted = 0 and ("
+                        . "( "
+                        . "booking.start >= time('$start')"
+                        . "and booking.start < (time('$start') + INTERVAL $duration HOUR)"
+                        . ")"
+                        . " OR ( "
+                        . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
+                        . "and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
+                        . "))")->result();
+    }
+
 }

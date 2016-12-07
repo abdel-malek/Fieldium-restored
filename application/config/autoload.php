@@ -143,4 +143,5 @@ $autoload['model'] = array('Exceptions/Parent_Exception',
     "Exceptions/User_Not_Found_Exception",
     "Exceptions/Player_Not_Found_Exception",
     "Exceptions/Game_Not_Found_Exception",
+    "Exceptions/Field_Not_Available_Exception",
     "Exceptions/SQL_Exception");

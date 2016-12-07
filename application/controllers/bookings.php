@@ -24,27 +24,26 @@ class bookings extends REST_Controller {
             throw new Validation_Exception(validation_errors());
         } else {
             $field_id = $this->input->post('field_id');
-            //   $this->user_permissions->management_permission($this->current_user, $company_id);
             $date = $this->input->post('date');
             $start = $this->input->post('start');
             $duration = $this->input->post('duration');
             $notes = $this->input->post('notes');
             $manually = false;
-            $player_id = 1; //$this->current_user->user_id;
+            $player_id = $this->current_user->player_id;
             $user_id = null;
             $booking = $this->booking_service
                     ->create(
                     $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
             );
             $this->response(array(
-                'status' => true, 
-                'data' => $booking, 
+                'status' => true,
+                'data' => $booking,
                 'message' => $this->lang->line('created')
                     )
-                    );
+            );
         }
     }
-    
+
     public function create_manually_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -58,7 +57,7 @@ class bookings extends REST_Controller {
             throw new Validation_Exception(validation_errors());
         } else {
             $field_id = $this->input->post('field_id');
-            //   $this->user_permissions->management_permission($this->current_user, $company_id);
+            $this->user_permissions->management_permission($this->current_user, $company_id);
             $date = $this->input->post('date');
             $start = $this->input->post('start');
             $duration = $this->input->post('duration');
@@ -66,16 +65,16 @@ class bookings extends REST_Controller {
             $name = $this->input->post('player_name');
             $phone = $this->input->post('player_phone');
             $manually = true;
-            $player_id = 2;//$this->player_service->create($name, $phone);
+            $player_id = $this->player_service->create($name, $phone);
             $user_id = $this->current_user->user_id;
             $booking = $this->booking_service
                     ->create(
                     $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
             );
             $sms = $this->post('sms_option') ? true : false;
-            if($sms == true)
+            if ($sms == true)
                 $this->send_sms->send_sms($phone, "");
-            $this->response(array('status' => true, 'data' => $booking, 'message' =>  $this->lang->line('created')));
+            $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('created')));
         }
     }
 
@@ -90,34 +89,30 @@ class bookings extends REST_Controller {
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
+            $this->user_permissions->update_booking_permission($this->current_user);
             $booking_id = $this->input->post('booking_id');
             $field_id = $this->input->post('field_id');
-            $company_id = $this->input->post('company_id');
-            // $this->user_permissions->management_permission($this->current_user, $field_id);
-            $name = $this->input->post('name');
-            $phone = $this->input->post('phone');
-            $hour_rate = $this->input->post('hour_rate');
-            $open_time = $this->input->post('open_time');
-            $cloes_time = $this->input->post('close_time');
-            $area_x = $this->input->post('area_x');
-            $area_y = $this->input->post('area_y');
-            $max_capacity = $this->input->post('max_capacity');
-            $description = $this->input->post('description');
-            $amenities = $this->input->post('amenities');
-            $images = $this->input->post('images');
-            $image_name = "";
-            $logo = "";
-            $field = $this->booking_service
+            $date = $this->input->post('date');
+            $start = $this->input->post('start');
+            $duration = $this->input->post('duration');
+            $notes = $this->input->post('notes');
+            $user_id = $this->current_user->user_id;
+            $booking = $this->booking_service
                     ->update(
-                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
+                    $booking_id, $field_id, $date, $start, $duration, $notes, $user_id, $this->response->lang
             );
-            $this->response(array('status' => true, 'data' => $field, 'message' =>  $this->lang->line('updated')));
+            $this->response(array(
+                'status' => true,
+                'data' => $booking,
+                'message' => $this->lang->line('created')
+                    )
+            );
         }
     }
 
     public function delete_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
             $this->booking_service->delete($this->get('booking_id'));
             $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
@@ -126,7 +121,7 @@ class bookings extends REST_Controller {
 
     public function decline_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
             $this->booking_service->decline($this->get('booking_id'));
             $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('declined')));
@@ -135,7 +130,7 @@ class bookings extends REST_Controller {
 
     public function approve_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
             $booking = $this->booking_service->approve($this->get('booking_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('approved')));
@@ -144,7 +139,7 @@ class bookings extends REST_Controller {
 
     public function show_get() {
         if (!$this->get('booking_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
             $booking = $this->booking_service->get($this->get('booking_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $booking, 'message' => ""));
@@ -152,12 +147,12 @@ class bookings extends REST_Controller {
     }
 
     public function my_bookings_get() {
-        $bookings = $this->booking_service->get_my_bookings(1, $this->response->lang);//$this->current_user->player_id, $this->response->lang);
+        $bookings = $this->booking_service->get_my_bookings(1, $this->response->lang); //$this->current_user->player_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
-    
+
     public function company_bookings_get() {
-        $bookings = $this->booking_service->company_bookings(2, $this->response->lang);//$this->current_user->company_id, $this->response->lang);
+        $bookings = $this->booking_service->company_bookings(2, $this->response->lang); //$this->current_user->company_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 

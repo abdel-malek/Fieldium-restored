@@ -33,10 +33,12 @@ class searches extends REST_Controller {
         $name = $this->get('name');
         $game = $this->get('game_type');
         $area = $this->get('area_id');
+        if (!$this->get('game_type') || !$this->get('area_id'))
+                $this->response(array('status' => false, 'data' => null, 'message' => 'The area_id and game_type details are required.'));
         $timing = $this->get('timing');
         if($timing == 'true' || $timing == true) {
             if (!$this->get('start') || !$this->get('duration') || !$this->get('date'))
-            $this->response(array('status' => false, 'data' => null, 'message' => 'The date and time details are required.'));
+                $this->response(array('status' => false, 'data' => null, 'message' => 'The date and time details are required.'));
         }
         $start = $this->get('start');
         $duration = $this->get('duration');

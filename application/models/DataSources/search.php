@@ -54,10 +54,12 @@ class search extends CI_Model {
                                     . "and booking.start < (time('$start') + INTERVAL $duration HOUR)"
                                     . ")"
                                     . " OR ( "
-                                    . "(booking.start + INTERVAL booking.duration HOUR) >= time('$start')"
+                                    . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
                                     . "and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
                                     . ")))"
-                                    . " AND field.deleted = 0", '', false)
+                                    . " AND field.deleted = 0"
+                                    . " AND (time('$start') between field.open_time and field.close_time)"
+                                    . " AND ((time('$start') + INTERVAL $duration HOUR) between field.open_time and field.close_time)", '', false)
                             ->get()->result();
         } else {
             return $this->db->select(ENTITY::COMPANY . ", "
