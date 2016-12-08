@@ -153,7 +153,7 @@ class companies extends REST_Controller {
                     ->display_as('en_address', 'address')
                     ->display_as('en_description', 'description')
                     ->display_as('area_id', 'area')
-                    ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
+                    ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name')
                     ->set_relation('area_id', 'area', 'en_name')
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->set_field_upload('logo', 'assets/uploaded_images/')
