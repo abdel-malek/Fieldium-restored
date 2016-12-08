@@ -146,7 +146,7 @@ class companies extends REST_Controller {
                     ->where("company.deleted", 0);
             $crud->set_table('company')
                     ->set_subject('Company')
-                    ->columns('company_id', 'en_name', 'phone', 'en_address', 'area_id', 'logo', 'image', 'en_description')
+                    ->columns('company_id', 'en_name', 'phone', 'en_address', 'area_id', 'logo', 'image','location', 'en_description')
                     ->order_by('company_id')
                     ->display_as('company_id', 'id')
                     ->display_as('en_name', 'name')
@@ -158,6 +158,7 @@ class companies extends REST_Controller {
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->set_field_upload('logo', 'assets/uploaded_images/')
                     ->callback_delete(array($this, 'delete_company'))
+                    ->callback_column('company_id', array($this, '_callback_location_render'))
                     ->add_action('fields', base_url() . 'assets/images/magnifier.png', '', 'read-icon', array($this, 'view_company_fields'))
                     ->unset_read()
                     ->unset_export()
@@ -188,6 +189,17 @@ class companies extends REST_Controller {
 
     function view_company_fields($primary_key, $row) {
         return site_url('/fields/fields_management/' . $primary_key);
+    }
+
+    public function _callback_location_render($value, $row) {
+        $company = $this->company_service->get($row->company_id);
+        $row->company_id = $company->company_id;
+        $row->location = "<br><a onclick='pan($company->longitude, $company->latitude, $company->company_id);$(\"#map_modal\").modal(\"show\");'>الخريطة</a>";
+    }
+    
+    public function update_location_get($company_id, $lng, $lat) {
+        $this->company_service->update_location($company_id, $lng, $lat);
+        redirect('companies/companies_management');
     }
 
 }

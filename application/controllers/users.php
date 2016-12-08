@@ -94,7 +94,10 @@ class users extends REST_Controller {
 
     function logout_get() {
         $this->user_service->logout();
-        redirect();
+        if ($this->response->format == "html")
+            redirect("dashboard");
+        else
+            $this->response(array('status' => true, 'data' => null, "message" => "Done"));
     }
 
     public function delete_get() {
@@ -224,7 +227,7 @@ class users extends REST_Controller {
 
     public function edit_profile_post($operation = null) {
         if (!$this->session->userdata('PHP_AUTH_USER'))
-            redirect();
+            redirect("dashboard");
         else {
             $this->load->library('grocery_CRUD');
             try {
@@ -270,7 +273,7 @@ class users extends REST_Controller {
 
                 $output = $crud->render();
                 if ($this->session->userdata('logout') == true)
-                    redirect();
+                    redirect("dahsboard");
                 $this->load->view('template.php', array(
                     'view' => 'users_management',
                     'output' => $output->output,

@@ -32,14 +32,14 @@ class company_service extends CI_Model {
         return $company;
     }
 
-    public function get($company_id, $lang="en") {
+    public function get($company_id, $lang = "en") {
         $company = $this->company->get($company_id, $lang);
         if (!$company)
-            throw new Company_Not_Found_Exception ($lang);
+            throw new Company_Not_Found_Exception($lang);
         return $company;
     }
 
-    public function get_all($lon = 0.0, $lat = 0.0, $lang="en") {
+    public function get_all($lon = 0.0, $lat = 0.0, $lang = "en") {
         $companies = $this->company->get_all($lon, $lat, $lang);
         return $companies;
     }
@@ -69,7 +69,7 @@ class company_service extends CI_Model {
     public function delete($company_id) {
         $this->get($company_id, "en");
 
-        $fields = $this->field->get_by_company($company_id,0,0, "en");
+        $fields = $this->field->get_by_company($company_id, 0, 0, "en");
         foreach ($fields as $field) {
             $this->field->update($field->field_id, array('deleted' => 1));
         }
@@ -77,6 +77,14 @@ class company_service extends CI_Model {
         $this->company->update($company_id, array(
             'deleted' => 1
         ));
+    }
+
+    public function update_location($company_id, $lng, $lat) {
+        $this->company->update($company_id, array(
+            'longitude' => $lng,
+            'latitude' => $lat
+                )
+        );
     }
 
 }

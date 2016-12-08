@@ -8,6 +8,8 @@ class site extends REST_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('Services/message_service');
+        $this->load->model('Services/field_service');
+        $this->load->model('Services/game_service');
     }
 
     public function index_get() {

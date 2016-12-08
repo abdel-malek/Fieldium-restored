@@ -201,6 +201,7 @@ $config['auth_override_class_method']['players']['request_verification_code'] = 
 
 ////Users
 $config['auth_override_class_method']['users']['login'] = 'none';
+$config['auth_override_class_method']['users']['edit_profile'] = 'none';
 
 //Searches
 $config['auth_override_class_method']['searches']['get_searches'] = 'none';

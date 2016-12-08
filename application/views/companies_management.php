@@ -46,6 +46,12 @@
                     <p id="addressText"></p>
                     <div id="map-canvas"></div>
                 </div>
+                <a style="margin-left:30px;" role="button" class="add_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" onclick="save_location()">
+                    <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span>
+                    <span class="ui-button-text">Save</span>
+                </a>
+                <br><br>
+                <!--<button>Save</button>-->
             </div>
         </div>
     </div>
@@ -56,7 +62,7 @@
         >
     </script>
     <script type="text/javascript">
-       
+
         $(document).ready(function () {
             $('.read-icon').attr("onclick", "console.log('clicked');");
             $('.hide_tr').each(function () {
@@ -73,13 +79,13 @@
             var mapProp = {
                 center: myCenter,
                 zoom: 14,
-                draggable: false,
+                draggable: true,
                 scrollwheel: false,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
             map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
-            marker.setMap(map);
+//            marker.setMap(map);
 
             google.maps.event.addListener(marker, 'click', function () {
 
@@ -114,17 +120,35 @@
             map.setCenter(center);
         }
 
-        function pan(lng, lat, address) {
-            $('#addressText').html(address);
+        var latt, longg, company_id;
+        var gmarkers = [];
+        function pan(lng, lat, company) {
+            $('#addressText').html("");
             console.log(lat, lng);
             var latLng = new google.maps.LatLng(lat, lng);
             map.setCenter(latLng);
+            for (i = 0; i < gmarkers.length; i++) {
+                gmarkers[i].setMap(null);
+            }
             var marker = new google.maps.Marker({
                 position: latLng,
                 title: 'Point A',
                 map: map,
                 draggable: true
             });
+            gmarkers.push(marker);
+            google.maps.event.addListener(marker, 'dragend', function (ev) {
+//                alert(map.lat() + ' ' + map.lng()); // always the same LatLng-Object...
+                // new LatLng-Object after dragend-event...
+                latt = marker.getPosition().lat();
+                longg = marker.getPosition().lng();
+                company_id = company;
+                console.log(latt, longg);
+            });
+        }
+        
+        function save_location() {
+            location.href = site_url + "/companies/update_location/" + company_id+"/" + longg + "/"+latt;
         }
     </script>
 </body>
