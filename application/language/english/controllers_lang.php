@@ -15,3 +15,4 @@ $lang["new_code"] = "A new verification code has been sent.";
 $lang["account_confirmed"] = "The account has been activated.";
 $lang["account_deleted"] = "The account has been deleted.";
 $lang['verification_sms'] = "Your activation code is: ";
+$lang['message_sent'] = "The message is sent successfully. ";

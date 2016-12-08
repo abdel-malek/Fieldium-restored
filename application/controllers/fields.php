@@ -10,7 +10,6 @@ class fields extends REST_Controller {
 
         $this->load->model("Services/field_service");
         $this->load->model('Permissions/user_permissions');
-        $this->load->library('grocery_CRUD');
     }
 
     public function create_post() {
@@ -154,6 +153,112 @@ class fields extends REST_Controller {
 
         $fields = $this->field_service->get_featured_places($this->response->lang);
         $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
+    }
+
+    function fields_management_post($primary_key = null) {
+
+        $this->user_permissions->support_permission($this->current_user);
+        $this->load->library('grocery_CRUD');
+        try {
+            $crud = new grocery_CRUD();
+
+            $crud->set_theme('datatables')
+                    ->set_table('field')
+                    ->where('field.company_id', $primary_key)
+                    ->where('field.deleted', 0)
+                    ->set_subject($this->lang->line('item'))
+                    ->columns('field_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'amenities', 'featured_place')
+                    ->order_by('field_id')
+                    ->set_relation('company_id', 'company', 'en_name', array('deleted' => 0))
+                    ->set_relation_n_n('games', 'field_game_type', 'game_type', 'field_id', 'game_type_id', 'en_name')
+                    ->set_relation_n_n('amenities', 'field_amenity', 'amenity', 'field_id', 'amenity_id', 'en_name')
+                    ->display_as('field_id', 'id')
+                    ->display_as('en_description', 'description')
+                    ->display_as('en_name', 'name')
+                    ->display_as('max_capacity', 'capacity')
+                    ->unset_edit_fields('ar_name', 'ar_description', 'deleted', 'company_id', 'featured_place')
+                    ->unset_add_fields('ar_name', 'ar_description', 'deleted', 'featured_place')
+                    ->field_type('open_time', 'time')
+                    ->field_type('close_time', 'time')
+                    ->required_fields('en_name')
+                    ->callback_delete(array($this, 'delete_field'))
+                    ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
+                    ->unset_export()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->model("Services/company_service");
+            $this->load->view('template.php', array(
+                'view' => 'fields_management',
+                'company' => $this->company_service->get($primary_key),
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+        } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+    }
+
+    function fields_management_get($primary_key = null) {
+        $this->fields_management_post($primary_key);
+    }
+
+    function view_images($primary_key, $row) {
+        return site_url('/fields/field_images_management/' . $primary_key);
+    }
+
+    public function delete_field($primary_key) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->field_service->delete($primary_key);
+        return true;
+    }
+
+    private $field_id;
+
+    function field_images_management_post($primary_key = null, $operation = null) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->load->library('grocery_CRUD');
+        $this->field_id = $primary_key;
+        try {
+            $crud = new grocery_CRUD();
+
+            $crud->set_theme('datatables')
+                    ->set_table('image')
+                    ->where('field_id', $primary_key)
+                    ->set_subject('image')
+                    ->columns('name')
+                    ->display_as('image_id', 'Id')
+                    ->set_field_upload('name', 'assets/uploaded_images')
+                    ->unset_edit_fields('field_id')
+                    ->callback_before_insert(array($this, 'add_field_id'))
+                    ->field_type('field_id', 'hidden')
+                    ->unset_read()
+                    ->unset_export()
+                    ->unset_print();
+
+            $output = $crud->render();
+            $this->load->view('template.php', array(
+                'view' => 'field_images_management',
+                'field_id' => $this->field_id,
+                'field' => $this->field_service->get($this->field_id),
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+        } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+    }
+
+    function field_images_management_get($primary_key = null, $operation = null) {
+        $this->field_images_management_post($primary_key, $operation = null);
+    }
+
+    function add_field_id($post_array) {
+        $post_array['field_id'] = $this->field_id;
+        return $post_array;
     }
 
 }

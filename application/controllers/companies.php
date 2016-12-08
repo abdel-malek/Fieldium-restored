@@ -9,7 +9,6 @@ class companies extends REST_Controller {
         parent::__construct();
         $this->load->model("Services/company_service");
         $this->load->model('Permissions/user_permissions');
-        $this->load->library('grocery_CRUD');
     }
 
     public function create_post() {
@@ -102,7 +101,7 @@ class companies extends REST_Controller {
 
     public function show_get() {
         if (!$this->get('company_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id')." ".$this->lang->line('required')));
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));
         else {
             $company = $this->company_service->get($this->get('company_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $company, 'message' => ""));
@@ -136,4 +135,59 @@ class companies extends REST_Controller {
             $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
         }
     }
+
+    public function companies_management_post($operation = null) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->load->library('grocery_CRUD');
+        try {
+            $crud = new grocery_CRUD();
+
+            $crud->set_theme('datatables')
+                    ->where("company.deleted", 0);
+            $crud->set_table('company')
+                    ->set_subject('Company')
+                    ->columns('company_id', 'en_name', 'phone', 'en_address', 'area_id', 'logo', 'image', 'en_description')
+                    ->order_by('company_id')
+                    ->display_as('company_id', 'id')
+                    ->display_as('en_name', 'name')
+                    ->display_as('en_address', 'address')
+                    ->display_as('en_description', 'description')
+                    ->display_as('area_id', 'area')
+                    ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
+                    ->set_relation('area_id', 'area', 'en_name')
+                    ->set_field_upload('image', 'assets/uploaded_images/')
+                    ->set_field_upload('logo', 'assets/uploaded_images/')
+                    ->callback_delete(array($this, 'delete_company'))
+                    ->add_action('fields', base_url() . 'assets/images/magnifier.png', '', 'read-icon', array($this, 'view_company_fields'))
+                    ->unset_read()
+                    ->unset_export()
+                    ->unset_print();
+
+            $output = $crud->render();
+            $this->load->view('template.php', array(
+                'view' => 'companies_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+        } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+    }
+
+    public function companies_management_get($operation = null) {
+        $this->companies_management_post($operation);
+    }
+
+    public function delete_company($primary_key) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->company_service->delete($primary_key);
+        return true;
+    }
+
+    function view_company_fields($primary_key, $row) {
+        return site_url('/fields/fields_management/' . $primary_key);
+    }
+
 }

@@ -18,7 +18,7 @@ class user extends CI_Model {
         return $this->db->select("user.*")
                         ->from('user')
                         ->where('user_id', $id)
-                        ->where('active', 1)
+//                        ->where('active', 1)
                         ->get()->row();
     }
 

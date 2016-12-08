@@ -9,7 +9,6 @@ class bookings extends REST_Controller {
         parent::__construct();
         $this->load->model("Services/booking_service");
         $this->load->model('Permissions/user_permissions');
-        $this->load->library('grocery_CRUD');
         $this->load->library('send_sms');
     }
 

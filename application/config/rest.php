@@ -180,6 +180,8 @@ $config['auth_library_function'] = 'check_user';
  */
 
 $config['auth_override_class_method']['site']['index'] = 'none';
+$config['auth_override_class_method']['site']['send_message'] = 'none';
+$config['auth_override_class_method']['dashboard']['index'] = 'none';
 
 //Companies
 $config['auth_override_class_method']['companies']['show'] = 'none';

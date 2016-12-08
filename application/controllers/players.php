@@ -9,7 +9,6 @@ class players extends REST_Controller {
         parent::__construct();
         $this->load->model("Services/player_service");
         $this->load->model('Permissions/user_permissions');
-        $this->load->library('grocery_CRUD');
     }
 
     public function register_post() {
