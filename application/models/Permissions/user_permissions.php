@@ -27,6 +27,20 @@ class user_permissions extends CI_Model {
         else
             throw new Permission_Denied_Exception();
     }
+    
+    function is_player($user) {
+        if ($user &&  $user->player_id)
+            return true;
+        else
+            throw new Permission_Denied_Exception();
+    }
+    
+    function is_company($user) {
+        if ($user &&  $user->company_id)
+            return true;
+        else
+            throw new Permission_Denied_Exception();
+    }
 
     function active_permission($user) {
         if ($user && ($user->role_id == ROLE::ADMIN )) {

@@ -104,6 +104,14 @@ class player_service extends CI_Model {
             'server_id' => ''
         ));
     }
+    
+    public function deactive_active($player_id) {
+        $player = $this->get($player_id);
+        $this->player->update($player_id, array(
+            'active' => !$player->active,
+            'server_id' => ''
+        ));
+    }
 
     public function request_verification_code($phone, $server_id) {
 

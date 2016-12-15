@@ -27,10 +27,8 @@
                  "> 
                 <br><br>
                 <h1 style="text-align: left">
-                    <?php echo $company->name ?> fields:
+                    Players Management:
                 </h1>
-                <a style="cursor: pointer" href="<?php echo site_url('companies/companies_management') ?>">< Back to companies list</a>
-
                 <div style="clear: both"></div>
                 <br><br>
                 <?php echo $output; ?>
@@ -38,4 +36,9 @@
         </div>
     </div>
 </body>
+<script type="text/javascript">
 
+    $('.hide_tr').each(function () {
+        $(this).parent('td').parent('tr').find('.actions a:first').find("span:last").text('Activate');
+    });
+</script>

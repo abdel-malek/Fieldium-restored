@@ -83,7 +83,7 @@ class players extends REST_Controller {
             } catch (Uploading_Image_Exception $ex) {
                 $profile_picture = "";
             }
-            $player = $this->player_service->update(1, $name, $email, $address, $games, $profile_picture, $this->response->lang);
+            $player = $this->player_service->update($this->current_user->player_id, $name, $email, $address, $games, $profile_picture, $this->response->lang);
             $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('updated')));
         }
     }
@@ -91,6 +91,66 @@ class players extends REST_Controller {
     public function deactive_get() {
         $this->player_service->deactive($this->current_user->player_id);
         $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('account_deleted')));
+    }
+
+    public function players_management_post($operation = null) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->load->library('grocery_CRUD');
+        try {
+            $crud = new grocery_CRUD();
+
+            $crud->set_theme('datatables')
+                    ->set_table('player')
+                    ->set_subject('player')
+                    ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'prefered_games', 'active')
+                    ->display_as('player_id', 'Player')
+                    ->set_relation_n_n('prefered_games', 'prefered_game', 'game_type', 'player_id', 'game_type_id', 'en_name')
+                    ->callback_column('active', array($this, '_callback_active_render'))
+                    ->callback_before_insert(array($this, 'encrypt_password_callback'))
+                    ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
+                    ->set_field_upload('profile_picture', 'assets/uploaded_images/')
+                    ->unset_export()
+                    ->unset_read()
+                    ->unset_print()
+                    ->unset_add()
+                    ->unset_edit()
+                    ->unset_delete();
+            $output = $crud->render();
+
+            $this->load->view('template.php', array(
+                'view' => 'players_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+        } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+    }
+
+    public function players_management_get($operation = null) {
+        $this->players_management_post($operation);
+    }
+
+    public function _callback_active_render($value, $row) {
+        if ($value == 1) {
+            return ""
+                    . "<p class='active'>Active</p>";
+        } else if ($value == 0) {
+            return ""
+                    . "<p class='hide_tr'>Not Active</p>";
+        }
+    }
+
+    public function delete_user_callback($primary_key) {
+        return site_url('/players/delete_user/' . $primary_key);
+    }
+
+    public function delete_user_get($primary_key) {
+
+        $this->player_service->deactive_active($primary_key);
+        redirect('players/players_management');
     }
 
 }

@@ -29,6 +29,7 @@
                 <h1 style="text-align: left">
                     <?php echo $field->name?> images:
                 </h1>
+                <a style="cursor: pointer" href="<?php echo site_url('fields/fields_management/'.$field->company_id)?>">< Back to fields list</a>
                 <div style="clear: both"></div>
                 <br><br>
                 <?php echo $output; ?>

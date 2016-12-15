@@ -51,7 +51,6 @@
                     <span class="ui-button-text">Save</span>
                 </a>
                 <br><br>
-                <!--<button>Save</button>-->
             </div>
         </div>
     </div>
@@ -85,7 +84,6 @@
             };
 
             map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
-//            marker.setMap(map);
 
             google.maps.event.addListener(marker, 'click', function () {
 
@@ -100,7 +98,6 @@
         google.maps.event.addDomListener(window, "resize", resizingMap());
 
         $('#map_modal').on('show.bs.modal', function () {
-            //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
             resizeMap();
         })
 
@@ -124,7 +121,6 @@
         var gmarkers = [];
         function pan(lng, lat, company) {
             $('#addressText').html("");
-            console.log(lat, lng);
             var latLng = new google.maps.LatLng(lat, lng);
             map.setCenter(latLng);
             for (i = 0; i < gmarkers.length; i++) {
@@ -138,12 +134,9 @@
             });
             gmarkers.push(marker);
             google.maps.event.addListener(marker, 'dragend', function (ev) {
-//                alert(map.lat() + ' ' + map.lng()); // always the same LatLng-Object...
-                // new LatLng-Object after dragend-event...
                 latt = marker.getPosition().lat();
                 longg = marker.getPosition().lng();
                 company_id = company;
-                console.log(latt, longg);
             });
         }
         

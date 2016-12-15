@@ -30,6 +30,7 @@ class areas extends REST_Controller {
                     ->display_as('en_name', 'name')
                     ->unset_edit_fields('ar_name')
                     ->unset_add_fields('ar_name')
+                    ->required_fields('en_name')
                     ->unset_export()
                     ->unset_read()
                     ->unset_print();

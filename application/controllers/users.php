@@ -159,7 +159,7 @@ class users extends REST_Controller {
                     throw new Permission_Denied_Exception ();
                 $crud
                         ->set_rules('password', 'Password', 'required|min_length[6]|max_length[30]')
-                        ->set_rules('username', 'User Name', 'required|min_length[3]|max_length[16]|is_unique[user.user_name]');
+                        ->set_rules('username', 'User Name', 'required|min_length[3]|max_length[16]|is_unique[user.username]');
             } else {
                 $crud
                         ->set_rules('password', 'Password', 'min_length[6]|max_length[30]');

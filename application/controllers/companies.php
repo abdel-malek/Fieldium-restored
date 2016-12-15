@@ -146,17 +146,19 @@ class companies extends REST_Controller {
                     ->where("company.deleted", 0);
             $crud->set_table('company')
                     ->set_subject('Company')
-                    ->columns('company_id', 'en_name', 'phone', 'en_address', 'area_id', 'logo', 'image','location', 'en_description')
+                    ->columns('company_id', 'en_name', 'phone', 'en_address', 'area_id', 'logo', 'image', 'location', 'en_description')
                     ->order_by('company_id')
                     ->display_as('company_id', 'id')
                     ->display_as('en_name', 'name')
                     ->display_as('en_address', 'address')
                     ->display_as('en_description', 'description')
                     ->display_as('area_id', 'area')
-                    ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name')
+                    ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
+                    ->unset_add_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
                     ->set_relation('area_id', 'area', 'en_name')
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->set_field_upload('logo', 'assets/uploaded_images/')
+                    ->required_fields( 'en_name', 'phone', 'en_address', 'area_id', 'location')
                     ->callback_delete(array($this, 'delete_company'))
                     ->callback_column('company_id', array($this, '_callback_location_render'))
                     ->add_action('fields', base_url() . 'assets/images/magnifier.png', '', 'read-icon', array($this, 'view_company_fields'))
@@ -195,8 +197,9 @@ class companies extends REST_Controller {
         $company = $this->company_service->get($row->company_id);
         $row->company_id = $company->company_id;
         $row->location = "<br><a onclick='pan($company->longitude, $company->latitude, $company->company_id);$(\"#map_modal\").modal(\"show\");'>الخريطة</a>";
+        return $company->company_id;
     }
-    
+
     public function update_location_get($company_id, $lng, $lat) {
         $this->company_service->update_location($company_id, $lng, $lat);
         redirect('companies/companies_management');

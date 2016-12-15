@@ -31,6 +31,7 @@ class amenities extends REST_Controller {
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->unset_edit_fields('ar_name')
                     ->unset_add_fields('ar_name')
+                    ->required_fields('en_name')
                     ->unset_export()
                     ->unset_read()
                     ->unset_print();

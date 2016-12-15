@@ -161,7 +161,13 @@ class field_service extends CI_Model {
         if (!$field)
             throw new Field_Not_Found_Exception($lang);
         $field->amenities = $this->amenity->get_field_amenities($field_id, $lang);
-        $field->images = $this->image->get_images($field_id);
+        $images = $this->image->get_images($field_id);
+        $f_img = array();
+        foreach ($images as $image) {
+            if ($image->name != "" && $image->name != null)
+                $f_img[] = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+        }
+        $field->images = $f_img;
         $field->games = $this->game->get_field_games($field_id, $lang);
         return $field;
     }
@@ -216,7 +222,7 @@ class field_service extends CI_Model {
         }
         return $result;
     }
-    
+
     public function get_featured_places($lang = "en") {
         $fields = $this->field->get_featured_places($lang);
         $result = array();

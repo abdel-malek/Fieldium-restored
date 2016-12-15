@@ -146,12 +146,14 @@ class bookings extends REST_Controller {
     }
 
     public function my_bookings_get() {
-        $bookings = $this->booking_service->get_my_bookings(1, $this->response->lang); //$this->current_user->player_id, $this->response->lang);
+        $this->user_permissions->is_player($this->current_user);
+        $bookings = $this->booking_service->get_my_bookings($this->current_user->player_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 
     public function company_bookings_get() {
-        $bookings = $this->booking_service->company_bookings(2, $this->response->lang); //$this->current_user->company_id, $this->response->lang);
+        $this->user_permissions->is_company($this->current_user);
+        $bookings = $this->booking_service->company_bookings($this->current_user->company_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 

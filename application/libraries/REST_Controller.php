@@ -730,45 +730,7 @@ abstract class REST_Controller extends CI_Controller {
         }
         $this->session->set_userdata(array('language'=>'en'));
         return $this->session->userdata('language');
-        //return "en-US";
-        $this->load->model('DataSources/user');
-
-        if ($this->current_user != null) {
-            $user = $this->current_user;
-            return $user['language'] == LANGUAGE::ENGLISH ? "en-US" : "de";
-        } else {
-
-            $this->load->library('session');
-            if ($language = $this->session->userdata('language')) {
-                return $language;
-            } else if ($lang = $this->input->server('HTTP_ACCEPT_LANGUAGE')) {
-                if (strpos($lang, ',') !== FALSE) {
-
-                    $langs = explode(',', $lang);
-
-                    $return_langs = array();
-                    $i = 1;
-
-                    foreach ($langs as $lang) {
-                        // Remove weight and strip space
-                        list($lang) = explode(';', $lang);
-                        $return_langs[] = trim($lang);
-                        if ($lang == LANGUAGE::ENGLISH || $lang == LANGUAGE::GERMAN || $lang == LANGUAGE::ARABIC)
-                            return $lang;
-                    }
-
-                    return LANGUAGE::ENGLISH;
-                }
-            } else {
-                return LANGUAGE::ENGLISH;
-            }
-        }
-
-
-        // They might have sent a few, make it an array
-        // Nope, just return the string
-
-        echo $lang;
+        
     }
 
     /**
