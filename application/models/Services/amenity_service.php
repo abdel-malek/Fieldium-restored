@@ -19,6 +19,10 @@ class amenity_service extends CI_Model {
 
     public function get_all($lang="en") {
         $amenities = $this->amenity->get_all($lang);
+        foreach ($amenities as $amenity) {
+            if ($amenity->image != "" && $amenity->image != null)
+                $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+        }
         return $amenities;
     }
 }

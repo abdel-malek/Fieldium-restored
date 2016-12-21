@@ -9,23 +9,31 @@ class booking_service extends CI_Model {
         parent::__construct();
         $this->load->model('DataSources/booking');
         $this->load->model('DataSources/field');
+        $this->load->model('DataSources/image');
     }
 
     public function create(
     $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
     ) {
         $field = $this->field->get($field_id);
+        if(!$field)
+            throw new Field_Not_Found_Exception();
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 3600;
         $end = strftime('%H:%M:%S', $endtime);
+//       var_dump($field); die();
         if ($bookings || !(
-                $start >= $field->open_time && $start <= $field->close_time &&
-                $end >= $field->open_time && $end <= $field->close_time
+                $start >= $field->open_time && $start < $field->close_time &&
+                $end > $field->open_time && $end <= $field->close_time
                 )) {
             throw new Field_Not_Available_Exception();
         }
         $total = ($duration * $field->hour_rate);
-
+        
+        $state = BOOKING_STATE::PENDING;
+        if($manually == true)
+            $state = BOOKING_STATE::APPROVED;
+        
         $booking_id = $this->booking->add(array(
             'field_id' => $field_id,
             'player_id' => $player_id,
@@ -35,7 +43,8 @@ class booking_service extends CI_Model {
             'notes' => $notes,
             'user_id' => $user_id,
             'total' => $total,
-            'manually' => $manually
+            'manually' => $manually,
+            'state_id' => $state
         ));
 
         $booking = $this->get($booking_id, $lang);
@@ -110,7 +119,20 @@ class booking_service extends CI_Model {
     }
 
     public function get_my_bookings($palyer_id, $lang) {
-        return $this->booking->get_my_bookings($palyer_id, $lang);
+        $bookings = $this->booking->get_my_bookings($palyer_id, $lang);
+        foreach ($bookings as $booking) {
+            $images = $this->image->get_images($booking->field_id);
+            $result = array();
+            foreach ($images as $image) {
+                if ($image->name != "" && $image->name != null) {
+                    $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                }
+                $result[] = $image;
+            }
+            $booking->images = $result;
+        }
+        return $bookings;
+    
     }
 
     public function company_bookings($company_id, $lang) {

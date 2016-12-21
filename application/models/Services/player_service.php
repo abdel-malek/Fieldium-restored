@@ -13,7 +13,7 @@ class player_service extends CI_Model {
         $this->load->library('send_sms');
     }
 
-    public function register($phone, $os) {
+    public function register($phone, $os, $name) {
 
         $player = $this->player->get_by_phone($phone);
         if ($player) {
@@ -26,10 +26,12 @@ class player_service extends CI_Model {
             $this->player->update($player_id, array(
                 'phone' => $phone,
                 'os' => $os,
+                'token' => '',
+                'name' => $name,
                 'server_id' => md5($server_id),
                 'verification_code' => $code
             ));
-            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         } else {
             $code = $this->generate_activation_code();
             $server_id = uniqid();
@@ -39,13 +41,52 @@ class player_service extends CI_Model {
             $player_id = $this->player->register(array(
                 'phone' => $phone,
                 'os' => $os,
+                'token' => '',
+                'name' => $name,
                 'server_id' => md5($server_id),
                 'verification_code' => $code
             ));
-            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
         $player = $this->player->get($player_id);
         $player->server_id = $server_id;
+        return $player;
+    }
+    
+    public function create($name, $phone) {
+
+        $player = $this->player->get_by_phone($phone);
+        if ($player) {
+            $player_id = $player->player_id;
+//            $code = $this->generate_activation_code();
+//            $server_id = uniqid();
+//            while ($this->player->check_server_id(md5($server_id))) {
+//                $server_id = uniqid();
+//            }
+//            $this->player->update($player_id, array(
+//                'phone' => $phone,
+//                'os' => $os,
+//                'server_id' => md5($server_id),
+//                'verification_code' => $code
+//            ));
+////            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+        } else {
+//            $code = $this->generate_activation_code();
+//            $server_id = uniqid();
+//            while ($this->player->check_server_id($server_id)) {
+//                $server_id = uniqid();
+//            }
+            $player_id = $this->player->register(array(
+                'phone' => $phone,
+                'name' => $name,
+                'server_id' => "",
+                'token' => "",
+                'address' => ""
+            ));
+//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+        }
+        $player = $this->player->get($player_id);
+//        $player->server_id = $server_id;
         return $player;
     }
 
@@ -67,6 +108,8 @@ class player_service extends CI_Model {
         if (!$res)
             throw new Player_Not_Found_Exception($lang);
         $res->prefered_games = $this->game->get_player_games($id, $lang);
+        if($res->profile_picture != "" && $red->profile_picture != null)
+            $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
         return $res;
     }
 
@@ -125,7 +168,7 @@ class player_service extends CI_Model {
                 'verification_code' => $code
             ));
             
-            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
             $player = $this->player->get_by_phone($phone);
             return $player;
         } else {

@@ -32,6 +32,8 @@ class user_service extends CI_Model {
         $res = $this->user->get($id, $lang);
         if (!$res)
             throw new User_Not_Found_Exception ($lang);
+        if($res->profile_picture != "" && $red->profile_picture != null)
+            $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
         return $res;
     }
 

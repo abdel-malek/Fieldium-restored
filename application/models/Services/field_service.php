@@ -160,14 +160,24 @@ class field_service extends CI_Model {
         $field = $this->field->get($field_id, $lang);
         if (!$field)
             throw new Field_Not_Found_Exception($lang);
-        $field->amenities = $this->amenity->get_field_amenities($field_id, $lang);
-        $images = $this->image->get_images($field_id);
-        $f_img = array();
-        foreach ($images as $image) {
-            if ($image->name != "" && $image->name != null)
-                $f_img[] = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+        $amenities = $this->amenity->get_field_amenities($field_id, $lang);
+        $result = array();
+        foreach ($amenities as $amenity) {
+            if ($amenity->image != "" && $amenity->image != null)
+                $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+            $result[] = $amenity;
         }
-        $field->images = $f_img;
+        $field->amenities = $result;
+
+        $images = $this->image->get_images($field_id);
+        $result = array();
+        foreach ($images as $image) {
+            if ($image->name != "" && $image->name != null) {
+                $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+            }
+            $result[] = $image;
+        }
+        $field->images = $result;
         $field->games = $this->game->get_field_games($field_id, $lang);
         return $field;
     }

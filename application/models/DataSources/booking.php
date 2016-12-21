@@ -10,7 +10,7 @@ class booking extends CI_Model {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, player.name as player_name, player.phone as player_phone")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
-                        ->join('player', 'player.player_id = booking.player_id')
+                        ->join('player', 'player.player_id = booking.player_id', 'left')
                         ->where('booking_id', $booking_id)
                         ->where('booking.deleted', 0)
                         ->get()->row();

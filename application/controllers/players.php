@@ -15,13 +15,15 @@ class players extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('phone', 'Phone', 'required');
+         $this->form_validation->set_rules('name', 'Name', 'required');
         $this->form_validation->set_rules('os', 'os', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
             $phone = $this->input->post('phone');
             $os = $this->input->post('os');
-            $user = $this->player_service->register($phone, $os);
+            $name = $this->input->post('name');
+            $user = $this->player_service->register($phone, $os, $name);
             $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('created')));
         }
     }
@@ -48,7 +50,7 @@ class players extends REST_Controller {
         $this->form_validation->set_rules('phone', 'Phone', 'required');
         $this->form_validation->set_rules('server_id', 'Server id', 'required');
         if (!$this->form_validation->run()) {
-            throw new Validation_Exception(validation_errors());
+            throw new Validation_Exception((validation_errors())?validation_errors():"Validation Exception");
         } else {
             $phone = $this->input->post('phone');
             $server_id = $this->input->post('server_id');
