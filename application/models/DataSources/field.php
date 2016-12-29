@@ -60,9 +60,9 @@ class field extends CI_Model {
                 ->where('field.deleted', 0)
                 ->where('field.company_id', $company_id);
         if ($lat == 0 || $lon == 0)
-            $this->db->order_by("available_time desc");
+            $this->db->order_by("field_id,available_time desc");
         else
-            $this->db->order_by("distance ASC, available_time desc");
+            $this->db->order_by("field_id,distance ASC, available_time desc");
         return $this->db->get()->result();
     }
 

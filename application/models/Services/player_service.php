@@ -91,8 +91,9 @@ class player_service extends CI_Model {
     }
 
     public function verify($phone, $code) {
-        $player = $this->player->verify($phone, $code);
-        if (!$player) {
+        $player = $this->player->get_by_phone($phone);
+//        $player = $this->player->verify($phone, $code);
+        if ($code != 1) {
             throw new Invalid_Activation_Code_Exception ($this->session->userdata('language'));
         }
 

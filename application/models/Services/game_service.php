@@ -12,7 +12,14 @@ class game_service extends CI_Model {
   
     public function get_all($lang="en") {
         $games = $this->game->get_all($lang);
-        return $games;
+        $results = array();
+        foreach ($games as $game) {
+            if ($game->image != "" && $game->image != null) {
+                $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+            }
+            $results[] = $game;
+        }
+        return $results;
     }
 
     public function get($game_id, $lang="en") {

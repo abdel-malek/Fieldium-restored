@@ -178,7 +178,15 @@ class field_service extends CI_Model {
             $result[] = $image;
         }
         $field->images = $result;
-        $field->games = $this->game->get_field_games($field_id, $lang);
+        $games = $this->game->get_field_games($field_id, $lang);
+        $results = array();
+        foreach ($games as $game) {
+            if ($game->image != "" && $game->image != null) {
+                $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+            }
+            $results[] = $game;
+        }
+        $field->games = $results;
         return $field;
     }
 
@@ -188,7 +196,15 @@ class field_service extends CI_Model {
         foreach ($fields as $field) {
             $result[] = $field;
             $result->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
-            $result->images = $this->image->get_images($field->field_id);
+            $images = $this->image->get_images($field->field_id);
+            $results = array();
+            foreach ($images as $image) {
+                if ($image->name != "" && $image->name != null) {
+                    $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                }
+                $results[] = $image;
+            }
+            $result->images = $results;
             $result->games = $this->game->get_field_games($field->field_id, $lang);
         }
         return $result;
@@ -198,9 +214,33 @@ class field_service extends CI_Model {
         $fields = $this->field->get_by_company($company_id, $lon, $lat, $lang);
         $result = array();
         foreach ($fields as $field) {
-            $field->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
-            $field->images = $this->image->get_images($field->field_id);
-            $field->games = $this->game->get_field_games($field->field_id, $lang);
+            $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+            $results = array();
+            foreach ($amenities as $amenity) {
+                if ($amenity->image != "" && $amenity->image != null) {
+                    $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+                }
+                $results[] = $amenity;
+            }
+            $field->amenities = $results;
+            $images = $this->image->get_images($field->field_id);
+            $results = array();
+            foreach ($images as $image) {
+                if ($image->name != "" && $image->name != null) {
+                    $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                }
+                $results[] = $image;
+            }
+            $field->images = $results;
+            $games = $this->game->get_field_games($field->field_id, $lang);
+            $results = array();
+            foreach ($games as $game) {
+                if ($game->image != "" && $game->image != null) {
+                    $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+                }
+                $results[] = $game;
+            }
+            $field->games = $results;
             $result[] = $field;
         }
         return $result;
@@ -237,9 +277,33 @@ class field_service extends CI_Model {
         $fields = $this->field->get_featured_places($lang);
         $result = array();
         foreach ($fields as $field) {
-            $field->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
-            $field->images = $this->image->get_images($field->field_id);
-            $field->games = $this->game->get_field_games($field->field_id, $lang);
+           $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+            $results = array();
+            foreach ($amenities as $amenity) {
+                if ($amenity->image != "" && $amenity->image != null) {
+                    $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+                }
+                $results[] = $amenity;
+            }
+            $field->amenities = $results;
+            $images = $this->image->get_images($field->field_id);
+            $results = array();
+            foreach ($images as $image) {
+                if ($image->name != "" && $image->name != null) {
+                    $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                }
+                $results[] = $image;
+            }
+            $field->images = $results;
+            $games = $this->game->get_field_games($field->field_id, $lang);
+            $results = array();
+            foreach ($games as $game) {
+                if ($game->image != "" && $game->image != null) {
+                    $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+                }
+                $results[] = $game;
+            }
+            $field->games = $results;
             $result[] = $field;
         }
         return $result;

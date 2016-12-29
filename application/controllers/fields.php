@@ -123,7 +123,19 @@ class fields extends REST_Controller {
             if (empty($date))
                 $date = date('y-m-d');
             $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
-            $this->response(array('status' => true, 'data' => $available_times, 'message' => ""));
+            $times = array();
+            $count = 0;
+            $range = array();
+            foreach ($available_times as $key => $value) {
+                if($count % 2  == 0) {
+                    $range["start"] = $value;
+                } else {
+                    $range["end"] = $value;
+                    array_push($times, $range);
+                }
+                $count++;
+            }
+            $this->response(array('status' => true, 'data' => $times, 'message' => ""));
         }
     }
 
