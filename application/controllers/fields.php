@@ -19,8 +19,8 @@ class fields extends REST_Controller {
         $this->form_validation->set_rules('name', 'Name', 'required|min_length[6]|max_length[30]');
         $this->form_validation->set_rules('phone', 'Phone', 'required');
         $this->form_validation->set_rules('hour_rate', 'Hour Rate', 'required');
-        $this->form_validation->set_rules('open_time', 'Open Time', 'required');
-        $this->form_validation->set_rules('close_time', 'Close Time', 'required');
+        $this->form_validation->set_rules('open_time', 'Open Time', 'required|min_length[7]|max_length[8]|callback_validate_time');
+        $this->form_validation->set_rules('close_time', 'Close Time', 'required|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('area_x', 'Area X', 'required');
         $this->form_validation->set_rules('area_y', 'Area Y', 'required');
         $this->form_validation->set_rules('games_types', 'games types', 'required');
@@ -61,8 +61,8 @@ class fields extends REST_Controller {
         $this->form_validation->set_rules('name', 'Name', 'required|min_length[6]|max_length[30]');
         $this->form_validation->set_rules('phone', 'Phone', 'required');
         $this->form_validation->set_rules('hour_rate', 'Hour Rate', 'required');
-        $this->form_validation->set_rules('open_time', 'Open Time', 'required');
-        $this->form_validation->set_rules('close_time', 'Close Time', 'required');
+        $this->form_validation->set_rules('open_time', 'Open Time', 'required|min_length[7]|max_length[8]|callback_validate_time');
+        $this->form_validation->set_rules('close_time', 'Close Time', 'required|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('area_x', 'Area X', 'required');
         $this->form_validation->set_rules('area_y', 'Area Y', 'required');
         $this->form_validation->set_rules('games_types', 'games types', 'required');
@@ -127,7 +127,7 @@ class fields extends REST_Controller {
             $count = 0;
             $range = array();
             foreach ($available_times as $key => $value) {
-                if($count % 2  == 0) {
+                if ($count % 2 == 0) {
                     $range["start"] = $value;
                 } else {
                     $range["end"] = $value;
@@ -271,6 +271,25 @@ class fields extends REST_Controller {
     function add_field_id($post_array) {
         $post_array['field_id'] = $this->field_id;
         return $post_array;
+    }
+
+    public function validate_time($str) {
+        if (strlen($str) == 7)
+            $str = "0" . $str;
+        $this->form_validation->set_message('validate_time', $str . ' is not a valid time. Ex:( 10:00:00 )');
+        if (strrchr($str, ":")) {
+            list($hh, $mm, $ss) = explode(':', $str);
+            if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)) {
+                return FALSE;
+            } elseif ((int) $hh > 24 || (int) $mm > 59 || (int) $ss > 59) {
+                return FALSE;
+            } elseif (mktime((int) $hh, (int) $mm, (int) $ss) === FALSE) {
+                return FALSE;
+            }
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
 }

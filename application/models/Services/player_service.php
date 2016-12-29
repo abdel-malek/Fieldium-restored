@@ -49,7 +49,7 @@ class player_service extends CI_Model {
 //            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
         $player = $this->player->get($player_id);
-        $player->server_id = $server_id;
+        $player->server_id = md5($server_id);
         return $player;
     }
     

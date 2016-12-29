@@ -19,7 +19,9 @@ function initialize() {
     var geocoder = new google.maps.Geocoder();
      $("#dropdown").click(function() {
          address = $("#dropdown :selected")[0].text;
-         geocodeAddress(address, geocoder, map);
+         map.setCenter(new google.maps.LatLng(33.513807, 36.276528));
+
+//         geocodeAddress(address, geocoder, map);
      });
      var address = $("#dropdown :selected")[0].text;
      geocodeAddress(address, geocoder, map);
@@ -49,6 +51,7 @@ function initialize() {
                 dataType: 'json',
                 success:function(response) {
                     // alert(response.data[0].company_id);
+                    console.log("companies:", response.data);
                     if( response.status === true){
                         // for(j = 0; j < response.length(); j++){
 
@@ -62,7 +65,7 @@ function initialize() {
                         //     '<h3>Dubai</h3>' +
                         //     '<p>Lorem ipsum dolor consect adipiscing elit, diamnonu nibh euismod dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim </p>'+
                         //     '</div>'+ '</div>']];
-
+console.log("companies:", response.data);
 
                           var markers = [[]];
                         for( var i = 0; i < response.data.length; i++ ) {

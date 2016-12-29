@@ -18,7 +18,7 @@ class bookings extends REST_Controller {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('field_id', 'Field id', 'required');
         $this->form_validation->set_rules('date', 'Date', 'required');
-        $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[8]|max_length[8]|callback_validate_time');
+        $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
@@ -50,7 +50,7 @@ class bookings extends REST_Controller {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('field_id', 'Field id', 'required');
         $this->form_validation->set_rules('date', 'Date', 'required');
-        $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[8]|max_length[8]|callback_validate_time');
+        $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('player_name', 'Player name', 'required');
         $this->form_validation->set_rules('player_phone', 'Player phone', '');
@@ -87,7 +87,7 @@ class bookings extends REST_Controller {
         $this->form_validation->set_rules('booking_id', 'Booking id', 'required');
         $this->form_validation->set_rules('field_id', 'Field id', 'required');
         $this->form_validation->set_rules('date', 'Date', 'required');
-        $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[8]|max_length[8]|callback_validate_time');
+        $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
@@ -162,6 +162,7 @@ class bookings extends REST_Controller {
     }
 
     public function validate_time($str) {
+        if(strlen($str) == 7) $str = "0".$str;
         $this->form_validation->set_message('validate_time', $str.' is not a valid time. Ex:( 10:00:00 )');
         if (strrchr($str, ":")) {
             list($hh, $mm, $ss) = explode(':', $str);
