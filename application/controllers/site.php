@@ -18,7 +18,7 @@ class site extends REST_Controller {
         else {
             $featured_places = $this->field_service->get_featured_places();
             $games = $this->game_service->get_all();
-            $this->load->view('website/index', array(
+            $this->load->view('index', array(
                 'featured_places' => $featured_places,
                 'games' => $games
                     )

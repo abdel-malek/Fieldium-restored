@@ -1,9 +1,4 @@
-<!--A Design by W3layouts
-Author: W3layout
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -125,18 +120,48 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             <div class="row about_box">
 
                 <?php
-                $x=0;
+                $x=1;
                 foreach ($games as $game): ?>
                     <?php
-                    $x++;
-                    $class = ($x%2 == 0)? 'box1': 'box2';
-                    $boxRight = ($x%2 == 0)? 'box1_right': 'box2_right';
-                    $desc = ($x%2 == 0)? 'desc1': 'desc2';
+
+                    switch ($x) {
+                        case 1:
+                            $class ='box1';
+                            $boxRight = 'box1_right';
+                            $desc = 'desc1';
+                            break;
+
+                            case 2:
+                            $class ='box2';
+                            $boxRight = 'box2_right';
+                            $desc = 'desc2';
+                            break;
+                            case 3:
+                            $class ='box2';
+                            $boxRight = 'box2_right';
+                            $desc = 'desc2';
+                            break;
+                            case 4:
+                            $class ='box1';
+                            $boxRight = 'box1_right';
+                            $desc = 'desc1';
+                            break;
+                        
+                        default:
+                           $class ='box1';
+                            $boxRight = 'box1_right';
+                            $desc = 'desc1';
+                            break;
+                    }
+                 
+                    // $class = ($x % 2 == 0)? 'box1': 'box2 ';
+                    // $boxRight = ($x % 2 == 0)? 'box1_right': 'box2_right';
+                    // $desc = ($x % 2 == 0)? 'desc1': 'desc2';
                     ?>
                 <div class="col-md-6 sp_av">
-                    <div class="<?php echo $class?>">
+                    <div class="<?php echo $class?> box">
                         <div class="box1_left">
-                            <a href="<?php echo $game->game_type_id?>"><img src="<?php echo base_url() ?>assets/website/images/<?php echo $game->image ?>" class="img-responsive" alt=""/></a>
+                            <a href="<?php echo $game->game_type_id?>"><img style="width: 100px; height: 160px" src="<?php echo base_url() ?>assets/website/images/<?php echo $game->image ?>" class="img-responsive" alt=""/></a>
                             <div class="<?php echo $desc?>">
                                 <h3><?php echo $game->name ?><br><span class="m_text"></span></h3>
                                 <p>Lorem ipsum dolor sit amet, consectetuer.</p>
@@ -160,7 +185,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         <div class="clear"></div>
                     </div>
                 </div>
-                <?php endforeach; ?>
+                <?php  $x++;    endforeach; ?>
 <!--                <div class="col-md-6 sp_av">-->
 <!--                    <div class="box2">-->
 <!--                        <div class="box1_left">-->
@@ -263,12 +288,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <?php $count = 0; ?>
-<!--                    --><?php //foreach ($featured_places as $key => $featured_place):?>
-               
-
+                  <!-- <?php foreach ($featured_places as $key => $featured_place):?> -->
                     <div class="item <?php $count ++; if($count == 1){echo ' active';}else{echo 'item';}?>">
                         <div class="row">
-                        <?php foreach ($featured_places as $featured_place):?>
+                        <?php foreach ($featured_places as $i => $featured_place):?>
+                            <?php   if (($i > 0) && ($i % 3 == 0)) { ?>
+                            </div>
+                            </div>
+                            <div class="item">
+                             <div class="row">
+                            <?php } ?>
                         <div class="col-sm-4"><a href="#">
                             <ul class="spinning">
                                 <li class="live"><?php echo $featured_place->name?></li>
@@ -280,9 +309,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <div class="mask">
                                    <ul class="desc_info">
                                        <li>Phone: <?php echo $featured_place->phone?> </li>
-                                       <li>Hour_rate: <?php echo $featured_place->hour_rate?></li>
-                                       <li>Open_time: <?php echo $featured_place->open_time?></li>
-                                       <li>Close_time:  <?php echo $featured_place->close_time?></li>
+                                       <li>Hour Rate: <?php echo $featured_place->hour_rate?></li>
+                                       <li>Open Time: <?php echo $featured_place->open_time?></li>
+                                       <li>Close Time:  <?php echo $featured_place->close_time?></li>
 
                                    </ul>
 
@@ -296,10 +325,31 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             </div>
 
                     </div>
+                      
+
                 
 
-<!--                    --><?php //endforeach;?>
+                  <!-- <?php endforeach;?> -->
                 </div>
+                
+
+                <!-- <div class="carousel-inner">
+  <div class="item active">
+    <div class="row">
+<?php foreach ($featured_places as $i => $featured_place) { ?>
+<?php   if (($i > 0) && ($i % 4 == 0)) { ?>
+    </div>
+  </div>
+  <div class="item">
+    <div class="row">
+<?php   } ?>
+      <div class="col-lg-3">
+        <img src="<?php echo base_url() ?>assets/website/images/pi.jpg" class="img-responsive2"  onerror="imgError(this);"/>
+      </div>
+<?php } ?>
+    </div>
+  </div>
+</div> -->
 
                 <!-- Controls -->
                 <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
@@ -334,17 +384,33 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         <div class="opening_hours">
             <ul   class="times">
                 <h3>Activities <span class="opening"></span></h3>
-                 <select id="dropdown" size="10"  multiple="true">
-        <option value="1" selected>Dubai</option> 
-        <option value="2">Sharjah</option>
-        <option value="3">Al Ain</option>
-        <option value="4">Ras al-Khaima</option>
-        <option value="5">Emirate of Ajman</option>
-    </select>
+
+                <script type="text/javascript">
+                 $.ajax({
+                url:'index.php/companies/get_all',
+                type: 'GET',
+                // data: map_c.serialize(),
+                dataType: 'json',
+                success:function(response) {
+                    var $company = $('#dropdown');
+                    console.log("here",mark);
+                    console.log(response);
+                    // alert("done");
+
+               for (var i = 0; i < response.data.length; i++) {
+                $company.append('<option  onclick="myClick(id);" id=' + (1+i) +  ' lng=' + response.data[i].longitude +' lat=' + response.data[i].latitude + '>' + response.data[i].name + '</option>');
+            }
+
+                }
+
+            });
+                </script>
+
+              <select id="dropdown" size="10"  multiple="true"></select>
+           
+                    <!-- <li><i class="calender"> </i><span class="week">Saturday</span><div class="hours">h.6:00-h.24:00</div>  <div class="clear"></div></li> -->
                 
-                    <li><i class="calender"> </i><span class="week">Saturday</span><div class="hours">h.6:00-h.24:00</div>  <div class="clear"></div></li>
-                
-    <div id="info" style="display:none"></div>
+    <div id="info"></div>
 <!--
                 <li value="1" > </i><span class="week">Monday</span><div class="hours">h.6:00-h.24:00</div><div class="clear"></div></li>
                 <li value="2"> </i><span class="week">Sunday</span><div class="hours">h.6:00-h.24:00</div>  <div class="clear"></div></li>

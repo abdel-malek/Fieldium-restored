@@ -5,6 +5,9 @@
 //     document.body.appendChild(script);
 // });
 
+
+var mark= [];
+
 function initialize() {
     var map;
     var bounds = new google.maps.LatLngBounds();
@@ -12,12 +15,12 @@ function initialize() {
         mapTypeId: 'roadmap'
     };
 
-    // Display a map on the page
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     map.setTilt(45);
     
-    var geocoder = new google.maps.Geocoder();
+        var geocoder = new google.maps.Geocoder();
      $("#dropdown").click(function() {
+<<<<<<< HEAD
          address = $("#dropdown :selected")[0].text;
          map.setCenter(new google.maps.LatLng(33.513807, 36.276528));
 
@@ -37,19 +40,53 @@ function initialize() {
          } else {
              alert('Geocode was not successful for the following reason: ' + status);
          }
+=======
+         address = $("#dropdown :selected")[0];
+         var lat = $(address).attr("lat");
+         var lng = $(address).attr("lng");
+         var position = new google.maps.LatLng(lat, lng);
+         map.setCenter(position);
+      
+>>>>>>> 69bc2d07fc0a14573b67466b67f43b4169114640
      });
- }
+
+
+   
+
+     // google.maps.event.addListener(address, 'selected', (function(address) {
+     //                            return function() {
+     //                                infoWindow.setContent(infoWindowContent[i][0]);
+     //                                infoWindow.open(map, address);
+     //                            }
+     //                        })(address));
+
+   
+  
+    
+ //    function geocodeAddress(address, geocoder, resultsMap) {
+ //     document.getElementById('info').innerHTML = address;
+ //     geocoder.geocode({
+ //         'address': address
+ //     }, function(results, status) {
+ //         if (status === google.maps.GeocoderStatus.OK) {
+ //             resultsMap.fitBounds(results[0].geometry.viewport);
+ //             document.getElementById('info').innerHTML += "<br>" + results[0].geometry.location.toUrlValue(6);
+ //         } else {
+ //             alert('Geocode was not successful for the following reason: ' + status);
+ //         }
+ //     });
+ // }
 
 
 
-        $('#map_canvas').dblclick(function () {
+        // $('#map_canvas, body').load(function () {
             // var map_c = $(this);
             $.ajax({
                 url:'index.php/companies/get_all',
                 type: 'GET',
-                // data: map_c.serialize(),
                 dataType: 'json',
                 success:function(response) {
+<<<<<<< HEAD
                     // alert(response.data[0].company_id);
                     console.log("companies:", response.data);
                     if( response.status === true){
@@ -67,12 +104,12 @@ function initialize() {
                         //     '</div>'+ '</div>']];
 console.log("companies:", response.data);
 
+=======
+                    if( response.status === true){   
+>>>>>>> 69bc2d07fc0a14573b67466b67f43b4169114640
                           var markers = [[]];
                         for( var i = 0; i < response.data.length; i++ ) {
-                            // alert(i);
                             markers = [[response.data[i].name, response.data[i].latitude, response.data[i].longitude]];
-                            // alert(markers);
-
                             var infoWindowContent = [
                                 ['<div class="info_content">' +
                                 '<img src="assets/website/images/basket.png" alt="">' +
@@ -86,12 +123,14 @@ console.log("companies:", response.data);
                                 content: infoWindowContent,
                                 maxWidth: 350
                             }), marker, i;
+
+                               
+
                         }
 
-
                         for( var i = 0; i < markers.length; i++ ){
-                            markers.push([response.data[i].name, response.data[i].latitude, response.data[i].longitude]);
 
+                            markers.push([response.data[i].name, response.data[i].latitude, response.data[i].longitude]);     
                             infoWindowContent .push(['<div class="info_content">' +
                             '<img src="assets/website/images/basket.png" alt="">' +
                             '<div class="field_desc">' +
@@ -106,7 +145,6 @@ console.log("companies:", response.data);
                                 map: map,
                                 title: markers[i][0]
                             });
-                            // $('#map_canvas').html(markers);
 
                             // Allow each marker to have an info window
                             google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -116,20 +154,49 @@ console.log("companies:", response.data);
                                 }
                             })(marker, i));
 
-                            // Automatically center the map fitting all markers on the screen
+                            mark.push(marker);
+
+
+                            // var $company = $('#dropdown');
+                               // $company.append('<option  onclick="myClick(id);" id=' + i + ' value=' + response.data[i].company_id + ' lng=' + response.data[i].longitude +' lat=' + response.data[i].latitude + '>' + response.data[i].name + '</option>'); 
                             map.fitBounds(bounds);
-                            // markers.push([response.data[i].name, response.data[i].latitude,response.data[i].longitude])
+                            // console.log("here2", mark);
 
                         }
-                        var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+
+                      var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
                             this.setZoom(8);
                             google.maps.event.removeListener(boundsListener);
                         });
+
+                       // for( var i = 0; i < response.data.length; i++ ){
+                       //      var $company = $('#dropdown');
+                       //      $company.append('<option  onclick="myClick(id);" id=' + i + ' value=' + response.data[i].company_id + ' lng=' + response.data[i].longitude +' lat=' + response.data[i].latitude + '>' + response.data[i].name + '</option>'); 
+
+                       //  }
+
                        }
+
+
             }
         });
+    }
 
-    });
+
+
+        function myClick(i){
+            // console.log("here3", mark);
+            
+             google.maps.event.trigger(mark[i], "click");
+              map.setCenter(mark[i].getPosition());
+        // google.maps.event.trigger(mark[id], 'click');
+    }
+
+
+   
+
+
+    // });
 
 
 
@@ -226,7 +293,6 @@ console.log("companies:", response.data);
     //     google.maps.event.removeListener(boundsListener);
     // });
 
-}
 
 window.onload = initialize;
 google.maps.event.addDomListener(window, "load", initialize);
@@ -273,7 +339,7 @@ function imgError(image) {
 
 
 $(document).ready(function() {
-    initialize();
+    // initialize();
 
 
     $(window).scroll(function() {
