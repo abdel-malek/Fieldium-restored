@@ -22,7 +22,7 @@ class search_service extends CI_Model {
     public function search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
         $search_result = $this->search->search($name, $game, $area, $timing, $start, $duration, $date, $lang);
         
-        if ($timing == 'true' || $timing == true) {
+        if ($timing == 'true') {
             $result = array();
             foreach ($search_result as $field) {
                 $field->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);

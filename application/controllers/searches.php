@@ -36,9 +36,15 @@ class searches extends REST_Controller {
         if (!$this->get('game_type') || !$this->get('area_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => 'The area_id and game_type details are required.'));
         $timing = $this->get('timing');
-        if ($timing == 'true' || $timing == true) {
+        if ($timing == 'true') {
             if (!$this->get('start') || !$this->get('duration') || !$this->get('date') || !$this->validate_time($this->get('start')))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date, start time and duration details are required.'));
+
+            $start = $this->get('start');
+            $duration = $this->get('duration');
+            $date = $this->get('date');
+            if (strlen($start) <= 7)
+                $start = "0" . $start;
         }
         $start = $this->get('start');
         $duration = $this->get('duration');
@@ -50,6 +56,7 @@ class searches extends REST_Controller {
 
     public function validate_time($str) {
 //        $this->form_validation->set_message('validate_time', $str . ' is not a valid time. Ex:( 10:00:00 )');
+
         if (strrchr($str, ":")) {
             list($hh, $mm, $ss) = explode(':', $str);
             if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)) {

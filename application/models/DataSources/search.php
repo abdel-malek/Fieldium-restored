@@ -33,7 +33,7 @@ class search extends CI_Model {
     }
 
     public function search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
-        if ($timing == 'true' || $timing == true) {
+        if ($timing == 'true') {
             return $this->db->select(ENTITY::FIELD . ", "
                                     . "field." . $lang . "_name as name, 
                 field." . $lang . "_description as description, 
@@ -83,16 +83,26 @@ class search extends CI_Model {
         }
     }
 
-    public function save_search($name, $game, $area, $timing, $start, $duration, $date,$player_id, $token) {
-        $this->db->insert('search', array(
-            'player_id' => $player_id,
-            'token' => $token,
-            'area_id' => $area,
-            'game_type_id' => $game,
-            'start' => $start,
-            'duration' => $duration,
-            'date' => $date,
-            'text' => $name
-        ));
+    public function save_search($name, $game, $area, $timing, $start, $duration, $date, $player_id, $token) {
+        if ($timing == 'true')
+            $this->db->insert('search', array(
+                'player_id' => $player_id,
+                'token' => $token,
+                'area_id' => $area,
+                'game_type_id' => $game,
+                'start' => $start,
+                'duration' => $duration,
+                'date' => $date,
+                'text' => $name
+            ));
+        else
+            $this->db->insert('search', array(
+                'player_id' => $player_id,
+                'token' => $token,
+                'area_id' => $area,
+                'game_type_id' => $game,
+                'text' => $name
+            ));
     }
+
 }

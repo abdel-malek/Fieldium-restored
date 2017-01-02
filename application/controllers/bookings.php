@@ -32,6 +32,8 @@ class bookings extends REST_Controller {
             $manually = false;
             $player_id = $this->current_user->player_id;
             $user_id = null;
+            if (strlen($start) == 7)
+                $start = "0" . $start;
             $booking = $this->booking_service
                     ->create(
                     $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
@@ -69,7 +71,8 @@ class bookings extends REST_Controller {
             $manually = true;
             $player = $this->player_service->create($name, $phone);
             $user_id = $this->current_user->user_id;
-
+            if (strlen($start) == 7)
+                $start = "0" . $start;
             $booking = $this->booking_service
                     ->create(
                     $field_id, $player->player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
@@ -100,6 +103,8 @@ class bookings extends REST_Controller {
             $duration = $this->input->post('duration');
             $notes = $this->input->post('notes');
             $user_id = $this->current_user->user_id;
+            if (strlen($start) == 7)
+                $start = "0" . $start;
             $booking = $this->booking_service
                     ->update(
                     $booking_id, $field_id, $date, $start, $duration, $notes, $user_id, $this->response->lang
@@ -162,8 +167,9 @@ class bookings extends REST_Controller {
     }
 
     public function validate_time($str) {
-        if(strlen($str) == 7) $str = "0".$str;
-        $this->form_validation->set_message('validate_time', $str.' is not a valid time. Ex:( 10:00:00 )');
+        if (strlen($str) == 7)
+            $str = "0" . $str;
+        $this->form_validation->set_message('validate_time', $str . ' is not a valid time. Ex:( 10:00:00 )');
         if (strrchr($str, ":")) {
             list($hh, $mm, $ss) = explode(':', $str);
             if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)) {

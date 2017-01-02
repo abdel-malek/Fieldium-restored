@@ -45,6 +45,10 @@ class fields extends REST_Controller {
             $amenities = $this->input->post('amenities');
             $images = $this->input->post('images');
             $games_types = $this->input->post('games_types');
+            if (strlen($open_time) == 7)
+                $open_time = "0" . $open_time;
+            if (strlen($cloes_time) == 7)
+                $cloes_time = "0" . $cloes_time;
             $field = $this->field_service
                     ->create(
                     $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $this->response->lang
@@ -87,6 +91,10 @@ class fields extends REST_Controller {
             $amenities = $this->input->post('amenities');
             $images = $this->input->post('images');
             $games_types = $this->input->post('games_types');
+            if (strlen($open_time) == 7)
+                $open_time = "0" . $open_time;
+            if (strlen($cloes_time) == 7)
+                $cloes_time = "0" . $cloes_time;
             $field = $this->field_service
                     ->update(
                     $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $this->response->lang
