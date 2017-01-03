@@ -8,33 +8,48 @@ class field extends CI_Model {
 
     public function get_all($lang = "en") {
         return $this->db->select(ENTITY::FIELD . ", "
-                                . $lang . "_name as name, "
-                                . $lang . "_description as description"
+                                . "field.".$lang . "_name as name, "
+                                . "field.".$lang . "_description as description,"
+                                . "company.en_name as company_name,"
+                                . "company.latitude,"
+                                . "company.longitude,"
+                                . "company.logo"
                         )
                         ->from('field')
+                 ->join('company', 'company.company_id = field.company_id')
                         ->where('deleted', 0)
                         ->get()->result();
     }
 
     public function get_featured_places($lang = "en") {
         return $this->db->select(ENTITY::FIELD . ", "
-                                . $lang . "_name as name, "
-                                . $lang . "_description as description"
+                                . "field.".$lang . "_name as name, "
+                                . "field.".$lang . "_description as description,"
+                                . "company.en_name as company_name,"
+                                . "company.latitude,"
+                                . "company.longitude,"
+                                . "company.logo"
                         )
                         ->from('field')
-                        ->where('deleted', 0)
+                        ->join('company', 'company.company_id = field.company_id')
+                        ->where('field.deleted', 0)
                         ->where('featured_place', 1)
                         ->get()->result();
     }
 
     public function get($field_id, $lang = "en") {
         return $this->db->select(ENTITY::FIELD . ", "
-                                . $lang . "_name as name, "
-                                . $lang . "_description as description"
+                                . "field.".$lang . "_name as name, "
+                                . "field.".$lang . "_description as description,"
+                                . "company.en_name as company_name,"
+                                . "company.latitude,"
+                                . "company.longitude,"
+                                . "company.logo"
                         )
                         ->from('field')
+                ->join('company', 'company.company_id = field.company_id')
                         ->where('field_id', $field_id)
-                        ->where('deleted', false)
+                        ->where('field.deleted', false)
                         ->get()->row();
     }
 
@@ -42,6 +57,7 @@ class field extends CI_Model {
         $this->db->select(ENTITY::FIELD . ", "
                         . "field." . $lang . "_name as name, 
                 field." . $lang . "_description as description, 
+                company.en_name as company_name, company.longitude, company.latitude, company.logo,
                 sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance, 
                 IFNULL((SELECT sum(duration) from booking where 
                 booking.field_id = field.field_id AND 

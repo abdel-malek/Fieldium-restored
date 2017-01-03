@@ -187,6 +187,8 @@ class field_service extends CI_Model {
             $results[] = $game;
         }
         $field->games = $results;
+        if ($field->logo != null)
+            $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
         return $field;
     }
 
@@ -206,6 +208,8 @@ class field_service extends CI_Model {
             }
             $result->images = $results;
             $result->games = $this->game->get_field_games($field->field_id, $lang);
+            if ($field->logo != null)
+                $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
         }
         return $result;
     }
@@ -241,6 +245,8 @@ class field_service extends CI_Model {
                 $results[] = $game;
             }
             $field->games = $results;
+            if ($field->logo != null)
+                $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
             $result[] = $field;
         }
         return $result;
@@ -277,7 +283,7 @@ class field_service extends CI_Model {
         $fields = $this->field->get_featured_places($lang);
         $result = array();
         foreach ($fields as $field) {
-           $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+            $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
             $results = array();
             foreach ($amenities as $amenity) {
                 if ($amenity->image != "" && $amenity->image != null) {
@@ -304,6 +310,8 @@ class field_service extends CI_Model {
                 $results[] = $game;
             }
             $field->games = $results;
+            if ($field->logo != null)
+                $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
             $result[] = $field;
         }
         return $result;

@@ -37,6 +37,7 @@ class search extends CI_Model {
             $this->db->select(ENTITY::FIELD . ", "
                             . "field." . $lang . "_name as name, 
                 field." . $lang . "_description as description, 
+                company.en_name as company_name, company.longitude, company.latitude, company.logo,
                 DATE_SUB(SUBTIME(field.close_time, field.open_time), INTERVAL IFNULL((SELECT sum(duration) from booking where 
                 booking.field_id = field.field_id AND 
                 booking.state_id = " . BOOKING_STATE::PENDING . " AND 

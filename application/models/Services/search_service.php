@@ -23,24 +23,51 @@ class search_service extends CI_Model {
         $search_result = $this->search->search($name, $game, $area, $timing, $start, $duration, $date, $lang);
 
         if ($timing == 'true') {
-            $result = array();
+            $res = array();
+
             foreach ($search_result as $field) {
-                $field->amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
-                $field->images = $this->image->get_images($field->field_id);
-                $field->games = $this->game->get_field_games($field->field_id, $lang);
-                $result[] = $field;
+                $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+                $result = array();
+                foreach ($amenities as $amenity) {
+                    if ($amenity->image != "" && $amenity->image != null)
+                        $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+                    $result[] = $amenity;
+                }
+                $field->amenities = $result;
+
+                $images = $this->image->get_images($field->field_id);
+                $result = array();
+                foreach ($images as $image) {
+                    if ($image->name != "" && $image->name != null) {
+                        $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                    }
+                    $result[] = $image;
+                }
+                $field->images = $result;
+                $games = $this->game->get_field_games($field->field_id, $lang);
+                $results = array();
+                foreach ($games as $game) {
+                    if ($game->image != "" && $game->image != null) {
+                        $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+                    }
+                    $results[] = $game;
+                }
+                $field->games = $results;
+                if ($field->logo != null)
+                    $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
+                $res[] = $field;
             }
         } else {
-            $result = array();
+            $res = array();
             foreach ($search_result as $company) {
                 if ($company->image != null)
                     $company->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->image;
                 if ($company->logo != null)
                     $company->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->logo;
-                $result[] = $company;
+                $res[] = $company;
             }
         }
-        return $result;
+        return $res;
     }
 
     public function save_search($name, $game, $area, $timing, $start, $duration, $date, $player_id, $token) {
