@@ -199,7 +199,7 @@ abstract class REST_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
-        
+
 //        if($_SERVER['SERVER_PORT'] !== 443 &&
 //            (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off')) {
 //           header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -285,7 +285,7 @@ abstract class REST_Controller extends CI_Controller {
         }
 
         $this->response->lang = $this->_detect_lang();
-        $this->load->language(array('controllers', 'views'), ($this->response->lang=="en")?"english":"arabic");
+        $this->load->language(array('controllers', 'views'), ($this->response->lang == "en") ? "english" : "arabic");
 
         $this->rest = new StdClass();
         // Load DB if its enabled
@@ -725,12 +725,15 @@ abstract class REST_Controller extends CI_Controller {
         $header = $this->input->request_headers();
 
         if (isset($header['Lang'])) {
-            $this->session->set_userdata(array('language'=>$header['Lang']));
-            return $header['Lang'];
+            if ($header['Lang'] == 'en' || $header['Lang'] == 'ar') {
+                $this->session->set_userdata(array('language' => $header['Lang']));
+                return $header['Lang'];
+            }
+            $this->session->set_userdata(array('language' => 'en'));
+            return $this->session->userdata('language');
         }
-        $this->session->set_userdata(array('language'=>'en'));
+        $this->session->set_userdata(array('language' => 'en'));
         return $this->session->userdata('language');
-        
     }
 
     /**

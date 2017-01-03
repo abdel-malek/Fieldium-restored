@@ -34,8 +34,8 @@ class search extends CI_Model {
 
     public function search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
         if ($timing == 'true') {
-            return $this->db->select(ENTITY::FIELD . ", "
-                                    . "field." . $lang . "_name as name, 
+            $this->db->select(ENTITY::FIELD . ", "
+                            . "field." . $lang . "_name as name, 
                 field." . $lang . "_description as description, 
                 DATE_SUB(SUBTIME(field.close_time, field.open_time), INTERVAL IFNULL((SELECT sum(duration) from booking where 
                 booking.field_id = field.field_id AND 
@@ -43,26 +43,31 @@ class search extends CI_Model {
                 booking.date = '" . $date . "' AND 
                 booking.deleted = 0),0 ) HOUR
                 )  as available_time", false)
-                            ->from('field')
-                            ->join('company', 'company.company_id = field.company_id')
-                            ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left')
-                            ->where("(company.area_id = $area OR field_game_type.game_type_id = $game OR field.en_name like '%$name%' OR field.ar_name like '%$name%')
-                                and NOT EXISTS (SELECT booking.* FROM booking
+                    ->from('field')
+                    ->join('company', 'company.company_id = field.company_id')
+                    ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
+            $where = "(company.area_id = $area and field_game_type.game_type_id = $game";
+            if($name != "")
+                $where .= "and( field.en_name like '%$name%' OR company.en_name like '%$name%')";
+            $where .= ")
+                    and NOT EXISTS (SELECT booking.* FROM booking
                     WHERE booking.field_id =field.field_id and booking.date = '$date' and booking.deleted = 0 and ("
-                                    . "( "
-                                    . "booking.start >= time('$start')"
-                                    . "and booking.start < (time('$start') + INTERVAL $duration HOUR)"
-                                    . ")"
-                                    . " OR ( "
-                                    . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
-                                    . "and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
-                                    . ")))"
-                                    . " AND field.deleted = 0"
-                                    . " AND (time('$start') between field.open_time and field.close_time)"
-                                    . " AND ((time('$start') + INTERVAL $duration HOUR) between field.open_time and field.close_time)", '', false)
+                    . "( "
+                    . "booking.start >= time('$start')"
+                    . "and booking.start < (time('$start') + INTERVAL $duration HOUR)"
+                    . ")"
+                    . " OR ( "
+                    . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
+                    . "and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
+                    . ")))"
+                    . " AND field.deleted = 0"
+                    . " AND (time('$start') between field.open_time and field.close_time)"
+                    . " AND ((time('$start') + INTERVAL $duration HOUR) between field.open_time and field.close_time)";
+            $res = $this->db->where($where, '', false)
                             ->get()->result();
+            return $res;
         } else {
-            return $this->db->select(ENTITY::COMPANY . ", "
+            $this->db->select(ENTITY::COMPANY . ", "
                                     . "company." . $lang . "_name as name, "
                                     . "company." . $lang . "_description as description, "
                                     . "company." . $lang . "_address as address, "
@@ -74,12 +79,16 @@ class search extends CI_Model {
                             ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left')
                             ->where('company.deleted', 0)
                             ->where('company.area_id', $area)
-                            ->or_where('field_game_type.game_type_id', $game)
-                            ->or_where("field.en_name like '%$name%'")
-                            ->or_where("field.ar_name like '%$name%'")
-                            ->order_by("fields_number desc")
-                            ->group_by('company_id')
-                            ->get()->result();
+                            ->where('field_game_type.game_type_id', $game);
+            if ($name != "") {
+                $this->db->where("field.en_name like '%$name%'")
+                        ->or_where("company.en_name like '%$name%'");
+            }
+//                            ->or_where("field.ar_name like '%$name%'")
+            $res = $this->db->order_by("fields_number desc")
+                    ->group_by('company_id')
+                    ->get()->result();
+            return $res;
         }
     }
 

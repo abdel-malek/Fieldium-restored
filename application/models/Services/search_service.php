@@ -21,7 +21,7 @@ class search_service extends CI_Model {
 
     public function search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
         $search_result = $this->search->search($name, $game, $area, $timing, $start, $duration, $date, $lang);
-        
+
         if ($timing == 'true') {
             $result = array();
             foreach ($search_result as $field) {
@@ -31,13 +31,20 @@ class search_service extends CI_Model {
                 $result[] = $field;
             }
         } else {
-            $result = $search_result;
+            $result = array();
+            foreach ($search_result as $company) {
+                if ($company->image != null)
+                    $company->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->image;
+                if ($company->logo != null)
+                    $company->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->logo;
+                $result[] = $company;
+            }
         }
         return $result;
     }
-    
-    public function save_search($name, $game, $area, $timing, $start, $duration, $date,$player_id, $token){
-        $this->search->save_search($name, $game, $area, $timing, $start, $duration, $date,$player_id, $token);
-    } 
+
+    public function save_search($name, $game, $area, $timing, $start, $duration, $date, $player_id, $token) {
+        $this->search->save_search($name, $game, $area, $timing, $start, $duration, $date, $player_id, $token);
+    }
 
 }
