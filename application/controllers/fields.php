@@ -175,7 +175,7 @@ class fields extends REST_Controller {
         $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
     }
 
-    function fields_management_post($primary_key = null) {
+    function fields_management_post($primary_key = null, $operation = null) {
 
         $this->user_permissions->support_permission($this->current_user);
         $this->load->library('grocery_CRUD');
@@ -220,8 +220,8 @@ class fields extends REST_Controller {
         }
     }
 
-    function fields_management_get($primary_key = null) {
-        $this->fields_management_post($primary_key);
+    function fields_management_get($primary_key = null, $operation = null) {
+        $this->fields_management_post($primary_key, $operation);
     }
 
     function view_images($primary_key, $row) {
@@ -273,7 +273,7 @@ class fields extends REST_Controller {
     }
 
     function field_images_management_get($primary_key = null, $operation = null) {
-        $this->field_images_management_post($primary_key, $operation = null);
+        $this->field_images_management_post($primary_key, $operation);
     }
 
     function add_field_id($post_array) {

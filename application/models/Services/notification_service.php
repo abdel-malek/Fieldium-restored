@@ -44,9 +44,29 @@ class notification_service extends CI_Model {
             $notification_helper->send_notification_to_ios_device($player->token, $message_key, $data, 1);
         $this->notification->save_notification(array(
             'player_id' => $player->player_id,
-            'content' => $message
+            'content' => $message,
+            'booking_id' => $data["booking"]->booking_id
                 )
         );
+    }
+
+    public function send_notification_admin($company_id, $message, $data, $message_key) {
+        $this->load->model('Services/user_service');
+        $users = $this->user_service->get_company_users($company_id);
+        $notification_helper = new NotificationHelper();
+        foreach ($users as $value) {
+            if ($value->os == 'android')
+                $notification_helper->send_notification_to_android_device(array($value->token), $message, $data);
+            else if ($value->os == 'ios')
+                $notification_helper->send_notification_to_ios_device($value->token, $message_key, $data, 1);
+        }
+//        $this->notification->save_notification(array(
+//            'player_id' => $users[0]->user_id,
+//            'content' => $message,
+//            'booking_id' => $data["booking"]->booking_id
+//                )
+//        );
+        
     }
 
     public function register_notification_token($user_id, $token) {
@@ -56,7 +76,11 @@ class notification_service extends CI_Model {
     }
 
     public function get_notifications($player_id) {
-        return $this->notification->get_notifications($player_id);
+        $notifications = $this->notification->get_notifications($player_id);
+        foreach ($notifications as $noti)
+            if ($noti->logo != null)
+                $noti->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $noti->logo;
+        return $notifications;
     }
 
 }

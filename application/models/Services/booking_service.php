@@ -16,7 +16,7 @@ class booking_service extends CI_Model {
     $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
     ) {
         $field = $this->field->get($field_id);
-        if(!$field)
+        if (!$field)
             throw new Field_Not_Found_Exception();
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 3600;
@@ -29,11 +29,12 @@ class booking_service extends CI_Model {
             throw new Field_Not_Available_Exception();
         }
         $total = ($duration * $field->hour_rate);
-        
+
         $state = BOOKING_STATE::PENDING;
-        if($manually == true)
+        if ($manually == true)
             $state = BOOKING_STATE::APPROVED;
         
+
         $booking_id = $this->booking->add(array(
             'field_id' => $field_id,
             'player_id' => $player_id,
@@ -48,6 +49,11 @@ class booking_service extends CI_Model {
         ));
 
         $booking = $this->get($booking_id, $lang);
+        if ($manually == true) {
+            $this->load->model('Services/notification_service');
+            $message = "You have received a new booking No." . $booking_id;
+            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+        }
         return $booking;
     }
 
@@ -103,7 +109,7 @@ class booking_service extends CI_Model {
         $message = array();
         $message["en"] = "Your booking No." . $booking_id . " has been declined. ";
         $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
-        // $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_declined_message");
+        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_declined_message");
     }
 
     public function approve($booking_id, $lang) {
@@ -114,7 +120,7 @@ class booking_service extends CI_Model {
         $message = array();
         $message["en"] = "Your booking No." . $booking_id . " has been approved. ";
         $message["ar"] = "تم قبول الطلب رقم " . $booking_id;
-        // $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_confirmed_message");
+        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_confirmed_message");
         return $booking;
     }
 
@@ -130,9 +136,10 @@ class booking_service extends CI_Model {
                 $result[] = $image;
             }
             $booking->images = $result;
+            if ($booking->logo != null)
+                $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
         }
         return $bookings;
-    
     }
 
     public function company_bookings($company_id, $lang) {

@@ -58,6 +58,24 @@ class users extends REST_Controller {
             $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('updated')));
         }
     }
+    
+    public function save_token_post() {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('token', 'Token', 'required');
+        $this->form_validation->set_rules('os', 'os', 'required');
+        if (!$this->form_validation->run()) {
+            throw new Validation_Exception(validation_errors());
+        } else {
+            $token = $this->input->post('token');
+            $os = $this->input->post('os');
+            $user_id = $this->current_user->user_id;
+            $user = $this->user_service->save_token(
+                    $user_id, $token, $os, $this->response->lang
+            );
+            $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('updated')));
+        }
+    }
 
     public function change_password_post() {
         $this->load->helper('form');

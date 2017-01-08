@@ -28,31 +28,30 @@ class user_service extends CI_Model {
         return $user;
     }
 
-    public function get($id, $lang= "en") {
+    public function get($id, $lang = "en") {
         $res = $this->user->get($id, $lang);
         if (!$res)
-            throw new User_Not_Found_Exception ($lang);
-        if($res->profile_picture != "" && $red->profile_picture != null)
+            throw new User_Not_Found_Exception($lang);
+        if ($res->profile_picture != "" && $red->profile_picture != null)
             $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
         return $res;
     }
 
     public function update(
-                    $user_id, $name, $phone, $email, $role_id, $lang
-                    ) {
+    $user_id, $name, $phone, $email, $role_id, $lang
+    ) {
         $this->get($user_id, $lang);
-        $user = $this->user->update( $user_id,
-                array(
-                    'name' => $name,
-                    'phone' => $phone,
-                    'email' => $email,
-                    'role_id' => $role_id
+        $user = $this->user->update($user_id, array(
+            'name' => $name,
+            'phone' => $phone,
+            'email' => $email,
+            'role_id' => $role_id
                 )
         );
         $user = $this->get($user_id, $lang);
         return $user;
     }
-    
+
     public function login($username, $password) {
 
         $user = $this->user->login($username, $password);
@@ -74,7 +73,7 @@ class user_service extends CI_Model {
     public function logout() {
         $this->session->sess_destroy();
     }
-    
+
     public function active($user_id) {
         $this->get($user_id);
         $this->user->update($user_id, array(
@@ -92,7 +91,7 @@ class user_service extends CI_Model {
         $user = $this->get($user_id);
         return $user;
     }
-    
+
     public function send_confirmation_email($email, $activation_code) {
         $activation_link = base_url("index.php/users/confirm_registration?email=" . $email . "&key=" . $activation_code);
         $message_body = "Welcome to BlueBrand .<br> Please click below on the link to activate your account.<br><br>" . $activation_link;
@@ -109,6 +108,23 @@ class user_service extends CI_Model {
 
         $this->user->update($user_id, array(
             'password' => $new_password
+        ));
+        $user = $this->get($user_id, $lang);
+        return $user;
+    }
+
+    public function get_company_users($company_id) {
+        return $this->db->get_where('user', array('company_id' => $company_id, 'active' => 1, 'role_id' => ROLE::ADMIN))->result();
+    }
+
+    public function save_token(
+    $user_id, $token, $os, $lang
+    ) {
+        $user = $this->get($user_id, $lang);
+
+        $this->user->update($user_id, array(
+            'token' => $token,
+            'os' => $os
         ));
         $user = $this->get($user_id, $lang);
         return $user;

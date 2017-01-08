@@ -37,14 +37,15 @@ class booking extends CI_Model {
     }
 
     public function get_my_bookings($player_id, $lang = "en") {
-        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name")
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, company.logo, company.".$lang."_address as address")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
+                        ->join('company', 'company.company_id = field.company_id')
                         ->where('player_id', $player_id)
                         ->where('booking.deleted', 0)
                         ->order_by('booking.field_id, booking.date ASC')
                         ->get()->result();
-    }
+	}
 
     public function company_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, player.name as player_name, player.phone as player_phone")
