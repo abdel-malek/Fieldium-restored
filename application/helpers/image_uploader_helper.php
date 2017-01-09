@@ -29,6 +29,6 @@ function set_upload_options() {
     $config = array();
     $config['upload_path'] = dirname($_SERVER["SCRIPT_FILENAME"]) . UPLOADED_IMAGES_PATH;
     $config['allowed_types'] = 'jpg|png|jpeg';
-    var_dump($config['upload_path']); die();
+//    var_dump($config['upload_path']); die();
     return $config;
 }

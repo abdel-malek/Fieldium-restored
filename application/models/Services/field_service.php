@@ -99,6 +99,7 @@ class field_service extends CI_Model {
         ));
 
         if ($amenities) {
+            $amenities = $this->decodeAmenities($amenities);
             $this->amenity->delete_field_amenities($field_id);
             foreach ($amenities as $am) {
                 if (!is_array($am)) {
@@ -116,6 +117,7 @@ class field_service extends CI_Model {
         }
 
         if ($games_types) {
+            $games_types = $this->decodeAmenities($games_types);
             $this->game->delete_field_games($field_id);
             foreach ($games_types as $type) {
                 if (!is_array($type)) {
@@ -146,13 +148,14 @@ class field_service extends CI_Model {
 
     function decodeAmenities($json) {
         $data = json_decode($json, true);
+//        var_dump($datsa);die();
         if (!is_array($data))
             throw new Invalid_Amenities_Exception($lang);
 
-        for ($i = 0; $i < count($data); $i++) {
-            if (!array_key_exists("amenity", $data[$i]))
-                throw new Invalid_Amenities_Exception($lang);
-        }
+//        for ($i = 0; $i < count($data); $i++) {
+//            if (!array_key_exists("amenity", $data[$i]))
+//                throw new Invalid_Amenities_Exception($lang);
+//        }
         return $data;
     }
 

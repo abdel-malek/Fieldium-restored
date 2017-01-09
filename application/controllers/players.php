@@ -156,4 +156,11 @@ class players extends REST_Controller {
         redirect('players/players_management');
     }
 
+    function upload_image_post() {
+        $this->load->helper('image_uploader_helper');
+        $image_file = upload_image($this);
+        $image_name = $image_file['image']['upload_data']['file_name'];
+      
+        $this->response(array('status' => true, 'data' => array("image_name" => $image_name), "message" => $this->lang->line('image_saved')));
+    }
 }
