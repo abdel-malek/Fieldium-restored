@@ -202,7 +202,7 @@ class users extends REST_Controller {
 
     public function _callback_password($value = '', $primary_key = null) {
 
-        return '<input type="text"  maxlength="50" value="" name="password" style="width:462px" autocomplete="false">';
+        return '<input type="text"  maxlength="50" value="" name="password" style="width:100%" autocomplete="false">';
     }
 
     function encrypt_password_callback($post_array, $primary_key) {

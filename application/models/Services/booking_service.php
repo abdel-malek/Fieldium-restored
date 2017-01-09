@@ -20,12 +20,13 @@ class booking_service extends CI_Model {
             throw new Field_Not_Found_Exception();
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 3600;
-        $end = strftime('%H:%M:%S', $endtime);
-//       var_dump($field); die();
-        if ($bookings || !(
+        $end = strftime('%H:%M:%S', $endtime);        
+        if ($bookings 
+		/*|| !(
                 $start >= $field->open_time && $start < $field->close_time &&
                 $end > $field->open_time && $end <= $field->close_time
-                )) {
+                )*/
+				) {
             throw new Field_Not_Available_Exception();
         }
         $total = ($duration * $field->hour_rate);
@@ -52,7 +53,7 @@ class booking_service extends CI_Model {
         if ($manually == true) {
             $this->load->model('Services/notification_service');
             $message = "You have received a new booking No." . $booking_id;
-            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+//            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
         }
         return $booking;
     }
@@ -98,7 +99,7 @@ class booking_service extends CI_Model {
         $this->booking->update($booking_id, array('deleted' => 1));
         $this->load->model('Services/notification_service');
         $message = "Your booking No." . $booking_id . " has been cancelled. ";
-        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_cancelled_message");
+//        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_cancelled_message");
     }
 
     public function decline($booking_id) {
@@ -107,9 +108,9 @@ class booking_service extends CI_Model {
         $booking = $this->get($booking_id);
         $this->load->model('Services/notification_service');
         $message = array();
-        $message["en"] = "Your booking No." . $booking_id . " has been declined. ";
-        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
-        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_declined_message");
+        $message = "Your booking No." . $booking_id . " has been declined. ";
+//        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
+//        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_declined_message");
     }
 
     public function approve($booking_id, $lang) {
@@ -118,9 +119,9 @@ class booking_service extends CI_Model {
         $booking = $this->get($booking_id, $lang);
         $this->load->model('Services/notification_service');
         $message = array();
-        $message["en"] = "Your booking No." . $booking_id . " has been approved. ";
-        $message["ar"] = "تم قبول الطلب رقم " . $booking_id;
-        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_confirmed_message");
+        $message = "Your booking No." . $booking_id . " has been approved. ";
+//        $message["ar"] = "تم قبول الطلب رقم " . $booking_id;
+//        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_confirmed_message");
         return $booking;
     }
 

@@ -14,7 +14,7 @@ function upload_image($controller) {
             //upload the image
             if (!$controller->upload->do_upload($index)) {
                 $error =  $controller->upload->display_errors();
-                //throw new Uploading_Image_Exception($error);
+                throw new Uploading_Image_Exception($error);
             } else {
 
                 $data[$index] = array('upload_data' => $controller->upload->data());
@@ -29,6 +29,6 @@ function set_upload_options() {
     $config = array();
     $config['upload_path'] = dirname($_SERVER["SCRIPT_FILENAME"]) . UPLOADED_IMAGES_PATH;
     $config['allowed_types'] = 'jpg|png|jpeg';
-
+    var_dump($config['upload_path']); die();
     return $config;
 }

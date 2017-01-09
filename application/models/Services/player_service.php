@@ -109,7 +109,7 @@ class player_service extends CI_Model {
         if (!$res)
             throw new Player_Not_Found_Exception($lang);
         $res->prefered_games = $this->game->get_player_games($id, $lang);
-        if($res->profile_picture != "" && $red->profile_picture != null)
+        if($res->profile_picture != "" && $res->profile_picture != null)
             $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
         return $res;
     }

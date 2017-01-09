@@ -25,7 +25,7 @@ class NotificationHelper {
         );
         //AIzaSyCWLceEX-QN5Az96nvsvMGlYHbsh49-XfM
         $headers = array(
-            'Authorization: key=' . "AIzaSyCmsZORr5rsRnLkcPzckgiBRAXwPTqll-Y",
+            'Authorization: key=' . "AAAAwgvsrCg:APA91bEwPMm8XYxGAEoOefo57UAUhgDGzcj_RS5FN2QJH1U9X4enyM3HCaJZkC99xSa0YxbsulZ0nV2WnZpNS8AN5ZZy28_8BRvwLcN5CQEbIt6heEwybagD01sG6nkUQCsFc-wx-QlH6l4KqMoAaMyu_X4yVKUlJg",
             'Content-Type: application/json'
         );
 

@@ -10,8 +10,13 @@ class fields extends REST_Controller {
 
         $this->load->model("Services/field_service");
         $this->load->model('Permissions/user_permissions');
+        $this->load->library('send_sms');
     }
 
+    public function send_sms_get(){
+        $this->send_sms->send_sms();
+    }
+    
     public function create_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -193,9 +198,9 @@ class fields extends REST_Controller {
                     ->set_relation_n_n('games', 'field_game_type', 'game_type', 'field_id', 'game_type_id', 'en_name')
                     ->set_relation_n_n('amenities', 'field_amenity', 'amenity', 'field_id', 'amenity_id', 'en_name')
                     ->display_as('field_id', 'id')
-                    ->display_as('en_description', 'description')
-                    ->display_as('en_name', 'name')
-                    ->display_as('max_capacity', 'capacity')
+                    ->display_as('en_description', 'Description')
+                    ->display_as('en_name', 'Name')
+                    ->display_as('max_capacity', 'Capacity')
                     ->unset_edit_fields('ar_name', 'ar_description', 'deleted', 'company_id', 'featured_place')
                     ->unset_add_fields('ar_name', 'ar_description', 'deleted', 'featured_place')
                     ->field_type('open_time', 'time')

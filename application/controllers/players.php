@@ -15,7 +15,7 @@ class players extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('phone', 'Phone', 'required');
-         $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('name', 'Name', 'required');
         $this->form_validation->set_rules('os', 'os', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
@@ -50,7 +50,7 @@ class players extends REST_Controller {
         $this->form_validation->set_rules('phone', 'Phone', 'required');
         $this->form_validation->set_rules('server_id', 'Server id', 'required');
         if (!$this->form_validation->run()) {
-            throw new Validation_Exception((validation_errors())?validation_errors():"Validation Exception");
+            throw new Validation_Exception((validation_errors()) ? validation_errors() : "Validation Exception");
         } else {
             $phone = $this->input->post('phone');
             $server_id = $this->input->post('server_id');
@@ -81,7 +81,8 @@ class players extends REST_Controller {
             try {
                 $this->load->helper('image_uploader_helper');
                 $image = upload_image($this);
-                $profile_picture = $image['profile_picture']['upload_data']['file_name'];
+                if (isset($image['profile_picture']))
+                    $profile_picture = $image['profile_picture']['upload_data']['file_name'];
             } catch (Uploading_Image_Exception $ex) {
                 $profile_picture = "";
             }
