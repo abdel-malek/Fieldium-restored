@@ -17,7 +17,7 @@ class field_service extends CI_Model {
     }
 
     public function create(
-    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $lang
+    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $lang
     ) {
 
         $field_id = $this->field->add(array(
@@ -32,6 +32,7 @@ class field_service extends CI_Model {
             'close_time' => $cloes_time,
             'area_x' => $area_x,
             'area_y' => $area_y,
+            'auto_confirm' => $auto_confirm,
             'max_capacity' => $max_capacity
         ));
 
@@ -80,7 +81,7 @@ class field_service extends CI_Model {
     }
 
     public function update(
-    $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $lang
+    $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $lang
     ) {
         $this->get($field_id, $lang);
 
@@ -95,6 +96,7 @@ class field_service extends CI_Model {
             'close_time' => $cloes_time,
             'area_x' => $area_x,
             'area_y' => $area_y,
+            'auto_confirm' => $auto_confirm,
             'max_capacity' => $max_capacity
         ));
 
@@ -117,7 +119,7 @@ class field_service extends CI_Model {
         }
 
         if ($games_types) {
-            $games_types = $this->decodeAmenities($games_types);
+            $games_types = $this->decode($games_types);
             $this->game->delete_field_games($field_id);
             foreach ($games_types as $type) {
                 if (!is_array($type)) {
@@ -144,6 +146,19 @@ class field_service extends CI_Model {
         }
         $field = $this->get($field_id, $lang);
         return $field;
+    }
+
+    function decode($json) {
+        $data = json_decode($json, true);
+//        var_dump($datsa);die();
+        if (!is_array($data))
+            throw new Invalid_Format_Exception($lang);
+
+//        for ($i = 0; $i < count($data); $i++) {
+//            if (!array_key_exists("amenity", $data[$i]))
+//                throw new Invalid_Amenities_Exception($lang);
+//        }
+        return $data;
     }
 
     function decodeAmenities($json) {

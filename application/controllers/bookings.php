@@ -184,5 +184,57 @@ class bookings extends REST_Controller {
             return FALSE;
         }
     }
+    
+    function bookings_management_post($operation = null) {
+
+        $this->user_permissions->support_permission($this->current_user);
+        $this->load->library('grocery_CRUD');
+        try {
+            $crud = new grocery_CRUD();
+
+            $crud->set_theme('datatables')
+                    ->set_table('booking')
+                    ->set_subject('booking')
+                    ->where('booking.deleted', 0)
+                    ->columns('booking_id', 'field_id', 'player_id', 'state_id', 'creation_date', 'date', 'start', 'duration', 'total')
+                    ->order_by('booking_id')
+                    ->set_relation('field_id', 'field', 'en_name', array('deleted' => 0))
+                    ->set_relation('player_id', 'player', '{name} <br> {phone}')
+                    ->set_relation('state_id', 'state', 'en_name')
+                    ->edit_fields('state_id')
+//                    ->display_as('field_id', 'id')
+//                    ->display_as('en_description', 'Description')
+//                    ->display_as('en_name', 'Name')
+//                    ->display_as('max_capacity', 'Capacity')
+//                    ->unset_edit_fields('ar_name', 'ar_description', 'deleted', 'company_id', 'featured_place')
+//                    ->unset_add_fields('ar_name', 'ar_description', 'deleted', 'featured_place')
+//                    ->field_type('open_time', 'time')
+//                    ->field_type('close_time', 'time')
+//                    ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'area_x', 'area_y', 'hour_rate')
+//                    ->callback_delete(array($this, 'delete_field'))
+//                    ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
+                    ->unset_export()
+                    ->unset_add()
+                    ->unset_read()
+                    ->unset_delete()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->model("Services/booking_service");
+            $this->load->view('template.php', array(
+                'view' => 'bookings_management',
+//                'company' => $this->company_service->get($primary_key),
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+        } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+    }
+
+    function bookings_management_get( $operation = null) {
+        $this->bookings_management_post($operation);
+    }
 
 }

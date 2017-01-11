@@ -13,10 +13,10 @@ class fields extends REST_Controller {
         $this->load->library('send_sms');
     }
 
-    public function send_sms_get(){
+    public function send_sms_get() {
         $this->send_sms->send_sms();
     }
-    
+
     public function create_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -50,13 +50,14 @@ class fields extends REST_Controller {
             $amenities = $this->input->post('amenities');
             $images = $this->input->post('images');
             $games_types = $this->input->post('games_types');
+            $auto_confirm = $this->input->post('auto_confirm');
             if (strlen($open_time) == 7)
                 $open_time = "0" . $open_time;
             if (strlen($cloes_time) == 7)
                 $cloes_time = "0" . $cloes_time;
             $field = $this->field_service
                     ->create(
-                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $this->response->lang
+                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm,$this->response->lang
             );
             $this->response(array('status' => true, 'data' => $field, 'message' => $this->lang->line('created')));
         }
@@ -96,13 +97,14 @@ class fields extends REST_Controller {
             $amenities = $this->input->post('amenities');
             $images = $this->input->post('images');
             $games_types = $this->input->post('games_types');
+            $auto_confirm = $this->input->post('auto_confirm');
             if (strlen($open_time) == 7)
                 $open_time = "0" . $open_time;
             if (strlen($cloes_time) == 7)
                 $cloes_time = "0" . $cloes_time;
             $field = $this->field_service
                     ->update(
-                    $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $this->response->lang
+                    $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $this->response->lang
             );
             $this->response(array('status' => true, 'data' => $field, 'message' => $this->lang->line('updated')));
         }
@@ -166,7 +168,10 @@ class fields extends REST_Controller {
     function upload_image_post() {
         $this->load->helper('image_uploader_helper');
         $image_file = upload_image($this);
-        $image_name = $image_file['image']['upload_data']['file_name'];
+        if (!isset($image_file['image']))
+            $this->response(array('status' => false, 'data' => null, "message" => "Uploading error"));
+        else
+            $image_name = $image_file['image']['upload_data']['file_name'];
 
         $this->load->model('Services/image_service');
         $image = $this->image_service->save_image($image_name);

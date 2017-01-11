@@ -32,7 +32,7 @@ class booking_service extends CI_Model {
         $total = ($duration * $field->hour_rate);
 
         $state = BOOKING_STATE::PENDING;
-        if ($manually == true)
+        if ($manually == true || $field->auto_confirm == 1)
             $state = BOOKING_STATE::APPROVED;
         
 
@@ -91,6 +91,8 @@ class booking_service extends CI_Model {
         $booking = $this->booking->get($booking_id, $lang);
         if (!$booking)
             throw new Booking_Not_Found_Exception($lang);
+        if ($booking->logo != null)
+                $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
         return $booking;
     }
 

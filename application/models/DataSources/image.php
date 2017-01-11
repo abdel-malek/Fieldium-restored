@@ -47,7 +47,8 @@ class image extends CI_Model {
     
     public function save_image($image_name) 
     {
-         if ($this->db->insert('image', array('name'=>$image_name))) {
+//                var_dump($image_name);die();
+         if ($this->db->insert('image', array('name'=>$image_name['name']))) {
             $id = $this->db->insert_id();
             return $id;
         } else {

@@ -123,6 +123,7 @@ class player_service extends CI_Model {
         ));
         $this->game->delete_player_games($player_id);
         if ($games_types) {
+            $games_types = $this->decode($games_types);
             foreach ($games_types as $type) {
                 if (!is_array($type)) {
                     try {
@@ -141,6 +142,19 @@ class player_service extends CI_Model {
         return $player;
     }
 
+    function decode($json) {
+        $data = json_decode($json, true);
+//        var_dump($datsa);die();
+        if (!is_array($data))
+            throw new Invalid_Format_Exception($lang);
+
+//        for ($i = 0; $i < count($data); $i++) {
+//            if (!array_key_exists("amenity", $data[$i]))
+//                throw new Invalid_Amenities_Exception($lang);
+//        }
+        return $data;
+    }
+    
     public function deactive($player_id) {
         $this->get($player_id);
         $this->player->update($player_id, array(

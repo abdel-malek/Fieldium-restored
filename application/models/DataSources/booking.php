@@ -7,9 +7,10 @@ class booking extends CI_Model {
     }
 
     public function get($booking_id, $lang = "en") {
-        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, player.name as player_name, player.phone as player_phone")
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, player.name as player_name, player.phone as player_phone, company." . $lang . "_address as address, company.logo")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
+                ->join('company', 'company.company_id = field.company_id')
                         ->join('player', 'player.player_id = booking.player_id', 'left')
                         ->where('booking_id', $booking_id)
                         ->where('booking.deleted', 0)
@@ -37,15 +38,16 @@ class booking extends CI_Model {
     }
 
     public function get_my_bookings($player_id, $lang = "en") {
-        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, company.logo, company.".$lang."_address as address")
+        return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, company." . $lang . "_address as address, company.logo")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('company', 'company.company_id = field.company_id')
                         ->where('player_id', $player_id)
+//                        ->where('booking.state_id != ', BOOKING_STATE::DECLINED)
                         ->where('booking.deleted', 0)
                         ->order_by('booking.field_id, booking.date ASC')
                         ->get()->result();
-	}
+    }
 
     public function company_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, player.name as player_name, player.phone as player_phone")
