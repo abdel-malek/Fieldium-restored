@@ -2139,8 +2139,9 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver {
     }
 
     protected function get_relation_input($field_info, $value) {
-        $this->load_js_chosen();
-        $this->set_js_config($this->default_javascript_path . '/jquery_plugins/config/jquery.chosen.config.js');
+        $this->set_css($this->default_css_path . '/jquery_plugins/chosen/chosen.css');
+        $this->set_js($this->default_javascript_path . '/jquery_plugins/jquery.chosen.min.js');
+        $this->set_js($this->default_javascript_path . '/jquery_plugins/config/jquery.chosen.config.js');
 
         $ajax_limitation = 10000;
         $total_rows = $this->get_relation_total_rows($field_info->extras);
@@ -2162,12 +2163,18 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver {
         $input .= "<option value=''></option>";
 
         if (!$using_ajax) {
+            // Added by chava
+            $state = $field_info->extras[6]; // add|edit| ..etc
+            $default_value = $field_info->extras[5];
+            if ($state === 'add')
+                $value = $default_value;
+
             $options_array = $this->get_relation_array($field_info->extras);
             foreach ($options_array as $option_value => $option) {
                 $selected = !empty($value) && $value == $option_value ? "selected='selected'" : '';
                 $input .= "<option value='$option_value' $selected >$option</option>";
             }
-        } elseif (!empty($value) || (is_numeric($value) && $value == '0')) { //If it's ajax then we only need the selected items and not all the items
+        } elseif (!empty($value) || (is_numeric($value) && $value == '0')) { //If it's ajax then we only need the selected items and not all the items  
             $selected_options_array = $this->get_relation_array($field_info->extras, $value);
             foreach ($selected_options_array as $option_value => $option) {
                 $input .= "<option value='$option_value'selected='selected' >$option</option>";
@@ -4496,8 +4503,12 @@ class Grocery_CRUD extends grocery_CRUD_States {
      * @param string $order_by
      * @return Grocery_CRUD
      */
-    public function set_relation($field_name, $related_table, $related_title_field, $where_clause = null, $order_by = null) {
-        $this->relation[$field_name] = array($field_name, $related_table, $related_title_field, $where_clause, $order_by);
+//    public function set_relation($field_name, $related_table, $related_title_field, $where_clause = null, $order_by = null) {
+//        $this->relation[$field_name] = array($field_name, $related_table, $related_title_field, $where_clause, $order_by);
+//        return $this;
+//    }
+    public function set_relation($field_name, $related_table, $related_title_field, $where_clause = null, $order_by = null, $default_value = null) {
+        $this->relation[$field_name] = array($field_name, $related_table, $related_title_field, $where_clause, $order_by, $default_value, $this->getState());
         return $this;
     }
 

@@ -184,7 +184,7 @@ class bookings extends REST_Controller {
             return FALSE;
         }
     }
-    
+
     function bookings_management_post($operation = null) {
 
         $this->user_permissions->support_permission($this->current_user);
@@ -201,28 +201,24 @@ class bookings extends REST_Controller {
                     ->set_relation('field_id', 'field', 'en_name', array('deleted' => 0))
                     ->set_relation('player_id', 'player', '{name} <br> {phone}')
                     ->set_relation('state_id', 'state', 'en_name')
-                    ->edit_fields('state_id')
-//                    ->display_as('field_id', 'id')
-//                    ->display_as('en_description', 'Description')
-//                    ->display_as('en_name', 'Name')
-//                    ->display_as('max_capacity', 'Capacity')
-//                    ->unset_edit_fields('ar_name', 'ar_description', 'deleted', 'company_id', 'featured_place')
-//                    ->unset_add_fields('ar_name', 'ar_description', 'deleted', 'featured_place')
-//                    ->field_type('open_time', 'time')
-//                    ->field_type('close_time', 'time')
-//                    ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'area_x', 'area_y', 'hour_rate')
-//                    ->callback_delete(array($this, 'delete_field'))
-//                    ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
+                    ->edit_fields('state_id', 'date', 'start', 'duration', 'notes')
+                    ->display_as('field_id', 'Field')
+                    ->display_as('player_id', 'Player')
+                    ->display_as('state_id', 'State')
+                    ->display_as('booking_id', 'ID')
+                    ->field_type('start', 'time')
+                    ->callback_column('duration', array($this, '_callback_duration_render'))
+                    ->callback_column('total', array($this, '_callback_total_render'))
+                    ->required_fields('date', 'start', 'duration', 'state_id')
+                    ->callback_delete(array($this, 'delete_booking'))
                     ->unset_export()
                     ->unset_add()
                     ->unset_read()
-                    ->unset_delete()
                     ->unset_print();
             $output = $crud->render();
             $this->load->model("Services/booking_service");
             $this->load->view('template.php', array(
                 'view' => 'bookings_management',
-//                'company' => $this->company_service->get($primary_key),
                 'output' => $output->output,
                 'js_files' => $output->js_files,
                 'css_files' => $output->css_files
@@ -233,8 +229,24 @@ class bookings extends REST_Controller {
         }
     }
 
-    function bookings_management_get( $operation = null) {
+    function bookings_management_get($operation = null) {
         $this->bookings_management_post($operation);
+    }
+
+    public function _callback_duration_render($value, $row) {
+
+        return $value . " h";
+    }
+
+    public function _callback_total_render($value, $row) {
+
+        return $value . " AED";
+    }
+
+    public function delete_booking($primary_key) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->booking_service->delete($primary_key);
+        return true;
     }
 
 }
