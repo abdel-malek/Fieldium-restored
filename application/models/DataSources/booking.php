@@ -44,7 +44,7 @@ class booking extends CI_Model {
                         ->join('company', 'company.company_id = field.company_id')
                         ->where('player_id', $player_id)
                         ->where('booking.deleted', 0)
-                        ->order_by('booking.field_id, booking.date ASC')
+                        ->order_by('booking.date ASC')
                         ->get()->result();
     }
 
@@ -78,6 +78,7 @@ class booking extends CI_Model {
                         ->where('booking.field_id', $field_id)
                         ->where('booking.date', $date)
                         ->where('booking.deleted', 0)
+                        ->order_by('booking.start ASC')
                         ->get()->result();
     }
 
@@ -98,14 +99,40 @@ class booking extends CI_Model {
         $date = date('Y-m-d');
         $time = date("h:i:s");
         return $this->db->query("
-            SELECT booking.* FROM booking
-                    WHERE booking.player_id =$player_id and booking.deleted = 0 and ("
-                        . "booking.date >= '$date'"
+            SELECT booking.*, field.$lang" . "_name as field_name, company." . $lang . "_address as address, company.logo
+                FROM booking
+                JOIN field on field.field_id = booking.field_id
+                JOIN company on company.company_id = field.company_id
+                    WHERE booking.player_id =$player_id and booking.deleted = 0 "
+                        . "and ("
+                        . "booking.date > '$date'"
                         . " OR ( "
                         . "booking.date = '$date' and  time(booking.start) > time('$time')"
                         . ")"
-                . ") ORDER BY booking.date, booking.start"
-                . " LIMIT 1")->result();
+                        . ") ORDER BY booking.date, booking.start"
+                        . " LIMIT 1")->row();
+    }
+
+    public function last_bookings($player_id, $lang = "en") {
+        $date = date('Y-m-d');
+        $time = date("h:i:s");
+        return $this->db->select("DISTINCT(`booking`.`field_id`),booking.booking_id,"
+                                . "booking.player_id,(booking.date) as date, (booking.start),"
+                                . " booking.duration, booking.state_id, booking.total, booking.notes,"
+                                . "  field.$lang" . "_name as field_name, company." . $lang . "_address as address, company.logo")
+                        ->DISTINCT()
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->join('company', 'company.company_id = field.company_id')
+                        ->where('player_id', $player_id)
+                        ->where('booking.state_id', BOOKING_STATE::APPROVED)
+                        ->where("(booking.date < '$date' OR (booking.date = '$date' and booking.start < time('$time')))")
+                        ->where('booking.deleted', 0)
+                        ->order_by('booking.date DESC, booking.start DESC')
+                        //->group_by('booking.field_id')
+                        // ->having('max(date) = date')
+                        // ->limit(3)
+                        ->get()->result();
     }
 
 }

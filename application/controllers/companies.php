@@ -80,17 +80,8 @@ class companies extends REST_Controller {
             $area_id = $this->input->post('area_id');
             $description = $this->input->post('description');
             $ar_description = $this->input->post('description');
-            $image_name = "";
-            $logo = "";
-            try {
-                $this->load->helper('image_uploader_helper');
-                $image = upload_image($this);
-                $image_name = $image['image']['upload_data']['file_name'];
-                $logo = $image['logo']['upload_data']['file_name'];
-            } catch (Uploading_Image_Exception $ex) {
-                $image_name = "";
-                $logo = "";
-            }
+            $image_name = $this->input->post('image');
+            $logo = $this->input->post('logo');
             $company = $this->company_service
                     ->update(
                     $company_id, $name, $ar_name, $phone, $address, $ar_address, $longitude, $latitude, $area_id, $description, $ar_description, $image_name, $logo, $this->response->lang

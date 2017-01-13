@@ -9,6 +9,8 @@ class bookings extends REST_Controller {
         parent::__construct();
         $this->load->model("Services/booking_service");
         $this->load->model("Services/player_service");
+        $this->load->model("Services/game_service");
+        $this->load->model("Services/area_service");
         $this->load->model('Permissions/user_permissions');
         $this->load->library('send_sms');
     }
@@ -248,10 +250,23 @@ class bookings extends REST_Controller {
         $this->booking_service->delete($primary_key);
         return true;
     }
-    
+
     public function upcoming_booking_get() {
         $booking = $this->booking_service->upcoming_booking($this->current_user->player_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $booking, 'message' => ""));
+    }
+
+    public function upcoming_and_last_bookings_get() {
+        $booking = $this->booking_service->upcoming_booking($this->current_user->player_id, $this->response->lang);
+        $bookings = $this->booking_service->last_bookings($this->current_user->player_id, $this->response->lang);
+        $this->response(array('status' => true, 'data' =>
+            array(
+                'last_bookings' => $bookings,
+                'upcoming_booking' => $booking,
+                'areas' => $this->area_service->get_all($this->response->lang),
+                'games' => $this->game_service->get_all($this->response->lang)
+            )
+            , 'message' => ""));
     }
 
 }

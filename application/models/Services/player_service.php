@@ -174,7 +174,7 @@ class player_service extends CI_Model {
     public function request_verification_code($phone, $server_id) {
 
         $player = $this->player->get_by_phone($phone);
-        if ($player && $player->server_id == md5($server_id)) {
+        if ($player && $player->server_id == $server_id) {
             $player_id = $player->player_id;
 
             $code = $this->generate_activation_code();
