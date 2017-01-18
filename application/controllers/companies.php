@@ -90,6 +90,29 @@ class companies extends REST_Controller {
         }
     }
 
+    public function update_location_post() {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('company_id', 'Company id', 'required');
+        $this->form_validation->set_rules('longitude', 'Longitude', 'required');
+        $this->form_validation->set_rules('latitude', 'Latitude', 'required');
+        if (!$this->form_validation->run()) {
+            throw new Validation_Exception(validation_errors());
+        } else {
+            $company_id = $this->input->post('company_id');
+            $this->user_permissions->management_permission($this->current_user, $company_id);
+            $longitude = $this->input->post('longitude');
+            $latitude = $this->input->post('latitude');
+            $this->company_service
+                    ->update_location(
+                    $company_id, $longitude, $latitude
+            );
+            $company = $this->company_service
+                    ->get($company_id, $this->response->lang);
+            $this->response(array('status' => true, 'data' => $company, 'message' => $this->lang->line('updated')));
+        }
+    }
+
     public function show_get() {
         if (!$this->get('company_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));

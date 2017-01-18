@@ -99,7 +99,8 @@ class field_service extends CI_Model {
             'auto_confirm' => $auto_confirm,
             'max_capacity' => $max_capacity
         ));
-
+        $games_types = $this->decode($games_types);
+        $amenities = $this->decode($amenities);
         if ($amenities) {
             $amenities = $this->decodeAmenities($amenities);
             $this->amenity->delete_field_amenities($field_id);
@@ -117,7 +118,7 @@ class field_service extends CI_Model {
                 }
             }
         }
-
+        
         if ($games_types) {
             $games_types = $this->decode($games_types);
             $this->game->delete_field_games($field_id);

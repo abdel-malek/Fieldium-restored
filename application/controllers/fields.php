@@ -57,7 +57,7 @@ class fields extends REST_Controller {
                 $cloes_time = "0" . $cloes_time;
             $field = $this->field_service
                     ->create(
-                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm,$this->response->lang
+                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $this->response->lang
             );
             $this->response(array('status' => true, 'data' => $field, 'message' => $this->lang->line('created')));
         }
@@ -136,7 +136,11 @@ class fields extends REST_Controller {
         else {
             $date = $this->get('date');
             if (empty($date))
-                $date = date('y-m-d');
+                $date = date('Y-m-d');
+            else {
+                if ($date < date('Y-m-d'))
+                    $this->response(array('status' => false, 'data' => null, 'message' => "wrong date"));
+            }
             $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
             $times = array();
             $count = 0;
@@ -184,9 +188,11 @@ class fields extends REST_Controller {
         $fields = $this->field_service->get_featured_places($this->response->lang);
         $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
     }
+
     private $COMPANY_ID;
+
     function fields_management_post($primary_key = null, $operation = null) {
-        
+
         $this->user_permissions->support_permission($this->current_user);
         $this->COMPANY_ID = $primary_key;
         $this->load->library('grocery_CRUD');
@@ -207,8 +213,8 @@ class fields extends REST_Controller {
                     ->display_as('en_description', 'Description')
                     ->display_as('en_name', 'Name')
                     ->display_as('max_capacity', 'Capacity')
-                    ->unset_edit_fields('ar_name','auto_confirm', 'ar_description', 'deleted', 'company_id', 'featured_place')
-                    ->unset_add_fields('ar_name', 'ar_description','auto_confirm', 'deleted', 'featured_place')
+                    ->unset_edit_fields('ar_name', 'auto_confirm', 'ar_description', 'deleted', 'company_id', 'featured_place')
+                    ->unset_add_fields('ar_name', 'ar_description', 'auto_confirm', 'deleted', 'featured_place')
                     ->field_type('open_time', 'time')
                     ->field_type('close_time', 'time')
                     ->field_type('hour_rate', 'integer')
@@ -222,8 +228,8 @@ class fields extends REST_Controller {
                     ->unset_export()
                     ->unset_print();
             $output = $crud->render();
-            if($operation=="insert")
-                var_dump ("amal");
+            if ($operation == "insert")
+                var_dump("amal");
             $this->load->model("Services/company_service");
             $this->load->view('template.php', array(
                 'view' => 'fields_management',
@@ -251,8 +257,6 @@ class fields extends REST_Controller {
         $this->field_service->delete($primary_key);
         return true;
     }
-    
-    
 
     private $field_id;
 

@@ -76,6 +76,8 @@ class company_service extends CI_Model {
         return $company;
     }
 
+    
+    
     public function delete($company_id) {
         $this->get($company_id, "en");
 
