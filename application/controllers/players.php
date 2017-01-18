@@ -70,6 +70,7 @@ class players extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'name', 'required');
+        $this->form_validation->set_rules('email', 'email', 'valid_email');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {

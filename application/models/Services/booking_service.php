@@ -44,16 +44,16 @@ class booking_service extends CI_Model {
             'duration' => $duration,
             'notes' => $notes,
             'user_id' => $user_id,
-            'total' => $total,
+          //  'total' => $total,
             'manually' => $manually,
             'state_id' => $state
         ));
 
         $booking = $this->get($booking_id, $lang);
-        if ($manually == true) {
+        if ($manually == false) {
             $this->load->model('Services/notification_service');
             $message = "You have received a new booking No." . $booking_id;
-//            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
         }
         return $booking;
     }
@@ -79,8 +79,8 @@ class booking_service extends CI_Model {
             'date' => $date,
             'duration' => $duration,
             'notes' => $notes,
-            'user_id' => $user_id,
-            'total' => $total
+            'user_id' => $user_id
+           // 'total' => $total
         ));
 
         $booking = $this->get($booking_id, $lang);
@@ -108,22 +108,24 @@ class booking_service extends CI_Model {
         $this->get($booking_id);
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
         $booking = $this->get($booking_id);
+        $booking->notification_time = date('Y-m-d H:i:s');
         $this->load->model('Services/notification_service');
         $message = array();
         $message = "Your booking No." . $booking_id . " has been declined. ";
 //        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
-//        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_declined_message");
+        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_declined_message");
     }
 
     public function approve($booking_id, $lang) {
         $this->get($booking_id, $lang);
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::APPROVED));
         $booking = $this->get($booking_id, $lang);
+        $booking->notification_time = date('Y-m-d H:i:s');
         $this->load->model('Services/notification_service');
         $message = array();
         $message = "Your booking No." . $booking_id . " has been approved. ";
 //        $message["ar"] = "تم قبول الطلب رقم " . $booking_id;
-//        $this->notification_service->send_notification_4customer($booking->player_id, $message["en"], array("booking" => $booking), "booking_confirmed_message");
+        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_confirmed_message");
         return $booking;
     }
 
@@ -157,10 +159,48 @@ class booking_service extends CI_Model {
         return $this->booking->field_bookings_by_date($field_id, $date, $lang);
     }
     
-    public function upcoming_booking($player, $lang) {
-        return $this->booking->upcoming_booking($player, $lang);
+     public function upcoming_booking($player, $lang) {
+        $bookings = $this->booking->upcoming_booking($player, $lang);
+        foreach ($bookings as $booking) {
+            $images = $this->image->get_images($booking->field_id);
+            $result = array();
+            foreach ($images as $image) {
+                if ($image->name != "" && $image->name != null) {
+                    $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                }
+                $result[] = $image;
+            }
+            $booking->images = $result;
+            if(isset($booking->logo) && $booking->logo != "")
+                $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
+        }
+        return $bookings;
     }
 
+    public function last_bookings($palyer_id, $lang) {
+        $bookings = $this->booking->last_bookings($palyer_id, $lang);
+        $field = 0;
+        $results = array();
+        foreach ($bookings as $booking) {
+            if ($field != $booking->field_id) {
+                $field = $booking->field_id;
+                $images = $this->image->get_images($booking->field_id);
+                $result = array();
+                foreach ($images as $image) {
+                    if ($image->name != "" && $image->name != null) {
+                        $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                    }
+                    $result[] = $image;
+                }
+                $booking->images = $result;
+                if ($booking->logo != null)
+                    $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
+                $results[] = $booking;
+            } 
+                
+        }
+        return $results;
+    }
 }
 
 ?>

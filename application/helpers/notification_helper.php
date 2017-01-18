@@ -11,21 +11,30 @@ class NotificationHelper {
         
     }
 
-    public function send_notification_to_android_device($registatoin_ids, $message, $data) {
+    public function send_notification_to_device($registatoin_ids, $message, $data, $os) {
 
         $message_object = array(
-            "message_text" => $message,
-            "message_body" => $data);
+            "ntf_type" => 1,
+            "ntf_text" => array("en" => $message),
+            "ntf_body" => $data);
 
         $url = 'https://android.googleapis.com/gcm/send';
-
-        $fields = array(
-            'registration_ids' => $registatoin_ids,
-            'data' => array("message" => json_encode($message_object)),
-        );
+        if ($os == "android")
+            $fields = array(
+                'registration_ids' => $registatoin_ids,
+                'data' => json_encode($message_object) 
+            );
+        else if ($os == "ios")
+            $fields = array(
+                'registration_ids' => $registatoin_ids,
+                'data' => $message_object,
+                'content_available' => true,
+                'priority' => 'high',
+                'notification' => array('sound' => 'default', 'badge' => 0, 'body' => $message)
+            );
         //AIzaSyCWLceEX-QN5Az96nvsvMGlYHbsh49-XfM
         $headers = array(
-            'Authorization: key=' . "AAAAwgvsrCg:APA91bEwPMm8XYxGAEoOefo57UAUhgDGzcj_RS5FN2QJH1U9X4enyM3HCaJZkC99xSa0YxbsulZ0nV2WnZpNS8AN5ZZy28_8BRvwLcN5CQEbIt6heEwybagD01sG6nkUQCsFc-wx-QlH6l4KqMoAaMyu_X4yVKUlJg",
+            'Authorization: key=' . "AIzaSyDbI7DYn57zUVEh9LfhksHkcyCt7t2RgU8",
             'Content-Type: application/json'
         );
 
@@ -41,6 +50,8 @@ class NotificationHelper {
 
         // Execute post
         $result = curl_exec($ch);
+        var_dump($fields);
+        die();
         if ($result === FALSE) {
             die('Curl failed: ' . curl_error($ch));
         }
@@ -49,7 +60,54 @@ class NotificationHelper {
         curl_close($ch);
     }
 
-    public function send_notification_to_ios_device($deviceToken, $message, $data = null, $type) {
+    public function send_notification_to_ios_device($registatoin_ids, $message, $data) {
+
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $message = array(
+            "ntf_type" => $notification_type,
+            "ntf_text" => $msg,
+            "sound" => $notification_sound,
+            "ntf_body" => $notification_data
+        );
+
+        $fields = array(
+            'registration_ids' => $registatoin_ids,
+            'data' => $message,
+            'content_available' => true,
+            'priority' => 'high',
+            'notification' => array('sound' => 'default', 'badge' => 0, 'body' => $msg)
+        );
+
+
+        //AIzaSyCWLceEX-QN5Az96nvsvMGlYHbsh49-XfM
+        $headers = array(
+            'Authorization: key=' . "AIzaSyDbI7DYn57zUVEh9LfhksHkcyCt7t2RgU8",
+            'Content-Type: application/json'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        // Execute post
+        $result = curl_exec($ch);
+        var_dump($fields);
+        die();
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+
+        // Close connection
+        curl_close($ch);
+    }
+
+    public function send_notification_to_ios_device_apple_push($deviceToken, $message, $data = null, $type) {
 
 
         $passphrase = 'tradinos';

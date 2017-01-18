@@ -17,10 +17,7 @@ class notification_service extends CI_Model {
         $notification_helper = new NotificationHelper();
         foreach ($users as $user) {
             if ($user->device_id) {
-                if ($user->os == 'ios')
-                    $notification_helper->send_notification_to_ios_device($user->device_id, $message["ar"], $data, 2);
-                else if ($user->os == 'android')
-                    $tokens[] = $user->device_id;
+                $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os);
             }
         }
 
@@ -38,10 +35,7 @@ class notification_service extends CI_Model {
 //        $this->email->message($message["ar"]."<br>".$message["en"]);
 //        $this->email->send();
         $notification_helper = new NotificationHelper();
-        if ($player->os == 'android')
-            $notification_helper->send_notification_to_android_device(array($player->token), $message, $data);
-        else if ($player->os == 'ios')
-            $notification_helper->send_notification_to_ios_device($player->token, $message_key, $data, 1);
+        $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os);
         $this->notification->save_notification(array(
             'player_id' => $player->player_id,
             'content' => $message,
@@ -55,18 +49,8 @@ class notification_service extends CI_Model {
         $users = $this->user_service->get_company_users($company_id);
         $notification_helper = new NotificationHelper();
         foreach ($users as $value) {
-            if ($value->os == 'android')
-                $notification_helper->send_notification_to_android_device(array($value->token), $message, $data);
-            else if ($value->os == 'ios')
-                $notification_helper->send_notification_to_ios_device($value->token, $message_key, $data, 1);
+            $notification_helper->send_notification_to_device(array($value->token), $message, $data, $value->os);
         }
-//        $this->notification->save_notification(array(
-//            'player_id' => $users[0]->user_id,
-//            'content' => $message,
-//            'booking_id' => $data["booking"]->booking_id
-//                )
-//        );
-        
     }
 
     public function register_notification_token($user_id, $token) {

@@ -9,13 +9,13 @@ class Send_sms extends CI_Controller {
     }
 
     public function send_sms($message, $moblie, $lang) {
-        $url = "";
-        if ($lang == 1) {
-            $message = $this->ToUnicode($message);
-            $_url = 'http://sms.malath.net.sa/httpSmsProvider.aspx' . "?username=" . "KHALEEJSYS" . "&password=" . "0565610236" . "&mobile=" . $moblie . "&sender=" . 'KHALEEJ SYS' . "&unicode=U&message=" . $message . "";
-        } else if ($lang == 2){
-            $_url = 'http://sms.malath.net.sa/httpSmsProvider.aspx' . "?username=" . "KHALEEJSYS" . "&password=" . "0565610236" . "&mobile=" . $moblie . "&sender=" . 'KHALEEJ SYS' . "&unicode=E&message=" . $message . "";
-        }
+//        $url = "";
+//        if ($lang == 1) {
+//            $message = $this->ToUnicode($message);
+        $_url = 'http://sms.malath.net.sa/httpSmsProvider.aspx' . "?username=" . "KHALEEJSYS" . "&password=" . "0565610236" . "&mobile=" . $moblie . "&sender=" . 'KHALEEJ SYS' . "&unicode=U&message=hey amal";
+//        } else if ($lang == 2){
+//            $_url = 'http://sms.malath.net.sa/httpSmsProvider.aspx' . "?username=" . "KHALEEJSYS" . "&password=" . "0565610236" . "&mobile=" . $moblie . "&sender=" . 'KHALEEJ SYS' . "&unicode=E&message=" . $message . "";
+//        }
         $_url = preg_replace("/ /", "%20", $_url);
         $result = file_get_contents($_url);
         return $result;

@@ -49,17 +49,18 @@ class search extends CI_Model {
                     ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
             $where = "(company.area_id = $area and field_game_type.game_type_id = $game";
             if($name != "")
-                $where .= "and( field.en_name like '%$name%' OR company.en_name like '%$name%')";
+                $where .= " and( field.en_name like '%$name%' OR company.en_name like '%$name%')";
             $where .= ")
-                    and NOT EXISTS (SELECT booking.* FROM booking
+                     and NOT EXISTS (SELECT booking.* FROM booking
                     WHERE booking.field_id =field.field_id and booking.date = '$date' and booking.deleted = 0 and ("
                     . "( "
                     . "booking.start >= time('$start')"
-                    . "and booking.start < (time('$start') + INTERVAL $duration HOUR)"
-                    . ")"
+                    . " and booking.start < (time('$start') + INTERVAL $duration HOUR)"
+                    . ") OR booking.start = time('$start') "
+                    . " OR (booking.start + INTERVAL booking.duration HOUR) = time('$start')"
                     . " OR ( "
-                    . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
-                    . "and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
+                    . "(booking.start + INTERVAL booking.duration HOUR) >= time('$start')"
+                    . " and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
                     . ")))"
                     . " AND field.deleted = 0"
                     . " AND (time('$start') between field.open_time and field.close_time)"
