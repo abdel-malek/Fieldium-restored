@@ -106,7 +106,7 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
                 company.company_id FROM booking
                 JOIN field on field.field_id = booking.field_id
                 JOIN company on company.company_id = field.company_id
-                    WHERE booking.player_id =$player_id and booking.deleted = 0 "
+                    WHERE booking.state_id = ".BOOKING_STATE::APPROVED." and booking.player_id =$player_id and booking.deleted = 0 "
                         . "and ("
                         . "booking.date > '$date'"
                         . " OR ( "

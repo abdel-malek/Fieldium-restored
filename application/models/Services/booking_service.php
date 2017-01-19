@@ -104,28 +104,42 @@ class booking_service extends CI_Model {
 //        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_cancelled_message");
     }
 
+    private function notification_object($booking){
+        $to_send = new stdClass();
+        $to_send->notification_time = date('Y-m-d H:i:s');
+        $to_send->booking_id = $booking->booking_id;
+        $to_send->company_name = $booking->company_name;
+        $to_send->logo = $booking->logo;
+        $to_send->address = $booking->address;
+        $to_send->state_id = $booking->state_id;
+        $to_send->start = $booking->start;
+        $to_send->duration = $booking->duration;
+        $to_send->date = $booking->date;
+        $to_send->field_name = $booking->field_name;
+        $to_send->logo_url = $booking->logo_url;
+        return $to_send;
+    }
+    
     public function decline($booking_id) {
         $this->get($booking_id);
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
-        $booking = $this->get($booking_id);
-        $booking->notification_time = date('Y-m-d H:i:s');
+        $booking = $this->get($booking_id);             
         $this->load->model('Services/notification_service');
         $message = array();
         $message = "Your booking No." . $booking_id . " has been declined. ";
 //        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
-        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_declined_message");
+        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_declined_message");
     }
 
     public function approve($booking_id, $lang) {
         $this->get($booking_id, $lang);
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::APPROVED));
         $booking = $this->get($booking_id, $lang);
-        $booking->notification_time = date('Y-m-d H:i:s');
         $this->load->model('Services/notification_service');
         $message = array();
         $message = "Your booking No." . $booking_id . " has been approved. ";
 //        $message["ar"] = "تم قبول الطلب رقم " . $booking_id;
-        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_confirmed_message");
+        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_confirmed_message");
         return $booking;
     }
 

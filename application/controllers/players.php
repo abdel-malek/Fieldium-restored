@@ -92,9 +92,9 @@ class players extends REST_Controller {
         }
     }
 
-    public function deactive_get() {
+    public function deactive_post() {
         $this->player_service->deactive($this->current_user->player_id);
-        $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('account_deleted')));
+        $this->response(array('status' => true, 'data' => array('message' => $this->lang->line('account_deleted')), 'message' => $this->lang->line('account_deleted')));
     }
 
     public function players_management_post($operation = null) {
