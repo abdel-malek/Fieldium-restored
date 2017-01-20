@@ -156,6 +156,10 @@ class booking_service extends CI_Model {
     public function field_bookings_by_date($field_id, $date, $lang = "en") {
         return $this->booking->field_bookings_by_date($field_id, $date, $lang);
     }
+    
+    public function upcoming_booking($player, $lang) {
+        return $this->booking->upcoming_booking($player, $lang);
+    }
 
 }
 

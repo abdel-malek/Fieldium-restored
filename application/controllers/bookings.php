@@ -248,5 +248,10 @@ class bookings extends REST_Controller {
         $this->booking_service->delete($primary_key);
         return true;
     }
+    
+    public function upcoming_booking_get() {
+        $booking = $this->booking_service->upcoming_booking($this->current_user->player_id, $this->response->lang);
+        $this->response(array('status' => true, 'data' => $booking, 'message' => ""));
+    }
 
 }

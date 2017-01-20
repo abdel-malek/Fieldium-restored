@@ -10,7 +10,7 @@ class booking extends CI_Model {
         return $this->db->select("booking.*, " . ENTITY::FIELD . ", field.$lang" . "_name as field_name, player.name as player_name, player.phone as player_phone, company." . $lang . "_address as address, company.logo")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
-                ->join('company', 'company.company_id = field.company_id')
+                        ->join('company', 'company.company_id = field.company_id')
                         ->join('player', 'player.player_id = booking.player_id', 'left')
                         ->where('booking_id', $booking_id)
                         ->where('booking.deleted', 0)
@@ -43,7 +43,6 @@ class booking extends CI_Model {
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('company', 'company.company_id = field.company_id')
                         ->where('player_id', $player_id)
-//                        ->where('booking.state_id != ', BOOKING_STATE::DECLINED)
                         ->where('booking.deleted', 0)
                         ->order_by('booking.field_id, booking.date ASC')
                         ->get()->result();
@@ -93,6 +92,20 @@ class booking extends CI_Model {
                         . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
                         . "and (booking.start + INTERVAL booking.duration HOUR) < (time('$start') + INTERVAL $duration HOUR)"
                         . "))")->result();
+    }
+
+    public function upcoming_booking($player_id, $lang = "en") {
+        $date = date('Y-m-d');
+        $time = date("h:i:s");
+        return $this->db->query("
+            SELECT booking.* FROM booking
+                    WHERE booking.player_id =$player_id and booking.deleted = 0 and ("
+                        . "booking.date >= '$date'"
+                        . " OR ( "
+                        . "booking.date = '$date' and  time(booking.start) > time('$time')"
+                        . ")"
+                . ") ORDER BY booking.date, booking.start"
+                . " LIMIT 1")->result();
     }
 
 }
