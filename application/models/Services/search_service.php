@@ -22,7 +22,7 @@ class search_service extends CI_Model {
     public function search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
         $search_result = $this->search->search($name, $game, $area, $timing, $start, $duration, $date, $lang);
 
-        if ($timing == 'true') {
+        if ($timing != 0) {
             $res = array();
 
             foreach ($search_result as $field) {
@@ -55,7 +55,8 @@ class search_service extends CI_Model {
                 $field->games = $results;
                 if ($field->logo != null)
                     $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
-                $res[] = $field;
+                if (!($timing == 2 && $field->available_time <= "00:00:00"))
+                    $res[] = $field;
             }
         } else {
             $res = array();

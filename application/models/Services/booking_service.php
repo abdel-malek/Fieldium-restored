@@ -20,13 +20,23 @@ class booking_service extends CI_Model {
             throw new Field_Not_Found_Exception();
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 3600;
-        $end = strftime('%H:%M:%S', $endtime);        
-        if ($bookings 
-		/*|| !(
-                $start >= $field->open_time && $start < $field->close_time &&
-                $end > $field->open_time && $end <= $field->close_time
-                )*/
-				) {
+        $end = strftime('%H:%M:%S', $endtime);
+        $accepted = true;
+        if ($field->close_time < $field->open_time) {
+            $accepted =
+                    !(
+                    ($start >= $field->close_time && $start < $field->open_time) ||
+                    ($end > $field->close_time && $end <= $field->open_time)
+                    )
+            ;
+        } else {
+            $accepted =
+                    ($start >= $field->open_time && $start < $field->close_time &&
+                    $end > $field->open_time && $end <= $field->close_time)
+            ;
+        }
+        if ($bookings || !$accepted
+        ) {
             throw new Field_Not_Available_Exception();
         }
         $total = ($duration * $field->hour_rate);
@@ -34,7 +44,7 @@ class booking_service extends CI_Model {
         $state = BOOKING_STATE::PENDING;
         if ($manually == true || $field->auto_confirm == 1)
             $state = BOOKING_STATE::APPROVED;
-        
+
 
         $booking_id = $this->booking->add(array(
             'field_id' => $field_id,
@@ -44,7 +54,6 @@ class booking_service extends CI_Model {
             'duration' => $duration,
             'notes' => $notes,
             'user_id' => $user_id,
-          //  'total' => $total,
             'manually' => $manually,
             'state_id' => $state
         ));
@@ -65,10 +74,22 @@ class booking_service extends CI_Model {
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 3600;
         $end = strftime('%H:%M:%S', $endtime);
-        if ($bookings || !(
-                $start >= $field->open_time && $start <= $field->close_time &&
-                $end >= $field->open_time && $end <= $field->close_time
-                )) {
+        $accepted = true;
+        if ($field->close_time < $field->open_time) {
+            $accepted =
+                    !(
+                    ($start >= $field->close_time && $start < $field->open_time) ||
+                    ($end > $field->close_time && $end <= $field->open_time)
+                    )
+            ;
+        } else {
+            $accepted =
+                    ($start >= $field->open_time && $start < $field->close_time &&
+                    $end > $field->open_time && $end <= $field->close_time)
+            ;
+        }
+        if ($bookings || !$accepted
+        ) {
             throw new Field_Not_Available_Exception();
         }
         $total = ($duration * $field->hour_rate);
@@ -80,7 +101,7 @@ class booking_service extends CI_Model {
             'duration' => $duration,
             'notes' => $notes,
             'user_id' => $user_id
-           // 'total' => $total
+                // 'total' => $total
         ));
 
         $booking = $this->get($booking_id, $lang);
@@ -92,7 +113,7 @@ class booking_service extends CI_Model {
         if (!$booking)
             throw new Booking_Not_Found_Exception($lang);
         if ($booking->logo != null)
-                $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
+            $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
         return $booking;
     }
 
@@ -104,7 +125,7 @@ class booking_service extends CI_Model {
 //        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_cancelled_message");
     }
 
-    private function notification_object($booking){
+    private function notification_object($booking) {
         $to_send = new stdClass();
         $to_send->notification_time = date('Y-m-d H:i:s');
         $to_send->booking_id = $booking->booking_id;
@@ -117,13 +138,14 @@ class booking_service extends CI_Model {
         $to_send->date = $booking->date;
         $to_send->field_name = $booking->field_name;
         $to_send->logo_url = $booking->logo_url;
+        $to_send->notes = $booking->notes;
         return $to_send;
     }
-    
+
     public function decline($booking_id) {
         $this->get($booking_id);
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
-        $booking = $this->get($booking_id);             
+        $booking = $this->get($booking_id);
         $this->load->model('Services/notification_service');
         $message = array();
         $message = "Your booking No." . $booking_id . " has been declined. ";
@@ -172,8 +194,8 @@ class booking_service extends CI_Model {
     public function field_bookings_by_date($field_id, $date, $lang = "en") {
         return $this->booking->field_bookings_by_date($field_id, $date, $lang);
     }
-    
-     public function upcoming_booking($player, $lang) {
+
+    public function upcoming_booking($player, $lang) {
         $bookings = $this->booking->upcoming_booking($player, $lang);
         foreach ($bookings as $booking) {
             $images = $this->image->get_images($booking->field_id);
@@ -185,7 +207,7 @@ class booking_service extends CI_Model {
                 $result[] = $image;
             }
             $booking->images = $result;
-            if(isset($booking->logo) && $booking->logo != "")
+            if (isset($booking->logo) && $booking->logo != "")
                 $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
         }
         return $bookings;
@@ -210,11 +232,11 @@ class booking_service extends CI_Model {
                 if ($booking->logo != null)
                     $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
                 $results[] = $booking;
-            } 
-                
+            }
         }
         return $results;
     }
+
 }
 
 ?>
