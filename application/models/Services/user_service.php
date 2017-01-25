@@ -121,8 +121,8 @@ class user_service extends CI_Model {
     $user_id, $token, $os, $lang
     ) {
         $user = $this->get($user_id, $lang);
-
-        $this->user->update($user_id, array(
+        $this->user->save_token(array(
+            'user_id' =>$user_id,
             'token' => $token,
             'os' => $os
         ));
@@ -130,6 +130,9 @@ class user_service extends CI_Model {
         return $user;
     }
 
+    public function get_tokens($user_id){
+        return $this->db->get_where('tokens', array('user_id'=>$user_id))->result();
+    }
 }
 
 ?>

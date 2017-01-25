@@ -49,7 +49,10 @@ class notification_service extends CI_Model {
         $users = $this->user_service->get_company_users($company_id);
         $notification_helper = new NotificationHelper();
         foreach ($users as $value) {
-            $notification_helper->send_notification_to_device(array($value->token), $message, $data, $value->os);
+            $tokens = $this->user_service->get_tokens($value->user_id);
+            foreach ($tokens as $value) {
+                $notification_helper->send_notification_to_device(array($value->token), $message, $data, $value->os);
+            }
         }
     }
 

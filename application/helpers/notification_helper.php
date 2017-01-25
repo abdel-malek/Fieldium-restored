@@ -18,11 +18,11 @@ class NotificationHelper {
             "ntf_text" => array("en" => $message),
             "ntf_body" => $data);
 
-        $url = 'https://android.googleapis.com/gcm/send';
+        $url = 'https://fcm.googleapis.com/fcm/send';
         if ($os == "android")
             $fields = array(
                 'registration_ids' => $registatoin_ids,
-                'data' => json_encode($message_object) 
+                'data' => $message_object 
             );
         else if ($os == "ios")
             $fields = array(
@@ -34,7 +34,7 @@ class NotificationHelper {
             );
         //AIzaSyCWLceEX-QN5Az96nvsvMGlYHbsh49-XfM
         $headers = array(
-            'Authorization: key=' . "AIzaSyDbI7DYn57zUVEh9LfhksHkcyCt7t2RgU8",
+            'Authorization: key=' . "AAAAwgvsrCg:APA91bEwPMm8XYxGAEoOefo57UAUhgDGzcj_RS5FN2QJH1U9X4enyM3HCaJZkC99xSa0YxbsulZ0nV2WnZpNS8AN5ZZy28_8BRvwLcN5CQEbIt6heEwybagD01sG6nkUQCsFc-wx-QlH6l4KqMoAaMyu_X4yVKUlJg",
             'Content-Type: application/json'
         );
 
@@ -50,8 +50,8 @@ class NotificationHelper {
 
         // Execute post
         $result = curl_exec($ch);
-        var_dump($fields);
-        die();
+       // var_dump($result);
+       //die();
         if ($result === FALSE) {
             die('Curl failed: ' . curl_error($ch));
         }

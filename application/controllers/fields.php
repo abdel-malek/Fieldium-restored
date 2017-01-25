@@ -139,7 +139,7 @@ class fields extends REST_Controller {
                 $date = date('Y-m-d');
             else {
                 if (strtotime($date) < strtotime(date('Y-m-d')))
-                    $this->response(array('status' => false, 'data' => null, 'message' => "wrong date"));
+                    $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             }
             $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
             $times = array();

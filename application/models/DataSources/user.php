@@ -53,4 +53,11 @@ class user extends CI_Model {
             return false;
     }
 
+    public function save_token($data) {
+        if ($this->db->insert('tokens', $data)) {
+            $id = $this->db->insert_id();
+            return $id;
+        } else
+            throw new Database_Exception();
+    }
 }

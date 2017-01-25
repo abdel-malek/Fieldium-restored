@@ -99,8 +99,8 @@ class field_service extends CI_Model {
             'auto_confirm' => $auto_confirm,
             'max_capacity' => $max_capacity
         ));
-        $games_types = $this->decode($games_types);
-        $amenities = $this->decode($amenities);
+       // $games_types = $this->decode($games_types);
+       // $amenities = $this->decode($amenities);
         if ($amenities) {
             $amenities = $this->decodeAmenities($amenities);
             $this->amenity->delete_field_amenities($field_id);
@@ -153,7 +153,7 @@ class field_service extends CI_Model {
         $data = json_decode($json, true);
 //        var_dump($datsa);die();
         if (!is_array($data))
-            throw new Invalid_Format_Exception($lang);
+            throw new Invalid_Format_Exception("en");
 
 //        for ($i = 0; $i < count($data); $i++) {
 //            if (!array_key_exists("amenity", $data[$i]))
@@ -166,7 +166,7 @@ class field_service extends CI_Model {
         $data = json_decode($json, true);
 //        var_dump($datsa);die();
         if (!is_array($data))
-            throw new Invalid_Amenities_Exception($lang);
+            throw new Invalid_Amenities_Exception("en");
 
 //        for ($i = 0; $i < count($data); $i++) {
 //            if (!array_key_exists("amenity", $data[$i]))
@@ -281,7 +281,7 @@ class field_service extends CI_Model {
         $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
 //        echo json_encode($bookings);
 //        die();
-        if (strtotime($field->open_time) < strtotime($field->close_time)) {
+        if ($field->open_time < $field->close_time) {
             $time = $field->open_time;
             $end = $field->close_time;
             $result = array();
@@ -297,7 +297,7 @@ class field_service extends CI_Model {
                 $result[] = $time;
                 $result[] = $end;
             }
-        } else if (strtotime($field->open_time) > strtotime($field->close_time)) {
+        } else if ($field->open_time > $field->close_time) {
             $r1 = array("00:00:00", $field->close_time);
             $r2 = array($field->open_time, "23:59:59");
             $time = "00:00:00";
@@ -308,9 +308,8 @@ class field_service extends CI_Model {
                         strtotime($booking->start) >= strtotime($r1[0]) &&
                         strtotime($booking->start) <= strtotime($r1[1])
                 ) {
-                    echo '1';
+               
                     if ($booking->start != $time) {
-                        echo $time;
                         $result[] = $time;
                         $result[] = $booking->start;
                     }
@@ -319,10 +318,9 @@ class field_service extends CI_Model {
                         strtotime($booking->start) >= strtotime($r2[0]) &&
                         strtotime($booking->start) <= strtotime($r2[1])
                 ) {
-                    echo '2';
+                
                     if ($first) {
                         if ($time != $end) {
-                            echo $time;
                             $result[] = $time;
                             $result[] = $end;
                         }
@@ -331,7 +329,6 @@ class field_service extends CI_Model {
                         $first = false;
                     }
                     if ($booking->start != $time) {
-                        echo $time;
                         $result[] = $time;
                         $result[] = $booking->start;
                     }

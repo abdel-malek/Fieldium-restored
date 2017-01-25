@@ -42,12 +42,16 @@ class searches extends REST_Controller {
             if (!$this->get('date'))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date is required.'));
             $date = $this->get('date');
+            if (strtotime($date) < strtotime(date('Y-m-d')))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
         } else if ($timing == 1) {
             if (!$this->get('start') || !$this->get('duration') || !$this->get('date') || !$this->validate_time($this->get('start')))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date, start time and duration details are required.'));
             $start = $this->get('start');
             $duration = $this->get('duration');
             $date = $this->get('date');
+            if (strtotime($date) < strtotime(date('Y-m-d')))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             if (strlen($start) <= 7)
                 $start = "0" . $start;
         }
@@ -55,7 +59,7 @@ class searches extends REST_Controller {
         $duration = $this->get('duration');
         $date = $this->get('date');
         $results = $this->search_service->search($name, $game, $area, $timing, $start, $duration, $date, $this->response->lang);
-        $this->search_service->save_search($name, $game, $area, $timing, $start, $duration, $date, ($this->current_user) ? $this->current_user->player_id : null, $this->get('token'));
+        //$this->search_service->save_search($name, $game, $area, $timing, $start, $duration, $date, ($this->current_user) ? $this->current_user->player_id : null, $this->get('token'));
         $this->response(array('status' => true, 'data' => $results, 'message' => ""));
     }
 

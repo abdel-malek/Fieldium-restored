@@ -8,7 +8,7 @@
 class Field_Not_Available_Exception extends Parent_Exception {
 
     public function __construct($lang="en") { // [Error code # , line #] 
-        parent::__construct(($lang == "en")?'Field is not available at the specific time ':'الملعب غير متاح في الوقت الذ تم تحديده');
+        parent::__construct(($lang == "en")?'Field is not available at the selected time ':'الملعب غير متاح في الوقت الذ تم تحديده');
     }
  
 }

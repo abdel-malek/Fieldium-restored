@@ -29,7 +29,7 @@ class bookings extends REST_Controller {
             $this->user_permissions->is_player($this->current_user);
             $date = $this->input->post('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
-                $this->response(array('status' => false, 'data' => null, 'message' => "wrong date"));
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             $start = $this->input->post('start');
             $duration = $this->input->post('duration');
             $notes = $this->input->post('notes');
@@ -68,7 +68,7 @@ class bookings extends REST_Controller {
             $this->user_permissions->management_permission($this->current_user, $this->current_user->company_id);
             $date = $this->input->post('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
-                $this->response(array('status' => false, 'data' => null, 'message' => "wrong date"));
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             $start = $this->input->post('start');
             $duration = $this->input->post('duration');
             $notes = $this->input->post('notes');
@@ -106,7 +106,7 @@ class bookings extends REST_Controller {
             $field_id = $this->input->post('field_id');
             $date = $this->input->post('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
-                $this->response(array('status' => false, 'data' => null, 'message' => "wrong date"));
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             $start = $this->input->post('start');
             $duration = $this->input->post('duration');
             $notes = $this->input->post('notes');
