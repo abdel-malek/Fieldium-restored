@@ -139,8 +139,11 @@ class bookings extends REST_Controller {
         if (!$this->get('booking_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
-            $this->booking_service->decline($this->get('booking_id'));
-            $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('declined')));
+            if ($this->booking_service->decline($this->get('booking_id')))
+                $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('declined')));
+            else {
+                
+            } $this->response(array('status' => false, 'data' => null, 'message' => "already declined"));
         }
     }
 

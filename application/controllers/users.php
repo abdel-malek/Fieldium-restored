@@ -111,6 +111,11 @@ class users extends REST_Controller {
     }
 
     function logout_get() {
+        if($this->current_user->role_id == ROLE::ADMIN) {
+            if(!$this->get('token'))
+                $this->response(array('status' => false, 'data' => null, "message" => "Token required"));
+            $this->user_service->delete_token($this->get('token'));
+        }
         $this->user_service->logout();
         if ($this->response->format == "html")
             redirect("dashboard");

@@ -106,7 +106,7 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
                 company.company_id FROM booking
                 JOIN field on field.field_id = booking.field_id
                 JOIN company on company.company_id = field.company_id
-                    WHERE booking.state_id = ".BOOKING_STATE::APPROVED." and booking.player_id =$player_id and booking.deleted = 0 "
+                    WHERE booking.state_id = " . BOOKING_STATE::APPROVED . " and booking.player_id =$player_id and booking.deleted = 0 "
                         . "and ("
                         . "booking.date > '$date'"
                         . " OR ( "
@@ -122,7 +122,8 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
         return $this->db->select("DISTINCT(`booking`.`field_id`),booking.booking_id, company.company_id ,"
                                 . "booking.player_id,(booking.date) as date, (booking.start),"
                                 . " booking.duration, booking.state_id,(booking.duration*field.hour_rate) as total, booking.notes,"
-                                . "  field.$lang" . "_name as field_name, company." . $lang . "_address as address, company.logo")
+                                . "  field.$lang" . "_name as field_name, company." . $lang . "_address as address, "
+                                . "company." . $lang . "_name as company_name, company.logo")
                         ->DISTINCT()
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
@@ -131,11 +132,59 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
                         ->where('booking.state_id', BOOKING_STATE::APPROVED)
                         ->where("(booking.date < '$date' OR (booking.date = '$date' and booking.start < time('$time')))")
                         ->where('booking.deleted', 0)
-                        ->order_by('booking.date DESC, booking.start DESC')
+                        ->order_by('company.company_id ASC, booking.date DESC, booking.start DESC')
                         //->group_by('booking.field_id')
                         // ->having('max(date) = date')
                         // ->limit(3)
                         ->get()->result();
+    }
+
+    public function reservations_report($company_id, $from_date, $to_date) {
+        $total = $this->db->select('count(booking.booking_id) as bookings_number, '
+                                . 'sum(booking.duration*field.hour_rate) as total')
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->where('booking.state_id', BOOKING_STATE::APPROVED)
+                        ->where('booking.deleted', 0)
+                        ->where('booking.date >=', $from_date)
+                        ->where('booking.date <= ', $to_date)
+                        ->get()->row();
+        if (!$total->bookings_number)
+            return array();
+        $details = $this->db->select('field.en_name as field_name, field.field_id,'
+                                . 'count(booking.booking_id) as bookings_number, '
+                                . 'sum(booking.duration*field.hour_rate) as total')
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->where('booking.state_id', BOOKING_STATE::APPROVED)
+                        ->where('booking.deleted', 0)
+                        ->where('booking.date >=', $from_date)
+                        ->where('booking.date <= ', $to_date)
+                        ->group_by('field.field_id')
+                        ->get()->result();
+
+        return array(
+            "bookings_number" => $total->bookings_number,
+            "total" => $total->total,
+            "details" => $details
+        );
+    }
+
+    public function field_reservations_report($field_id, $from_date, $to_date) {
+        $details = $this->db->select('field.en_name as field_name, field.field_id,'
+                                . 'booking.booking_id, booking.date, booking.start, booking.duration,'
+                                . 'booking.player_id, player.name as player_name, booking.manually,'
+                                . '(booking.duration*field.hour_rate) as total')
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->join('player', 'player.player_id = booking.player_id')
+                        ->where('booking.state_id', BOOKING_STATE::APPROVED)
+                        ->where('booking.deleted', 0)
+                        ->where('booking.date >=', $from_date)
+                        ->where('booking.date <= ', $to_date)
+                        ->get()->result();
+
+        return $details;
     }
 
 }

@@ -143,7 +143,9 @@ class booking_service extends CI_Model {
     }
 
     public function decline($booking_id) {
-        $this->get($booking_id);
+        $booking = $this->get($booking_id);
+        if($booking->state_id == BOOKING_STATE::DECLINED)
+            return false;
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
         $booking = $this->get($booking_id);
         $this->load->model('Services/notification_service');
@@ -151,6 +153,8 @@ class booking_service extends CI_Model {
         $message = "Your booking No." . $booking_id . " has been declined. ";
 //        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
         $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_declined_message");
+    
+        return true;
     }
 
     public function approve($booking_id, $lang) {
@@ -215,11 +219,11 @@ class booking_service extends CI_Model {
 
     public function last_bookings($palyer_id, $lang) {
         $bookings = $this->booking->last_bookings($palyer_id, $lang);
-        $field = 0;
+        $company = 0;
         $results = array();
         foreach ($bookings as $booking) {
-            if ($field != $booking->field_id) {
-                $field = $booking->field_id;
+            if ($company != $booking->company_id) {
+                $company = $booking->company_id;
                 $images = $this->image->get_images($booking->field_id);
                 $result = array();
                 foreach ($images as $image) {

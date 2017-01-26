@@ -60,4 +60,8 @@ class user extends CI_Model {
         } else
             throw new Database_Exception();
     }
+    
+    public function check_token($user, $token) {
+        return $this->db->get_where('tokens', array('token'=>$token, 'user_id' => $user))->row();
+    }
 }

@@ -37,6 +37,7 @@ class field_service extends CI_Model {
         ));
 
         if ($amenities) {
+            $amenities = $this->decodeAmenities($amenities);
             foreach ($amenities as $am) {
                 if (!is_array($am)) {
                     try {
@@ -53,6 +54,7 @@ class field_service extends CI_Model {
         }
 
         if ($games_types) {
+            $games_types = $this->decode($games_types);
             foreach ($games_types as $type) {
                 if (!is_array($type)) {
                     try {
@@ -99,8 +101,8 @@ class field_service extends CI_Model {
             'auto_confirm' => $auto_confirm,
             'max_capacity' => $max_capacity
         ));
-       // $games_types = $this->decode($games_types);
-       // $amenities = $this->decode($amenities);
+        // $games_types = $this->decode($games_types);
+        // $amenities = $this->decode($amenities);
         if ($amenities) {
             $amenities = $this->decodeAmenities($amenities);
             $this->amenity->delete_field_amenities($field_id);
@@ -279,18 +281,20 @@ class field_service extends CI_Model {
     public function check_availability($field_id, $date) {
         $field = $this->get($field_id);
         $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
-//        echo json_encode($bookings);
-//        die();
         if ($field->open_time < $field->close_time) {
             $time = $field->open_time;
             $end = $field->close_time;
             $result = array();
             foreach ($bookings as $key => $booking) {
-                if ($booking->start != $time) {
-                    $result[] = $time;
-                    $result[] = $booking->start;
+                $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 3600);
+                if ($booking->start >= $field->open_time && $booking->start < $field->close_time &&
+                        $endtime > $field->open_time && $endtime <= $field->close_time) {
+                    if ($booking->start != $time) {
+                        $result[] = $time;
+                        $result[] = $booking->start;
+                    }
+                    $time = $endtime;
                 }
-                $time = strftime('%H:%M:%S', (strtotime($booking->start) + doubleval($booking->duration) * 3600));
             }
 
             if ($time < $end) {
@@ -304,35 +308,41 @@ class field_service extends CI_Model {
             $end = $field->close_time;
             $first = true;
             foreach ($bookings as $key => $booking) {
-                if (
-                        strtotime($booking->start) >= strtotime($r1[0]) &&
-                        strtotime($booking->start) <= strtotime($r1[1])
-                ) {
-               
-                    if ($booking->start != $time) {
-                        $result[] = $time;
-                        $result[] = $booking->start;
-                    }
-                    $time = strftime('%H:%M:%S', (strtotime($booking->start) + doubleval($booking->duration) * 3600));
-                } else if (
-                        strtotime($booking->start) >= strtotime($r2[0]) &&
-                        strtotime($booking->start) <= strtotime($r2[1])
-                ) {
-                
-                    if ($first) {
-                        if ($time != $end) {
+                $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 3600);
+                if (!(
+                        ($booking->start >= $field->close_time && $booking->start < $field->open_time) ||
+                        ($endtime > $field->close_time && $endtime <= $field->open_time)
+                        )) {
+                    if (
+                            strtotime($booking->start) >= strtotime($r1[0]) &&
+                            strtotime($booking->start) <= strtotime($r1[1])
+                    ) {
+
+                        if ($booking->start != $time) {
                             $result[] = $time;
-                            $result[] = $end;
+                            $result[] = $booking->start;
                         }
-                        $time = $field->open_time;
-                        $end = "23:59:59";
-                        $first = false;
+                        $time = $endtime;
+                    } else if (
+                            strtotime($booking->start) >= strtotime($r2[0]) &&
+                            strtotime($booking->start) <= strtotime($r2[1])
+                    ) {
+
+                        if ($first) {
+                            if ($time != $end) {
+                                $result[] = $time;
+                                $result[] = $end;
+                            }
+                            $time = $field->open_time;
+                            $end = "23:59:59";
+                            $first = false;
+                        }
+                        if ($booking->start != $time) {
+                            $result[] = $time;
+                            $result[] = $booking->start;
+                        }
+                        $time = $endtime;
                     }
-                    if ($booking->start != $time) {
-                        $result[] = $time;
-                        $result[] = $booking->start;
-                    }
-                    $time = strftime('%H:%M:%S', (strtotime($booking->start) + doubleval($booking->duration) * 3600));
                 }
             }
             if ($time < $end) {
