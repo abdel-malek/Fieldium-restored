@@ -86,6 +86,74 @@ class field extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_by_company_with_timing($company_id, $timing, $start, $date, $duration, $lon, $lat, $lang = "en") {
+        $available_time_query = "DATE_FORMAT(DATE_SUB(  
+                            IF(
+                                close_time > open_time, SUBTIME(field.close_time, field.open_time), 
+                               (
+                                   ADDTIME(
+                                           SUBTIME( 
+                                                  '12:00:00', SUBTIME(field.open_time, field.close_time)  
+                                                  ),'12:00:00'
+                                          )         
+                                )
+                            )
+                            ,
+                            INTERVAL IFNULL((SELECT sum(duration) from booking where "
+                . "booking.field_id = field.field_id AND "
+                . "booking.state_id = " . BOOKING_STATE::PENDING
+                . " AND booking.date = '" . $date
+                . "' AND booking.deleted = 0),0 ) hour ), '%H:%i:%s')   as available_time";
+        $where = "( field.deleted = 0 and field.company_id = $company_id )";
+        if ($timing == 1) {
+            $where .= " and NOT EXISTS (SELECT booking.* FROM booking
+                    WHERE booking.field_id =field.field_id and booking.date = '$date' and booking.deleted = 0 and ("
+                    . "( "
+                    . "booking.start >= time('$start')"
+                    . " and booking.start < (time('$start') + INTERVAL $duration HOUR)"
+                    . ") OR booking.start = time('$start') "
+                    . " OR ( "
+                    . "(booking.start + INTERVAL booking.duration HOUR) > time('$start')"
+                    . " and (booking.start + INTERVAL booking.duration HOUR) <= (time('$start') + INTERVAL $duration HOUR)"
+                    . ")))"
+                    . " AND field.deleted = 0"
+                    . " AND (
+                            (close_time < open_time and NOT (
+                                (time('$start') >= `field`.close_time and time('$start') < `field`.open_time) OR
+                                (
+                                    (time('$start') + INTERVAL $duration HOUR) > `field`.close_time 
+                                    and (time('$start') + INTERVAL $duration HOUR) <= `field`.open_time
+                                )
+                                )
+                            )
+                            OR
+                            (close_time > open_time and (
+                                    time('$start') >= `field`.open_time and time('$start') < `field`.close_time and
+                                    (time('$start') + INTERVAL $duration HOUR) > `field`.open_time 
+                                    and (time('$start') + INTERVAL $duration HOUR) <= `field`.close_time
+                                )
+                            )    
+                            )";
+        }
+        $this->db->select(ENTITY::FIELD . ", "
+                        . "field." . $lang . "_name as name,"
+                        . "field." . $lang . "_description as description, "
+                        . "sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance,"
+                        . "company.en_name as company_name, company.longitude, company.latitude, company.logo,"
+                        . $available_time_query
+                        , false)
+                ->from('field')
+                ->join('company', 'company.company_id = field.company_id')
+                ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
+         $this->db->where($where, '', false);
+        if ($lat == 0 || $lon == 0)
+            $this->db->order_by("field_id,available_time desc");
+        else
+            $this->db->order_by ("field_id,distance ASC, available_time desc");
+        $res = $this->db->group_by('field_id')->get()->result();
+        return $res;
+    }
+
     public function add($data) {
         if ($this->db->insert('field', $data)) {
             $id = $this->db->insert_id();

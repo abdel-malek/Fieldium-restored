@@ -191,6 +191,7 @@ $config['auth_override_class_method']['companies']['get_nearby_companies'] = 'no
 //Fields
 $config['auth_override_class_method']['fields']['show'] = 'none';
 $config['auth_override_class_method']['fields']['get_by_company'] = 'none';
+$config['auth_override_class_method']['fields']['get_by_company_with_timing'] = 'none';
 $config['auth_override_class_method']['fields']['get_featured_places'] = 'none';
 $config['auth_override_class_method']['fields']['check_availability'] = 'none';
 

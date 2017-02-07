@@ -154,7 +154,21 @@ class fields extends REST_Controller {
                 }
                 $count++;
             }
-            $this->response(array('status' => true, 'data' => $times, 'message' => ""));
+            $results = array();
+            $current = date('H:i:s');
+            foreach ($times as $key => $range) {
+                if (strtotime($range["start"]) < strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+                    $hour = date('H');
+                    if (date('i') > "00")
+                        $hour++;
+                    array_push($results, array(
+                        "start" => date("H:00:00", strtotime($hour)),
+                        "end" => $range["end"]));
+                } else if (strtotime($range["start"]) > strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+                    array_push($results, $range);
+                }
+            }
+            $this->response(array('status' => true, 'data' => $results, 'message' => ""));
         }
     }
 
@@ -167,6 +181,38 @@ class fields extends REST_Controller {
             $fields = $this->field_service->get_by_company($this->get('company_id'), $lon, $lat, $this->response->lang);
             $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
         }
+    }
+
+    public function get_by_company_with_timing_get() {
+        if (!$this->get('company_id'))
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));
+        $timing = $this->get('timing');
+        if ($timing == 0)
+            $this->response(array('status' => false, 'data' => null, 'message' => 'The timing is required.'));
+        else if ($timing == 2) {
+            if (!$this->get('date'))
+                $this->response(array('status' => false, 'data' => null, 'message' => 'The date is required.'));
+            $date = $this->get('date');
+            if (strtotime($date) < strtotime(date('Y-m-d')))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+        } else if ($timing == 1) {
+            if (!$this->get('start') || !$this->get('duration') || !$this->get('date') || !$this->validate_time($this->get('start')))
+                $this->response(array('status' => false, 'data' => null, 'message' => 'The date, start time and duration details are required.'));
+            $start = $this->get('start');
+            $duration = $this->get('duration');
+            $date = $this->get('date');
+            if (strtotime($date) < strtotime(date('Y-m-d')))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+            if (strlen($start) <= 7)
+                $start = "0" . $start;
+        }
+        $start = $this->get('start');
+        $duration = $this->get('duration');
+        $date = $this->get('date');
+        $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
+        $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
+        $fields = $this->field_service->get_by_company_with_timing($this->get('company_id'), $timing, $start, $date, $duration, $lon, $lat, $this->response->lang);
+        $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
     }
 
     function upload_image_post() {
@@ -306,6 +352,8 @@ class fields extends REST_Controller {
     }
 
     public function validate_time($str) {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
         if (strlen($str) == 7)
             $str = "0" . $str;
         $this->form_validation->set_message('validate_time', $str . ' is not a valid time. Ex:( 10:00:00 )');

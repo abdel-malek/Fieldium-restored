@@ -83,7 +83,7 @@ class company_service extends CI_Model {
 
         $fields = $this->field->get_by_company($company_id, 0, 0, "en");
         foreach ($fields as $field) {
-            $this->field->update($field->field_id, array('deleted' => 1));
+            $this->field_service->delete($field->field_id);
         }
 
         $this->company->update($company_id, array(

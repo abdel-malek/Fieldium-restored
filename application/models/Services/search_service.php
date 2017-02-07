@@ -24,39 +24,72 @@ class search_service extends CI_Model {
 
         if ($timing != 0) {
             $res = array();
-
+            $company = 0;
             foreach ($search_result as $field) {
-                $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
-                $result = array();
-                foreach ($amenities as $amenity) {
-                    if ($amenity->image != "" && $amenity->image != null)
-                        $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
-                    $result[] = $amenity;
+                if ($company != $field->company_id) {
+                    $company = $field->company_id;
+                    if ($field->logo != null)
+                        $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
+                    if ($field->image != null)
+                        $field->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->image;
+                    if (!($timing == 2 && $field->available_time <= "00:00:00"))
+                        $res[] = $field;
                 }
-                $field->amenities = $result;
+            }
+        } else {
+            $res = array();
+            foreach ($search_result as $company) {
+                if ($company->image != null)
+                    $company->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->image;
+                if ($company->logo != null)
+                    $company->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->logo;
+                $res[] = $company;
+            }
+        }
+        return $res;
+    }
 
-                $images = $this->image->get_images($field->field_id);
-                $result = array();
-                foreach ($images as $image) {
-                    if ($image->name != "" && $image->name != null) {
-                        $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+    public function __search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
+        $search_result = $this->search->search($name, $game, $area, $timing, $start, $duration, $date, $lang);
+
+        if ($timing != 0) {
+            $res = array();
+            $company = 0;
+            foreach ($search_result as $field) {
+                if ($company != $field->company_id) {
+                    $company = $field->company_id;
+                    $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+                    $result = array();
+                    foreach ($amenities as $amenity) {
+                        if ($amenity->image != "" && $amenity->image != null)
+                            $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+                        $result[] = $amenity;
                     }
-                    $result[] = $image;
-                }
-                $field->images = $result;
-                $games = $this->game->get_field_games($field->field_id, $lang);
-                $results = array();
-                foreach ($games as $game) {
-                    if ($game->image != "" && $game->image != null) {
-                        $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+                    $field->amenities = $result;
+
+                    $images = $this->image->get_images($field->field_id);
+                    $result = array();
+                    foreach ($images as $image) {
+                        if ($image->name != "" && $image->name != null) {
+                            $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                        }
+                        $result[] = $image;
                     }
-                    $results[] = $game;
+                    $field->images = $result;
+                    $games = $this->game->get_field_games($field->field_id, $lang);
+                    $results = array();
+                    foreach ($games as $game) {
+                        if ($game->image != "" && $game->image != null) {
+                            $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+                        }
+                        $results[] = $game;
+                    }
+                    $field->games = $results;
+                    if ($field->logo != null)
+                        $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
+                    if (!($timing == 2 && $field->available_time <= "00:00:00"))
+                        $res[] = $field;
                 }
-                $field->games = $results;
-                if ($field->logo != null)
-                    $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
-                if (!($timing == 2 && $field->available_time <= "00:00:00"))
-                    $res[] = $field;
             }
         } else {
             $res = array();

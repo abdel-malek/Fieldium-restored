@@ -273,8 +273,50 @@ class field_service extends CI_Model {
         return $result;
     }
 
+    public function get_by_company_with_timing($company_id, $timing, $start, $date, $duration, $lon, $lat, $lang = "en") {
+        $fields = $this->field->get_by_company_with_timing($company_id, $timing, $start, $date, $duration, $lon, $lat, $lang);
+        $result = array();
+        foreach ($fields as $field) {
+            $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
+            $results = array();
+            foreach ($amenities as $amenity) {
+                if ($amenity->image != "" && $amenity->image != null) {
+                    $amenity->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $amenity->image;
+                }
+                $results[] = $amenity;
+            }
+            $field->amenities = $results;
+            $images = $this->image->get_images($field->field_id);
+            $results = array();
+            foreach ($images as $image) {
+                if ($image->name != "" && $image->name != null) {
+                    $image->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $image->name;
+                }
+                $results[] = $image;
+            }
+            $field->images = $results;
+            $games = $this->game->get_field_games($field->field_id, $lang);
+            $results = array();
+            foreach ($games as $game) {
+                if ($game->image != "" && $game->image != null) {
+                    $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+                }
+                $results[] = $game;
+            }
+            $field->games = $results;
+            if ($field->logo != null)
+                $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
+            $result[] = $field;
+        }
+        return $result;
+    }
+
     public function delete($field_id) {
         $this->get($field_id, "en");
+        $bookings = $this->booking_Service->field_bookings($field_id, "en");
+        foreach ($bookings as $booking) {
+            $this->booking_service->delete($booking->booking_id);
+        }
         $this->field->update($field_id, array('deleted' => 1));
     }
 

@@ -30,13 +30,15 @@ class reports extends REST_Controller {
         $report = $this->report_service->reservations_report($company_id, $from_date, $to_date);
         $this->response(array('status' => true, 'data' => $report, 'message' => ""));
     }
-    
+
     public function field_reservations_report_get() {
         if (!$this->get('field_id'))
-            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
-        $field_id = $this->input->get('field_id');
-        $field = $this->field_service->get($field_id);
-        $this->user_permissions->management_permission($this->current_user, $field->company_id);
+            $field_id = 0;
+        else {
+            $field_id = $this->input->get('field_id');
+            $field = $this->field_service->get($field_id);
+        }
+//        $this->user_permissions->management_permission($this->current_user, $this->get('company_id'));
         if (!$this->get('from_date'))
             $from_date = date('Y-m-d');
         else
@@ -47,7 +49,7 @@ class reports extends REST_Controller {
         else
             $to_date = $this->input->get("to_date");
         $to_date = date('Y-m-d', strtotime($to_date));
-        $report = $this->report_service->field_reservations_report($field_id, $from_date, $to_date);
+        $report = $this->report_service->field_reservations_report($this->current_user->company_id, $field_id, $from_date, $to_date);
         $this->response(array('status' => true, 'data' => $report, 'message' => ""));
     }
 
