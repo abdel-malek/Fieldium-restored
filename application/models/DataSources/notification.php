@@ -7,7 +7,8 @@ class notification extends CI_Model {
     }
 
     public function get_notifications($player_id) {
-        return $this->db->select("notification.date as notification_time, company.en_name as company_name, company.logo, company.en_address as address, booking.state_id , booking.start, booking.duration, booking.date, field.en_name as field_name")
+        return $this->db->select("notification.date as notification_time, company.en_name as company_name, company.logo, company.en_address as address, booking.state_id , booking.start, booking.duration, "
+                                . "(booking.duration * field.hour_rate) as total, booking.date, field.en_name as field_name")
                         ->from('notification')
                         ->join('booking', 'booking.booking_id = notification.booking_id')
                         ->join('field', 'field.field_id = booking.field_id')

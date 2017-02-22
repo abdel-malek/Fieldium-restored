@@ -135,12 +135,11 @@ class fields extends REST_Controller {
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
         else {
             $date = $this->get('date');
-            if (empty($date))
-                $date = date('Y-m-d');
-            else {
-                if (strtotime($date) < strtotime(date('Y-m-d')))
-                    $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
-            }
+
+            $date = date_format(date_create($date), 'Y-m-d');
+            if (strtotime($date) < strtotime(date('Y-m-d')))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+
             $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
             $times = array();
             $count = 0;
@@ -156,16 +155,21 @@ class fields extends REST_Controller {
             }
             $results = array();
             $current = date('H:i:s');
+            $hour = date('H');
+            if (date('i') > "00")
+                $hour++;
+            $current = $hour . ":00:00";
             foreach ($times as $key => $range) {
-                if (strtotime($range["start"]) < strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
-                    $hour = date('H');
-                    if (date('i') > "00")
-                        $hour++;
-                    array_push($results, array(
-                        "start" => date("H:00:00", strtotime($hour)),
-                        "end" => $range["end"]));
-                } else if (strtotime($range["start"]) > strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+                if (strtotime($date) > strtotime(date('Y-m-d')))
                     array_push($results, $range);
+                else {
+                    if (strtotime($range["start"]) < strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+                        array_push($results, array(
+                            "start" => $hour . ":00:00",
+                            "end" => $range["end"]));
+                    } else if (strtotime($range["start"]) >= strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+                        array_push($results, $range);
+                    }
                 }
             }
             $this->response(array('status' => true, 'data' => $results, 'message' => ""));
@@ -184,12 +188,15 @@ class fields extends REST_Controller {
     }
 
     public function get_by_company_with_timing_get() {
+        $game = $this->get('game_type');
+        if (!$this->get('game_type')) $game = 0;
         if (!$this->get('company_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));
         $timing = $this->get('timing');
-        if ($timing == 0)
-            $this->response(array('status' => false, 'data' => null, 'message' => 'The timing is required.'));
-        else if ($timing == 2) {
+//        if ($timing == 0)
+//            $this->response(array('status' => false, 'data' => null, 'message' => 'The timing is required.'));
+        
+        if ($timing == 2) {
             if (!$this->get('date'))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date is required.'));
             $date = $this->get('date');
@@ -211,7 +218,7 @@ class fields extends REST_Controller {
         $date = $this->get('date');
         $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
         $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
-        $fields = $this->field_service->get_by_company_with_timing($this->get('company_id'), $timing, $start, $date, $duration, $lon, $lat, $this->response->lang);
+        $fields = $this->field_service->get_by_company_with_timing($game, $this->get('company_id'), $timing, $start, $date, $duration, $lon, $lat, $this->response->lang);
         $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
     }
 

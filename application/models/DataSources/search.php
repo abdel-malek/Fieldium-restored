@@ -34,6 +34,10 @@ class search extends CI_Model {
 
     public function search($name, $game, $area, $timing, $start, $duration, $date, $lang = "en") {
         if ($timing != 0) {
+            $hour = date('H');
+            if (date('i') > "00")
+                $hour++;
+            $current = $hour . ":00:00";
             $available_time_query = "DATE_FORMAT(DATE_SUB(  
                             IF(
                                 close_time > open_time, SUBTIME(field.close_time, field.open_time), 

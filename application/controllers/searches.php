@@ -34,7 +34,7 @@ class searches extends REST_Controller {
             $this->response(array('status' => false, 'data' => null, 'message' => 'The area_id and game_type details are required.'));
         $name = $this->get('name');
         $game = 0;
-//        $game = $this->get('game_type');
+        $game = $this->get('game_type');
         $area = $this->get('area_id');
         if (!$this->get('game_type')) $game = 0;
         if (!$this->get('area_id')) $area = 0;

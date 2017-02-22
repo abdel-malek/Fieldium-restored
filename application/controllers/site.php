@@ -25,4 +25,9 @@ class site extends REST_Controller {
         }
     }
 
+    public function about_get() {
+        $this->load->model('Services/site_service');
+        $this->response(array('status' => true, 'data' => $this->site_service->about(), "message" => ""));
+    }
+
 }

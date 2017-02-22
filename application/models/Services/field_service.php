@@ -273,10 +273,14 @@ class field_service extends CI_Model {
         return $result;
     }
 
-    public function get_by_company_with_timing($company_id, $timing, $start, $date, $duration, $lon, $lat, $lang = "en") {
-        $fields = $this->field->get_by_company_with_timing($company_id, $timing, $start, $date, $duration, $lon, $lat, $lang);
+    public function get_by_company_with_timing($game, $company_id, $timing, $start, $date, $duration, $lon, $lat, $lang = "en") {
+        $fields = $this->field->get_by_company_with_timing($game, $company_id, $timing, $start, $date, $duration, $lon, $lat, $lang);
         $result = array();
         foreach ($fields as $field) {
+            $available = true;
+            if ($timing == 2 && count($this->check_availability($field->field_id, $date)) == 0) {
+                $available = false;
+            }
             $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
             $results = array();
             foreach ($amenities as $amenity) {
@@ -303,10 +307,12 @@ class field_service extends CI_Model {
                 }
                 $results[] = $game;
             }
+
             $field->games = $results;
             if ($field->logo != null)
                 $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
-            $result[] = $field;
+            if ($available)
+                $result[] = $field;
         }
         return $result;
     }

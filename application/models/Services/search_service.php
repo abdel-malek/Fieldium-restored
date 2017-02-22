@@ -32,7 +32,24 @@ class search_service extends CI_Model {
                         $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
                     if ($field->image != null)
                         $field->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->image;
-                    if (!($timing == 2 && $field->available_time <= "00:00:00"))
+                    if (!($timing == 2 && $field->available_time <= "00:00:00")) {
+                        $available = false;
+                        $this->load->model('Services/field_service');
+                        $this->load->model('DataSources/field');
+                        $company_fields = $this->field->get_by_company($field->company_id, 0.0, 0.0, $lang);
+                        foreach ($company_fields as $value) {
+                            if (
+                                    count(
+                                            $this->field_service->check_availability($value->field_id, $date)
+                                    ) != 0
+                            ) {
+
+                                $available = true;
+                                break;
+                            }
+                        }
+                    }
+                    if ($available)
                         $res[] = $field;
                 }
             }
@@ -87,7 +104,25 @@ class search_service extends CI_Model {
                     $field->games = $results;
                     if ($field->logo != null)
                         $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
-                    if (!($timing == 2 && $field->available_time <= "00:00:00"))
+                    if (!($timing == 2 && $field->available_time <= "00:00:00")) {
+                        $available = false;
+                        $this->load->model('Services/field_service');
+                        $this->load->model('DataSources/field');
+                        $company_fields = $this->field->get_by_company($company_id, 0.0, 0.0, $lang);
+                        foreach ($company_fields as $value) {
+                            if (!($timing == 2 &&
+                                    count(
+                                            $this->field_service->check_availability($value->field_id, $date)
+                                    ) != 0
+                                    )
+                            ) {
+
+                                $available = true;
+                                break;
+                            }
+                        }
+                    }
+                    if ($available)
                         $res[] = $field;
                 }
             }

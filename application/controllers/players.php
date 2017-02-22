@@ -81,13 +81,14 @@ class players extends REST_Controller {
             $games = $this->input->post('prefered_games');
             $updated = $this->input->post('image_updated');
             $profile_picture = "";
-            if ($updated == true || $updated == 'true') {
+            if ($updated == 'true') {
                 try {
                     $this->load->helper('image_uploader_helper');
                     $image = upload_image($this);
                     if (isset($image['profile_picture']))
                         $profile_picture = $image['profile_picture']['upload_data']['file_name'];
-                } catch (Uploading_Image_Exception $ex) {
+                } 
+                catch (Uploading_Image_Exception $ex) {
                     $profile_picture = "";
                 }
             } else if ($updated == false || $updated == 'false') {
@@ -172,6 +173,20 @@ class players extends REST_Controller {
             $image_name = $image_file['image']['upload_data']['file_name'];
 
         $this->response(array('status' => true, 'data' => array("image_name" => $image_name), "message" => $this->lang->line('image_saved')));
+    }
+
+    function contact_us_post() {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('message', 'Message', 'required');
+        $this->form_validation->set_rules('phone', 'phone', 'required');
+        if (!$this->form_validation->run()) {
+            throw new Validation_Exception(validation_errors());
+        } else {
+            $this->load->model("Services/message_service");
+            $this->message_service->save(($this->current_user) ? $this->current_user->name : '', $this->post('email'), "Fieldium Contact us", $this->post('message'), $this->post('phone'));
+            $this->response(array('status' => true, 'data' => array('message' => $this->lang->line('message_sent')), 'message' => $this->lang->line('message_sent')));
+        }
     }
 
 }

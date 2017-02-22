@@ -52,5 +52,27 @@ class reports extends REST_Controller {
         $report = $this->report_service->field_reservations_report($this->current_user->company_id, $field_id, $from_date, $to_date);
         $this->response(array('status' => true, 'data' => $report, 'message' => ""));
     }
+    
+    public function declined_reservations_report_get() {
+        if (!$this->get('field_id'))
+            $field_id = 0;
+        else {
+            $field_id = $this->input->get('field_id');
+            $field = $this->field_service->get($field_id);
+        }
+//        $this->user_permissions->management_permission($this->current_user, $this->get('company_id'));
+        if (!$this->get('from_date'))
+            $from_date = date('Y-m-d');
+        else
+            $from_date = $this->input->get("from_date");
+        $from_date = date('Y-m-d', strtotime($from_date));
+        if (!$this->get('to_date'))
+            $to_date = date('Y-m-d');
+        else
+            $to_date = $this->input->get("to_date");
+        $to_date = date('Y-m-d', strtotime($to_date));
+        $report = $this->report_service->declined_reservations_report($this->current_user->company_id, $field_id, $from_date, $to_date);
+        $this->response(array('status' => true, 'data' => $report, 'message' => ""));
+    }
 
 }

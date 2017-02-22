@@ -33,8 +33,8 @@ class CI_Form_validation {
     protected $_config_rules = array();
     protected $_error_array = array();
     protected $_error_messages = array();
-    protected $_error_prefix = '<p style="color:red">';
-    protected $_error_suffix = '</p>';
+    protected $_error_prefix = '';
+    protected $_error_suffix = '';
 //  protected $_error_prefix		= '<p>';
 //  protected $_error_suffix		= '</p>';
     protected $error_string = '';

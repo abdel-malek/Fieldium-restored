@@ -8,14 +8,8 @@ class Send_sms extends CI_Controller {
         //  $CI->load->model('DataSources/messages');
     }
 
-    public function send_sms($message, $moblie, $lang) {
-//        $url = "";
-//        if ($lang == 1) {
-//            $message = $this->ToUnicode($message);
-        $_url = 'http://sms.malath.net.sa/httpSmsProvider.aspx' . "?username=" . "KHALEEJSYS" . "&password=" . "0565610236" . "&mobile=" . $moblie . "&sender=" . 'KHALEEJ SYS' . "&unicode=U&message=hey amal";
-//        } else if ($lang == 2){
-//            $_url = 'http://sms.malath.net.sa/httpSmsProvider.aspx' . "?username=" . "KHALEEJSYS" . "&password=" . "0565610236" . "&mobile=" . $moblie . "&sender=" . 'KHALEEJ SYS' . "&unicode=E&message=" . $message . "";
-//        }
+    public function send_sms($moblie, $message, $lang = "en") {
+        $_url = 'http://www.smartsmsgateway.com/api/api_http.php?username=tradinos&password=trd256&senderid=SMS%20Alert&to=00971' . $moblie . '&text=' . $message . '&type=text';
         $_url = preg_replace("/ /", "%20", $_url);
         $result = file_get_contents($_url);
         return $result;

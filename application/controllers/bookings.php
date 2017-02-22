@@ -12,7 +12,6 @@ class bookings extends REST_Controller {
         $this->load->model("Services/game_service");
         $this->load->model("Services/area_service");
         $this->load->model('Permissions/user_permissions');
-        $this->load->library('send_sms');
     }
 
     public function create_post() {
@@ -90,8 +89,10 @@ class bookings extends REST_Controller {
                     $field_id, $player->player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
             );
             $sms = $this->post('sms_option') ? true : false;
-//            if ($sms == true)
-//                $this->send_sms->send_sms($phone, "");
+            if ($sms == true) {
+                $this->load->library('send_sms');
+                $this->send_sms->send_sms($phone, "");
+            }
             $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('created')));
         }
     }

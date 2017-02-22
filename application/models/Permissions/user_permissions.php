@@ -21,6 +21,16 @@ class user_permissions extends CI_Model {
             throw new Permission_Denied_Exception();
     }
     
+    function password_permission($user, $user_id) {
+        if ($user && (
+                ($user->role_id == ROLE::ADMIN && $user->user_id == $user_id) || $user->role_id == ROLE::SUPPORT
+                )
+        )
+            return true;
+        else
+            throw new Permission_Denied_Exception();
+    }
+    
     function support_permission($user) {
         if ($user &&  $user->role_id == ROLE::SUPPORT)
             return true;

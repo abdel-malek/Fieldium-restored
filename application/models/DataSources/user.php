@@ -40,6 +40,14 @@ class user extends CI_Model {
                         ->get()->row();
     }
 
+    public function check_password($user_id, $str) {
+        return $this->db->select("*")
+                        ->from("user")
+                        ->where('user_id', $user_id)
+                        ->where('password', $str)
+                        ->get()->row();
+    }
+
     public function check_authentication($username, $password) {
         $user = $this->db->select('*')
                         ->from('user')
@@ -60,8 +68,9 @@ class user extends CI_Model {
         } else
             throw new Database_Exception();
     }
-    
+
     public function check_token($user, $token) {
-        return $this->db->get_where('tokens', array('token'=>$token, 'user_id' => $user))->row();
+        return $this->db->get_where('tokens', array('token' => $token, 'user_id' => $user))->row();
     }
+
 }

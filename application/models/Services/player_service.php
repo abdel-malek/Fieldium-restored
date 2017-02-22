@@ -29,9 +29,10 @@ class player_service extends CI_Model {
                 'token' => '',
                 'name' => $name,
                 'server_id' => md5($server_id),
-                'verification_code' => $code
+                'verification_code' => $code,
+                'active' => 0
             ));
-//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         } else {
             $code = $this->generate_activation_code();
             $server_id = uniqid();
@@ -46,7 +47,7 @@ class player_service extends CI_Model {
                 'server_id' => md5($server_id),
                 'verification_code' => $code
             ));
-//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
         $player = $this->get($player_id);
         $player->server_id = md5($server_id);
@@ -92,8 +93,8 @@ class player_service extends CI_Model {
 
     public function verify($phone, $code) {
         $player = $this->player->get_by_phone($phone);
-//        $player = $this->player->verify($phone, $code);
-        if ($code != 1) {
+        $player = $this->player->verify($phone, $code);
+        if (!$player) {
             throw new Invalid_Activation_Code_Exception ($this->session->userdata('language'));
         }
 
@@ -184,8 +185,7 @@ class player_service extends CI_Model {
             ));
             
 //            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
-            $player = $this->player->get_by_phone($phone);
-            return $player;
+            return $this->get($player->player_id);
         } else {
             throw new Player_Not_Found_Exception($this->session->userdata('language'));
         }

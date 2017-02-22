@@ -90,7 +90,7 @@ class booking extends CI_Model {
     public function field_bookings_by_timing($field_id, $date, $start, $duration) {
         return $this->db->query("SELECT booking.*,(booking.duration*field.hour_rate) as total FROM booking
 join field on field.field_id = booking.field_id                     
-WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted = 0 and booking.state_id =". BOOKING_STATE::APPROVED." and ("
+WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted = 0 and booking.state_id =" . BOOKING_STATE::APPROVED . " and ("
                         . "( "
                         . "booking.start >= time('$start')"
                         . "and booking.start < (time('$start') + INTERVAL $duration HOUR)"
@@ -105,7 +105,7 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
         $date = date('Y-m-d');
         $time = date("H:i:s");
         return $this->db->query("
-            SELECT booking.*,(booking.duration*field.hour_rate) as total,  field.$lang" . "_name as field_name, company." . $lang . "_address as address, company.logo,
+            SELECT booking.*,(booking.duration*field.hour_rate) as total,  field.$lang" . "_name as field_name, company." . $lang . "_name as comapny_name, company." . $lang . "_address as address, company.logo,
                 company.company_id FROM booking
                 JOIN field on field.field_id = booking.field_id
                 JOIN company on company.company_id = field.company_id
@@ -147,6 +147,7 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
                                 . 'sum(booking.duration*field.hour_rate) as total')
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
+                        ->where('field.company_id', $company_id)
                         ->where('booking.state_id', BOOKING_STATE::APPROVED)
                         ->where('booking.deleted', 0)
                         ->where('booking.date >=', $from_date)
@@ -159,11 +160,12 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
                                 . 'sum(booking.duration*field.hour_rate) as total')
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
+                        ->where('field.company_id', $company_id)
                         ->where('booking.state_id', BOOKING_STATE::APPROVED)
                         ->where('booking.deleted', 0)
                         ->where('booking.date >=', $from_date)
                         ->where('booking.date <= ', $to_date)
-                        ->group_by('field.field_id')
+                        ->group_by('booking.field_id')
                         ->get()->result();
 
         return array(
@@ -201,6 +203,47 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
         if ($field_id != 0)
             $this->db->where('field.field_id', $field_id);
         $details = $this->db->where('booking.state_id', BOOKING_STATE::APPROVED)
+                        ->where('booking.deleted', 0)
+                        ->where('field.deleted', 0)
+                        ->where('booking.date >=', $from_date)
+                        ->where('booking.date <= ', $to_date)
+                        ->get()->result();
+
+        return array(
+            "bookings_number" => $total->bookings_number,
+            "total" => $total->total,
+            "details" => $details
+        );
+    }
+
+    public function declined_reservations_report($company_id, $field_id, $from_date, $to_date) {
+        $this->db->select('count(booking.booking_id) as bookings_number, '
+                        . 'sum(booking.duration*field.hour_rate) as total')
+                ->from('booking')
+                ->join('field', 'field.field_id = booking.field_id')
+                ->where('field.company_id', $company_id);
+        if ($field_id != 0)
+            $this->db->where('field.field_id', $field_id);
+        $total = $this->db->where('booking.state_id', BOOKING_STATE::DECLINED)
+                        ->where('booking.deleted', 0)
+                        ->where('field.deleted', 0)
+                        ->where('booking.date >=', $from_date)
+                        ->where('booking.date <= ', $to_date)
+                        ->get()->row();
+
+        if (!$total->bookings_number)
+            return array();
+        $this->db->select('field.en_name as field_name, field.field_id,'
+                        . 'booking.booking_id, booking.date, booking.start, booking.duration,'
+                        . 'booking.player_id, player.name as player_name, booking.manually,'
+                        . '(booking.duration*field.hour_rate) as total')
+                ->from('booking')
+                ->join('field', 'field.field_id = booking.field_id')
+                ->join('player', 'player.player_id = booking.player_id')
+                ->where('field.company_id', $company_id);
+        if ($field_id != 0)
+            $this->db->where('field.field_id', $field_id);
+        $details = $this->db->where('booking.state_id', BOOKING_STATE::DECLINED)
                         ->where('booking.deleted', 0)
                         ->where('field.deleted', 0)
                         ->where('booking.date >=', $from_date)

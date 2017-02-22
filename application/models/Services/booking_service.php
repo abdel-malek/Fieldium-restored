@@ -23,15 +23,13 @@ class booking_service extends CI_Model {
         $end = strftime('%H:%M:%S', $endtime);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
-            $accepted =
-                    !(
+            $accepted = !(
                     ($start >= $field->close_time && $start < $field->open_time) ||
                     ($end > $field->close_time && $end <= $field->open_time)
                     )
             ;
         } else {
-            $accepted =
-                    ($start >= $field->open_time && $start < $field->close_time &&
+            $accepted = ($start >= $field->open_time && $start < $field->close_time &&
                     $end > $field->open_time && $end <= $field->close_time)
             ;
         }
@@ -76,15 +74,13 @@ class booking_service extends CI_Model {
         $end = strftime('%H:%M:%S', $endtime);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
-            $accepted =
-                    !(
+            $accepted = !(
                     ($start >= $field->close_time && $start < $field->open_time) ||
                     ($end > $field->close_time && $end <= $field->open_time)
                     )
             ;
         } else {
-            $accepted =
-                    ($start >= $field->open_time && $start < $field->close_time &&
+            $accepted = ($start >= $field->open_time && $start < $field->close_time &&
                     $end > $field->open_time && $end <= $field->close_time)
             ;
         }
@@ -139,12 +135,13 @@ class booking_service extends CI_Model {
         $to_send->field_name = $booking->field_name;
         $to_send->logo_url = $booking->logo_url;
         $to_send->notes = $booking->notes;
+        $to_send->total = ($booking->total);
         return $to_send;
     }
 
     public function decline($booking_id) {
         $booking = $this->get($booking_id);
-        if($booking->state_id == BOOKING_STATE::DECLINED)
+        if ($booking->state_id == BOOKING_STATE::DECLINED)
             return false;
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
         $booking = $this->get($booking_id);
@@ -153,12 +150,15 @@ class booking_service extends CI_Model {
         $message = "Your booking No." . $booking_id . " has been declined. ";
 //        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
         $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_declined_message");
-    
+
         return true;
     }
 
     public function approve($booking_id, $lang) {
-        $this->get($booking_id, $lang);
+        $booking = $this->get($booking_id, $lang);
+        $bookings = $this->booking->field_bookings_by_timing($booking->field_id, $booking->date, $booking->start, $booking->duration);
+        if ($bookings)
+            throw new Field_Not_Available_Exception();
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::APPROVED));
         $booking = $this->get($booking_id, $lang);
         $this->load->model('Services/notification_service');

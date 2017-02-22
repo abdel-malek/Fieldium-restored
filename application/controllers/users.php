@@ -52,6 +52,7 @@ class users extends REST_Controller {
             $email = $this->input->post('email');
             $role_id = $this->input->post('role_id');
             $user_id = $this->input->post('user_id');
+            
             $user = $this->user_service->update(
                     $user_id, $name, $phone, $email, $role_id, $this->response->lang
             );
@@ -82,12 +83,13 @@ class users extends REST_Controller {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('user_id', 'User id', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[30]');
-        $this->form_validation->set_rules('password_confirmation', 'Password confirmation', 'required|min_length[6]|max_length[30]|matches[password]');
+        $this->form_validation->set_rules('old_password', 'Old Password', 'required|min_length[6]|max_length[30]|callback_check_old_password');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
             $password = $this->input->post('password');
             $user_id = $this->input->post('user_id');
+            $this->user_permissions->password_permission($this->current_user, $user_id);
             $user = $this->user_service->change_password(
                     $user_id, md5($password), $this->response->lang
             );
@@ -261,15 +263,15 @@ class users extends REST_Controller {
                         ->where('user_id', $this->current_user->user_id)
                         ->set_table('user')
                         ->set_subject('user')
-                        ->columns('user_id', 'name', 'email', 'role_id', 'active', 'creation_date')
+//                        ->columns('user_id', 'name', 'email', 'role_id', 'active', 'creation_date')
                         ->order_by('user_id')
                         ->set_relation('role_id', 'role', 'name')
                         ->display_as('role_id', 'User Type')
-                        ->field_type('phone', 'integer')
-                        ->edit_fields('name', 'email', 'phone', 'password')
-                        ->add_fields('name', 'email', 'password')
-                        ->required_fields('name', 'role_id')
-                        ->set_rules('name', 'Name', 'required|min_length[3]|max_length[16]')
+//                        ->field_type('phone', 'integer')
+//                        ->edit_fields('name', 'email', 'phone', 'password')
+//                        ->add_fields('name', 'email', 'password')
+//                        ->required_fields('name', 'role_id')
+//                        ->set_rules('name', 'Name', 'required|min_length[3]|max_length[16]')
                         ->callback_before_update(array($this, 'confirm_password_edit_profile_callback'))
                         ->callback_edit_field('password', array($this, '_callback_password'))
                         ->callback_after_update(array($this, 'after_edit_profile_callback'))
@@ -337,4 +339,14 @@ class users extends REST_Controller {
         return true;
     }
 
+    public function check_old_password($str) {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_message('check_old_password', ' wrong password');
+        if ($this->user_service->check_password($this->current_user->user_id, $str)) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 }

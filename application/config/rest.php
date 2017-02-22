@@ -199,6 +199,7 @@ $config['auth_override_class_method']['fields']['check_availability'] = 'none';
 $config['auth_override_class_method']['players']['register'] = 'none';
 $config['auth_override_class_method']['players']['verify'] = 'none';
 $config['auth_override_class_method']['players']['request_verification_code'] = 'none';
+$config['auth_override_class_method']['players']['contact_us'] = 'none';
 
 ////Users
 $config['auth_override_class_method']['users']['login'] = 'none';
@@ -216,6 +217,8 @@ $config['auth_override_class_method']['amenities']['get_all'] = 'none';
 
 //Areas
 $config['auth_override_class_method']['areas']['get_all'] = 'none';
+
+$config['auth_override_class_method']['site']['about'] = 'none';
 
 // ---Uncomment list line for the wildard unit test
 // $config['auth_override_class_method']['wildcard_test_cases']['*'] = 'basic';

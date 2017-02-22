@@ -103,8 +103,16 @@ class user_service extends CI_Model {
         $this->email->send();
     }
 
+    public function check_password($user_id, $str) {
+        $user = $this->user->check_password($user_id, md5($str));
+        if(!$user)
+            return false;
+        else
+            return true;
+    }
+    
     public function change_password($user_id, $new_password, $lang) {
-        $user = $this->get($user_id, $lang);
+        $user = $this->get($user_id);
 
         $this->user->update($user_id, array(
             'password' => $new_password

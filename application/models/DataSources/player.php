@@ -44,7 +44,7 @@ class player extends CI_Model {
     }
 
     public function get_by_phone($phone) {
-        return $this->db->select('*')
+        return $this->db->select("*")
                         ->from('player')
                         ->where('phone', $phone)
                         ->get()->row();

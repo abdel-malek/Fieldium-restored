@@ -13,7 +13,7 @@ function upload_image($controller) {
 
             //upload the image
             if (!$controller->upload->do_upload($index)) {
-                $error =  $controller->upload->display_errors();
+                $error = $controller->upload->display_errors();
                 throw new Uploading_Image_Exception($error);
             } else {
 
@@ -29,6 +29,7 @@ function set_upload_options() {
     $config = array();
     $config['upload_path'] = dirname($_SERVER["SCRIPT_FILENAME"]) . UPLOADED_IMAGES_PATH;
     $config['allowed_types'] = 'jpg|png|jpeg';
+    $config['max_size'] = 100;
 //    var_dump($config['upload_path']); die();
     return $config;
 }
