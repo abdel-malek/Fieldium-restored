@@ -91,7 +91,15 @@ class bookings extends REST_Controller {
             $sms = $this->post('sms_option') ? true : false;
             if ($sms == true) {
                 $this->load->library('send_sms');
-                $this->send_sms->send_sms($phone, "");
+                $msg = "Dear Player,%0AYour Field is booked.%0A"
+                        . "“".$booking->company_name."”%0A"
+                        . "Field “".$booking->field_name."”%0A"
+                        . "On “".date("D, d/m/Y", strtotime($booking->date))."”%0A"
+                        . "At: “".date('h:i A', strtotime($booking->start))."”%0A"
+                        . "For: “".$booking->duration." Hour”%0A"
+                        . "Enjoy the Game,%0A"
+                        . "Fieldium";
+                $this->send_sms->send_sms($phone, $msg);
             }
             $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('created')));
         }
@@ -183,7 +191,11 @@ class bookings extends REST_Controller {
 
     public function company_bookings_get() {
         $this->user_permissions->is_company($this->current_user);
-        $bookings = $this->booking_service->company_bookings($this->current_user->company_id, $this->response->lang);
+        if($this->current_user->role_id == ROLE::SUPPORT)
+            $company_id = $this->input->post('company_id');
+        else
+            $company_id = $this->current_user->company_id;
+        $bookings = $this->booking_service->company_bookings($company_id, $this->response->lang);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 

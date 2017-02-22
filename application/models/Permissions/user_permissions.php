@@ -46,7 +46,7 @@ class user_permissions extends CI_Model {
     }
     
     function is_company($user) {
-        if ($user &&  $user->company_id)
+        if (($user &&  $user->company_id) || $user->role_id == ROLE::SUPPORT)
             return true;
         else
             throw new Permission_Denied_Exception();
