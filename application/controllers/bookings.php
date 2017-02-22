@@ -92,11 +92,11 @@ class bookings extends REST_Controller {
             if ($sms == true) {
                 $this->load->library('send_sms');
                 $msg = "Dear Player,%0AYour Field is booked.%0A"
-                        . "“".$booking->company_name."”%0A"
-                        . "Field “".$booking->field_name."”%0A"
-                        . "On “".date("D, d/m/Y", strtotime($booking->date))."”%0A"
-                        . "At: “".date('h:i A', strtotime($booking->start))."”%0A"
-                        . "For: “".$booking->duration." Hour”%0A"
+                        . "“" . $booking->company_name . "”%0A"
+                        . "Field “" . $booking->field_name . "”%0A"
+                        . "On “" . date("D, d/m/Y", strtotime($booking->date)) . "”%0A"
+                        . "At: “" . date('h:i A', strtotime($booking->start)) . "”%0A"
+                        . "For: “" . $booking->duration . " Hour”%0A"
                         . "Enjoy the Game,%0A"
                         . "Fieldium";
                 $this->send_sms->send_sms($phone, $msg);
@@ -190,12 +190,22 @@ class bookings extends REST_Controller {
     }
 
     public function company_bookings_get() {
-        $this->user_permissions->is_company($this->current_user);
-        if($this->current_user->role_id == ROLE::SUPPORT)
-            $company_id = $this->input->post('company_id');
+        try {
+            $this->user_permissions->is_company($this->current_user);
+        } catch (Permission_Denied_Exception $e) {
+            $this->user_permissions->support_permission($this->current_user);
+        }
+        if ($this->current_user->role_id == ROLE::SUPPORT)
+            $company_id = $this->input->get('company_id');
         else
             $company_id = $this->current_user->company_id;
         $bookings = $this->booking_service->company_bookings($company_id, $this->response->lang);
+        $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
+    }
+
+    public function pending_bookings_get() {
+        $this->user_permissions->support_permission($this->current_user);
+        $bookings = $this->booking_service->pending_bookings();
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 

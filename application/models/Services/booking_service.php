@@ -191,6 +191,10 @@ class booking_service extends CI_Model {
         return $this->booking->company_bookings($company_id, $lang);
     }
 
+    public function pending_bookings(){
+        return $this->booking->pending_bookings();
+    }
+    
     public function field_bookings($field_id, $lang) {
         return $this->booking->field_bookings($field_id, $lang);
     }
