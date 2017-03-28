@@ -12,9 +12,13 @@ class site extends REST_Controller {
     }
 
     public function index_get() {
-        if ($this->current_user)
-            redirect('dashboard');
-        else {
+        if ($this->current_user) {
+            if ($this->current_user->role_id == ROLE::SUPPORT)
+                redirect('dashboard');
+            else if ($this->current_user->role_id == ROLE::ADMIN) {
+                redirect('bookings/calander');
+            }
+        }else {
             $featured_places = $this->field_service->get_featured_places();
             $games = $this->game_service->get_all();
             $this->load->view('index', array(

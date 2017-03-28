@@ -28,7 +28,7 @@
                 evnt.preventDefault();
                 evnt.stopImmediatePropagation();
                 $(".error").html("");
-                var url = site_url + "/users/login";
+                var url = site_url + "/users/web_login";
                 $.ajax({
                     type: "POST",
                     url: url,

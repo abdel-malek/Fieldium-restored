@@ -14,6 +14,13 @@ class bookings extends REST_Controller {
         $this->load->model('Permissions/user_permissions');
     }
 
+    public function calander_get() {
+        $this->user_permissions->is_company($this->current_user);
+        $this->load->view('calander', array(
+                )
+        );
+    }
+
     public function create_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -21,6 +28,7 @@ class bookings extends REST_Controller {
         $this->form_validation->set_rules('date', 'Date', 'required');
         $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('game_type', 'game type', 'required|is_natural_no_zero');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
@@ -28,12 +36,21 @@ class bookings extends REST_Controller {
             $this->user_permissions->is_player($this->current_user);
             $date = $this->input->post('date');
             $start = $this->input->post('start');
+            $start = date("H:i:s", strtotime($start));
+            $duration = $this->input->post('duration');
+            $endtime = strtotime($start) + doubleval($duration) * 60;
+            $end = strftime('%H:%M:%S', $endtime);
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             else if (strtotime($date) == strtotime(date('Y-m-d')) && strtotime($start) < strtotime(date('H:i:s')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid time"));
+            else if (strtotime($start) > strtotime($end))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid start and end time."));
 
-            $duration = $this->input->post('duration');
+            $game_type = $this->input->post('game_type');
+            $game = $this->game_service->get($game_type);
+            if ($duration < $game->minimum_duration)
+                $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $game->minimum_duration . " mins."));
             $notes = $this->input->post('notes');
             $manually = false;
             $player_id = $this->current_user->player_id;
@@ -42,7 +59,7 @@ class bookings extends REST_Controller {
                 $start = "0" . $start;
             $booking = $this->booking_service
                     ->create(
-                    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
+                    $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $this->response->lang
             );
             $this->response(array(
                 'status' => true,
@@ -60,8 +77,9 @@ class bookings extends REST_Controller {
         $this->form_validation->set_rules('date', 'Date', 'required');
         $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('game_type', 'game type', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('player_name', 'Player name', 'required');
-        $this->form_validation->set_rules('player_phone', 'Player phone', '');
+        $this->form_validation->set_rules('player_phone', 'Player phone', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
@@ -70,12 +88,21 @@ class bookings extends REST_Controller {
             $this->user_permissions->management_permission($this->current_user, $this->current_user->company_id);
             $date = $this->input->post('date');
             $start = $this->input->post('start');
+            $start = date("H:i:s", strtotime($start));
+            $duration = $this->input->post('duration');
+            $endtime = strtotime($start) + doubleval($duration) * 60;
+            $end = strftime('%H:%M:%S', $endtime);
+
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             else if (strtotime($date) == strtotime(date('Y-m-d')) && strtotime($start) < strtotime(date('H:i:s')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid time"));
-
-            $duration = $this->input->post('duration');
+            else if (strtotime($start) > strtotime($end))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid start and end time."));
+            $game_type = $this->input->post('game_type');
+            $game = $this->game_service->get($game_type);
+            if ($duration < $game->minimum_duration)
+                $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $game->minimum_duration . " mins."));
             $notes = $this->input->post('notes');
             $name = $this->input->post('player_name');
             $phone = $this->input->post('player_phone');
@@ -86,17 +113,17 @@ class bookings extends REST_Controller {
                 $start = "0" . $start;
             $booking = $this->booking_service
                     ->create(
-                    $field_id, $player->player_id, $date, $start, $duration, $notes, $user_id, $manually, $this->response->lang
+                    $field_id, $player->player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $this->response->lang
             );
-            $sms = $this->post('sms_option') ? true : false;
+            $sms = $this->post('sms_option') == 'true' || $this->post('sms_option') == 1 ? true : false;
             if ($sms == true) {
                 $this->load->library('send_sms');
                 $msg = "Dear Player,%0AYour Field is booked.%0A"
-                        . "“" . $booking->company_name . "”%0A"
-                        . "Field “" . $booking->field_name . "”%0A"
-                        . "On “" . date("D, d/m/Y", strtotime($booking->date)) . "”%0A"
-                        . "At: “" . date('h:i A', strtotime($booking->start)) . "”%0A"
-                        . "For: “" . $booking->duration . " Hour”%0A"
+                        . $booking->company_name . "%0A"
+                        . "Field: " . $booking->field_name . "%0A"
+                        . "On: " . date("D, d/m/Y", strtotime($booking->date)) . "%0A"
+                        . "At: " . date('h:i A', strtotime($booking->start)) . "%0A"
+                        . "For: " . $booking->duration / 60 . " Hour%0A"
                         . "Enjoy the Game,%0A"
                         . "Fieldium";
                 $this->send_sms->send_sms($phone, $msg);
@@ -113,6 +140,7 @@ class bookings extends REST_Controller {
         $this->form_validation->set_rules('date', 'Date', 'required');
         $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('game_type', 'game type', 'required|is_natural_no_zero');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
@@ -121,19 +149,27 @@ class bookings extends REST_Controller {
             $field_id = $this->input->post('field_id');
             $date = $this->input->post('date');
             $start = $this->input->post('start');
+            $start = date("H:i:s", strtotime($start));
+            $duration = $this->input->post('duration');
+            $endtime = strtotime($start) + doubleval($duration) * 60;
+            $end = strftime('%H:%M:%S', $endtime);
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             else if (strtotime($date) == strtotime(date('Y-m-d')) && strtotime($start) < strtotime(date('H:i:s')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid time"));
-
-            $duration = $this->input->post('duration');
+            else if (strtotime($start) > strtotime($end))
+                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid start and end time."));
+            $game_type = $this->input->post('game_type');
+            $game = $this->game_service->get($game_type);
+            if ($duration < $game->minimum_duration)
+                $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $game->minimum_duration . " mins."));
             $notes = $this->input->post('notes');
             $user_id = $this->current_user->user_id;
             if (strlen($start) == 7)
                 $start = "0" . $start;
             $booking = $this->booking_service
                     ->update(
-                    $booking_id, $field_id, $date, $start, $duration, $notes, $user_id, $this->response->lang
+                    $booking_id, $field_id, $date, $start, $duration, $game_type, $notes, $user_id, $this->response->lang
             );
             $this->response(array(
                 'status' => true,
@@ -144,19 +180,51 @@ class bookings extends REST_Controller {
         }
     }
 
-    public function delete_get() {
+    public function cancel_get() {
         if (!$this->get('booking_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
-            $this->booking_service->delete($this->get('booking_id'));
-            $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
+            try {
+                $this->user_permissions->company_booking($this->current_user, $this->get('booking_id'));
+            } catch (Permission_Denied_Exception $e) {
+                $this->user_permissions->support_permission($this->current_user);
+            }
+            $msg = $this->get('reason_id');
+            if ($msg != 0) {
+                $messages = get_cancellation_reasons();
+                if (isset($messages[$msg]))
+                    $msg = $messages[$msg];
+                else
+                    $this->response(array('status' => false, 'data' => null, 'message' => "Error in reason id."));
+            } else {
+                $msg = $this->get('note');
+            }
+            if ($msg == "" && $msg == 0)
+                $this->response(array('status' => false, 'data' => null, 'message' => "The reason is required."));
+
+            $booking = $this->booking_service->cancel($this->get('booking_id'), $msg);
+            $this->response(array('status' => true, 'data' => $booking, 'message' => "The booking has been canceled"));
         }
+    }
+
+    public function get_cancellation_reasons_get() {
+        $messages = get_cancellation_reasons();
+        $result = array();
+        foreach ($messages as $key => $value) {
+            $result[] = array('id' => $key, 'message' => $value);
+        }
+        $this->response(array('status' => true, 'data' => $result, "message" => ""));
     }
 
     public function decline_get() {
         if (!$this->get('booking_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
+            try {
+                $this->user_permissions->company_booking($this->current_user, $this->get('booking_id'));
+            } catch (Permission_Denied_Exception $e) {
+                $this->user_permissions->support_permission($this->current_user);
+            }
             if ($this->booking_service->decline($this->get('booking_id')))
                 $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('declined')));
             else {
@@ -169,6 +237,11 @@ class bookings extends REST_Controller {
         if (!$this->get('booking_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('booking_id') . " " . $this->lang->line('required')));
         else {
+            try {
+                $this->user_permissions->company_booking($this->current_user, $this->get('booking_id'));
+            } catch (Permission_Denied_Exception $e) {
+                $this->user_permissions->support_permission($this->current_user);
+            }
             $booking = $this->booking_service->approve($this->get('booking_id'), $this->response->lang);
             $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('approved')));
         }

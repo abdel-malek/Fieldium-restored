@@ -203,7 +203,7 @@ $config['auth_override_class_method']['players']['contact_us'] = 'none';
 
 ////Users
 $config['auth_override_class_method']['users']['login'] = 'none';
-$config['auth_override_class_method']['users']['edit_profile'] = 'none';
+$config['auth_override_class_method']['users']['web_login'] = 'none';
 
 //Searches
 $config['auth_override_class_method']['searches']['get_searches'] = 'none';

@@ -52,14 +52,14 @@ class users extends REST_Controller {
             $email = $this->input->post('email');
             $role_id = $this->input->post('role_id');
             $user_id = $this->input->post('user_id');
-            
+
             $user = $this->user_service->update(
                     $user_id, $name, $phone, $email, $role_id, $this->response->lang
             );
             $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('updated')));
         }
     }
-    
+
     public function save_token_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -108,21 +108,44 @@ class users extends REST_Controller {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
             $user = $this->user_service->login($username, md5($password));
+            if($user->role_id != ROLE::ADMIN){
+                $this->user_service->logout();
+                $this->response(array('status' => false, 'data' => $user, "message" => "The username used is not a super admin user."));
+            }
+            $this->response(array('status' => true, 'data' => $user, "message" => "You are logged in."));
+        }
+    }
+    
+    public function web_login_post() {
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[30]');
+        if (!$this->form_validation->run()) {
+            throw new Validation_Exception(validation_errors());
+        } else {
+            $username = $this->input->post('username');
+            $password = $this->input->post('password');
+            $user = $this->user_service->login($username, md5($password));
+            
             $this->response(array('status' => true, 'data' => $user, "message" => "You are logged in."));
         }
     }
 
     function logout_get() {
-        if($this->current_user->role_id == ROLE::ADMIN) {
-            if(!$this->get('token'))
-                $this->response(array('status' => false, 'data' => null, "message" => "Token required"));
+        if ($this->current_user->role_id == ROLE::ADMIN || $this->current_user->role_id == ROLE::SUPPORT) {
+            if (!$this->get('token'))
+                $this->response(array('status' => false, 'data' => null, "message" => "Token is required"));
             $this->user_service->delete_token($this->get('token'));
         }
         $this->user_service->logout();
-        if ($this->response->format == "html")
-            redirect("dashboard");
-        else
-            $this->response(array('status' => true, 'data' => null, "message" => "Done"));
+        $this->response(array('status' => true, 'data' => null, "message" => "Done"));
+    }
+
+    function web_logout_get() {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->user_service->logout();
+        redirect("dashboard");
     }
 
     public function delete_get() {
@@ -130,6 +153,7 @@ class users extends REST_Controller {
         if (!$this->get('user_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('user_id') . " " . $this->lang->line('required')));
         else {
+
             $this->user_service->deactive($this->get('user_id'));
             $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('deleted')));
         }
@@ -349,4 +373,5 @@ class users extends REST_Controller {
             return FALSE;
         }
     }
+
 }
