@@ -55,6 +55,10 @@ class fields extends REST_Controller {
                 $open_time = "0" . $open_time;
             if (strlen($cloes_time) == 7)
                 $cloes_time = "0" . $cloes_time;
+            if($cloes_time == $open_time){
+                $open_time = "00:00:00";
+                $cloes_time = "23:59:00";
+            }
             $field = $this->field_service
                     ->create(
                     $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $this->response->lang
@@ -102,6 +106,10 @@ class fields extends REST_Controller {
                 $open_time = "0" . $open_time;
             if (strlen($cloes_time) == 7)
                 $cloes_time = "0" . $cloes_time;
+            if($cloes_time == $open_time){
+                $open_time = "00:00:00";
+                $cloes_time = "23:59:00";
+            }
             $field = $this->field_service
                     ->update(
                     $field_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $this->response->lang
@@ -133,46 +141,37 @@ class fields extends REST_Controller {
     public function check_availability_get() {
         if (!$this->get('field_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
+        else if (!$this->get('game_type'))
+            $this->response(array('status' => false, 'data' => null, 'message' => "the game type " . $this->lang->line('required')));
         else {
             $date = $this->get('date');
-
             $date = date_format(date_create($date), 'Y-m-d');
-            if (strtotime($date) < strtotime(date('Y-m-d')))
-                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+//            if (strtotime($date) < strtotime(date('Y-m-d')))
+//                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+            $game_type = $this->input->get('game_type');
+            $available_times = $this->field_service->check_availability($this->get('field_id'), $date, $game_type);
+            $busy_times = $this->field_service->busy_range($this->get('field_id'), $date);
 
-            $available_times = $this->field_service->check_availability($this->get('field_id'), $date);
-            $times = array();
-            $count = 0;
-            $range = array();
-            foreach ($available_times as $key => $value) {
-                if ($count % 2 == 0) {
-                    $range["start"] = $value;
-                } else {
-                    $range["end"] = $value;
-                    array_push($times, $range);
-                }
-                $count++;
-            }
-            $results = array();
-            $current = date('H:i:s');
-            $hour = date('H');
-            if (date('i') > "00")
-                $hour++;
-            $current = $hour . ":00:00";
-            foreach ($times as $key => $range) {
-                if (strtotime($date) > strtotime(date('Y-m-d')))
-                    array_push($results, $range);
-                else {
-                    if (strtotime($range["start"]) < strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
-                        array_push($results, array(
-                            "start" => $hour . ":00:00",
-                            "end" => $range["end"]));
-                    } else if (strtotime($range["start"]) >= strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
-                        array_push($results, $range);
-                    }
-                }
-            }
-            $this->response(array('status' => true, 'data' => $results, 'message' => ""));
+            $this->response(array('status' => true, 'data' =>
+                array(
+                    'available' => $available_times,
+                    'busy' => $busy_times
+                ), 'message' => ""
+                    )
+            );
+        }
+    }
+
+    public function busy_range_get() {
+        if (!$this->get('field_id'))
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('field_id') . " " . $this->lang->line('required')));
+        else {
+            $date = $this->get('date');
+            $date = date_format(date_create($date), 'Y-m-d');
+//            if (strtotime($date) < strtotime(date('Y-m-d')))
+//                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+            $busy_times = $this->field_service->busy_range($this->get('field_id'), $date);
+            $this->response(array('status' => true, 'data' => $busy_times, 'message' => ""));
         }
     }
 
@@ -189,13 +188,14 @@ class fields extends REST_Controller {
 
     public function get_by_company_with_timing_get() {
         $game = $this->get('game_type');
-        if (!$this->get('game_type')) $game = 0;
+        if (!$this->get('game_type'))
+            $game = 0;
         if (!$this->get('company_id'))
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('company_id') . " " . $this->lang->line('required')));
         $timing = $this->get('timing');
 //        if ($timing == 0)
 //            $this->response(array('status' => false, 'data' => null, 'message' => 'The timing is required.'));
-        
+        $duration = $this->get('duration');
         if ($timing == 2) {
             if (!$this->get('date'))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date is required.'));
@@ -206,7 +206,10 @@ class fields extends REST_Controller {
             if (!$this->get('start') || !$this->get('duration') || !$this->get('date') || !$this->validate_time($this->get('start')))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date, start time and duration details are required.'));
             $start = $this->get('start');
-            $duration = $this->get('duration');
+            $this->load->model("Services/game_service");
+            $g = $this->game_service->get($game);
+            if ($duration < $g->minimum_duration)
+                $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $g->minimum_duration . " mins."));
             $date = $this->get('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
@@ -214,7 +217,6 @@ class fields extends REST_Controller {
                 $start = "0" . $start;
         }
         $start = $this->get('start');
-        $duration = $this->get('duration');
         $date = $this->get('date');
         $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
         $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
@@ -229,7 +231,7 @@ class fields extends REST_Controller {
             $this->response(array('status' => false, 'data' => null, "message" => "Uploading error"));
         else
             $image_name = $image_file['image']['upload_data']['file_name'];
-
+        
         $this->load->model('Services/image_service');
         $image = $this->image_service->save_image($image_name);
 
@@ -259,7 +261,7 @@ class fields extends REST_Controller {
                     ->where('field.deleted', 0)
                     ->columns('field_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'amenities', 'featured_place')
                     ->order_by('field_id')
-                    ->set_relation('company_id', 'company', 'en_name', array('deleted' => 0), null, $primary_key)
+                    ->set_relation('company_id', 'company', 'en_name', array('deleted' => 0))
                     ->set_relation_n_n('games', 'field_game_type', 'game_type', 'field_id', 'game_type_id', 'en_name')
                     ->set_relation_n_n('amenities', 'field_amenity', 'amenity', 'field_id', 'amenity_id', 'en_name')
                     ->display_as('field_id', 'id')
@@ -275,7 +277,9 @@ class fields extends REST_Controller {
                     ->field_type('area_x', 'integer')
                     ->field_type('area_y', 'integer')
                     ->field_type('max_capacity', 'integer')
-                    ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'area_x', 'area_y', 'hour_rate')
+                    ->callback_before_insert(array($this, 'add_update_callback'))
+                    ->callback_before_update(array($this, 'add_update_callback'))
+                    ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'hour_rate')
                     ->callback_delete(array($this, 'delete_field'))
                     ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
                     ->unset_export()
@@ -301,6 +305,14 @@ class fields extends REST_Controller {
         $this->fields_management_post($primary_key, $operation);
     }
 
+    function add_update_callback($post_array) {
+        if($post_array['open_time'] == $post_array['close_time']) {
+            $post_array['open_time'] = "00:00:00";
+            $post_array['close_time'] = "23:59:00";
+        }
+        return $post_array;
+    }
+    
     function view_images($primary_key, $row) {
         return site_url('/fields/field_images_management/' . $primary_key);
     }

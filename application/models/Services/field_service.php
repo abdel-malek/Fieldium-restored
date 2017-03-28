@@ -274,11 +274,16 @@ class field_service extends CI_Model {
     }
 
     public function get_by_company_with_timing($game, $company_id, $timing, $start, $date, $duration, $lon, $lat, $lang = "en") {
-        $fields = $this->field->get_by_company_with_timing($game, $company_id, $timing, $start, $date, $duration, $lon, $lat, $lang);
+        if ($timing == 1) {
+            $fields = $this->field->get_by_company_with_timing($game, $company_id, $timing, $start, $date, $duration, $lon, $lat, $lang);
+        } else {
+            $fields = $this->field->get_by_company_with_filters($game, $company_id, $lon, $lat, $lang);
+        }
         $result = array();
         foreach ($fields as $field) {
             $available = true;
-            if ($timing == 2 && count($this->check_availability($field->field_id, $date)) == 0) {
+//            var_dump($game);
+            if ($timing == 2 && count($this->check_availability($field->field_id, $date, $game)) == 0) {
                 $available = false;
             }
             $amenities = $this->amenity->get_field_amenities($field->field_id, $lang);
@@ -301,11 +306,11 @@ class field_service extends CI_Model {
             $field->images = $results;
             $games = $this->game->get_field_games($field->field_id, $lang);
             $results = array();
-            foreach ($games as $game) {
-                if ($game->image != "" && $game->image != null) {
-                    $game->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $game->image;
+            foreach ($games as $g) {
+                if ($g->image != "" && $g->image != null) {
+                    $g->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $g->image;
                 }
-                $results[] = $game;
+                $results[] = $g;
             }
 
             $field->games = $results;
@@ -319,22 +324,24 @@ class field_service extends CI_Model {
 
     public function delete($field_id) {
         $this->get($field_id, "en");
-        $bookings = $this->booking_Service->field_bookings($field_id, "en");
+        $bookings = $this->booking_service->field_bookings($field_id, "en");
         foreach ($bookings as $booking) {
-            $this->booking_service->delete($booking->booking_id);
+            $this->booking_service->cancel($booking->booking_id, 'Your booking has been canceled. Sorry for the inconvienve but the field is undergoing maintenance.');
         }
         $this->field->update($field_id, array('deleted' => 1));
     }
+    
 
-    public function check_availability($field_id, $date) {
+    public function check_availability($field_id, $date, $game_type) {
         $field = $this->get($field_id);
         $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
+        $result = array();
         if ($field->open_time < $field->close_time) {
             $time = $field->open_time;
             $end = $field->close_time;
-            $result = array();
+            
             foreach ($bookings as $key => $booking) {
-                $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 3600);
+                $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 60);
                 if ($booking->start >= $field->open_time && $booking->start < $field->close_time &&
                         $endtime > $field->open_time && $endtime <= $field->close_time) {
                     if ($booking->start != $time) {
@@ -355,8 +362,9 @@ class field_service extends CI_Model {
             $time = "00:00:00";
             $end = $field->close_time;
             $first = true;
+            $changed = false;
             foreach ($bookings as $key => $booking) {
-                $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 3600);
+                $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 60);
                 if (!(
                         ($booking->start >= $field->close_time && $booking->start < $field->open_time) ||
                         ($endtime > $field->close_time && $endtime <= $field->open_time)
@@ -367,6 +375,7 @@ class field_service extends CI_Model {
                     ) {
 
                         if ($booking->start != $time) {
+                            $changed = true;
                             $result[] = $time;
                             $result[] = $booking->start;
                         }
@@ -378,6 +387,7 @@ class field_service extends CI_Model {
 
                         if ($first) {
                             if ($time != $end) {
+                                $changed = true;
                                 $result[] = $time;
                                 $result[] = $end;
                             }
@@ -386,6 +396,7 @@ class field_service extends CI_Model {
                             $first = false;
                         }
                         if ($booking->start != $time) {
+                            $changed = true;
                             $result[] = $time;
                             $result[] = $booking->start;
                         }
@@ -393,16 +404,135 @@ class field_service extends CI_Model {
                     }
                 }
             }
-            if ($time < $end) {
-                $result[] = $time;
-                $result[] = $end;
+			if(count($bookings) == 0 ){
+				$result[] = $r1[0];
+				$result[] = $r1[1];
+				$result[] = $r2[0];
+				$result[] = $r2[1];
+			}else{
+				if ($time < $end && $time != "00:00:00") {
+					$result[] = $time;
+					$result[] = $end;
+				}
+				if ($end != "23:59:59") {
+					$result[] = $field->open_time;
+					$result[] = "23:59:59";
+				}
+			}
+        }
+        $available_times = $result;
+        $times = array();
+        $count = 0;
+        $range = array();
+        foreach ($available_times as $key => $value) {
+            if ($count % 2 == 0) {
+                $range["start"] = $value;
+            } else {
+                $range["end"] = $value;
+                array_push($times, $range);
             }
-            if ($end != "23:59:59") {
-                $result[] = $field->open_time;
-                $result[] = "23:59:59";
+            $count++;
+        }
+        $results = array();
+//        var_dump($game_type,"\n");
+        $game = $this->game_service->get($game_type);
+//        var_dump($game,"\n");
+        $current = date('H:i:00');
+        $mins = date('i');
+        if ($mins % $game->increament_factor != 0)
+            $current = date('H:i:00', strtotime($current) + doubleval(
+                            (
+                            $game->increament_factor - ($mins % $game->increament_factor)
+                            )
+                    ) * 60);
+//        $current = $hour . ":00:00";
+        $this->load->model("Services/game_service");
+
+        foreach ($times as $key => $range) {
+            if (strtotime($date) > strtotime(date('Y-m-d'))) {
+
+                if ($this->check_ranege_duration($range, $game))
+                    array_push($results, $range);
+                else {
+                    
+                }
+            } else {
+
+                if (strtotime($range["start"]) < strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+                    $ran = array(
+                        "start" => $current,
+                        "end" => $range["end"]
+                    );
+                    if ($this->check_ranege_duration($ran, $game))
+                        array_push($results, $ran);
+                } else if (strtotime($range["start"]) >= strtotime($current) && strtotime($range["end"]) > strtotime($current)) {
+
+                    if ($this->check_ranege_duration($range, $game))
+                        array_push($results, $range);
+                }
             }
         }
-        return $result;
+        return $results;
+    }
+
+    private function check_ranege_duration($range, $game) {
+        $diff = abs(strtotime($range["end"]) - strtotime($range["start"]));
+        $years = floor($diff / (365 * 60 * 60 * 24));
+        $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+        $days = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+        $hours = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24) / (60 * 60));
+        if ($hours < 10)
+            $hours = "0" . $hours;
+        $minuts = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60) / 60);
+        if ($minuts < 10)
+            $minuts = "0" . $minuts;
+        $seconds = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60 - $minuts * 60));
+        $minimum = "";
+        if (floor($game->minimum_duration / 60) < 10)
+            $minimum .= "0";
+        $minimum .= floor($game->minimum_duration / 60) . ":";
+        if (($game->minimum_duration % 60) < 10)
+            $minimum .= "0";
+        $minimum .= ($game->minimum_duration % 60) . ":00";
+//        var_dump($minimum, $range["start"], $range["end"], $hours . ":" . $minuts . ":00");
+        if (
+                strtotime($hours . ":" . $minuts . ":00") >= strtotime($minimum)
+        )
+            return true;
+        return false;
+    }
+
+    public function busy_range($field_id, $date) {
+        $field = $this->get($field_id);
+        $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
+        $time = $field->open_time;
+        $end = $field->close_time;
+        $result = array();
+        foreach ($bookings as $key => $booking) {
+            $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 60);
+            if (strtotime($time) == strtotime($booking->start) && count($result) != 0) {
+                $key = array_search($booking->start, $result);
+                array_splice($result, $key, 1);
+                $result[] = $endtime;
+            } else {
+                $result[] = $booking->start;
+                $result[] = $endtime;
+            }
+            $time = $endtime;
+        }
+        $times = array();
+        $count = 0;
+        $range = array();
+        foreach ($result as $key => $value) {
+            if ($count % 2 == 0) {
+                $range["start"] = $value;
+            } else {
+                $range["end"] = $value;
+                array_push($times, $range);
+            }
+            $count++;
+        }
+        return $times;
     }
 
     public function get_featured_places($lang = "en") {
@@ -442,7 +572,5 @@ class field_service extends CI_Model {
         }
         return $result;
     }
-
 }
-
 ?>

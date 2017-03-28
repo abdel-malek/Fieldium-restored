@@ -9,7 +9,7 @@ class Send_sms extends CI_Controller {
     }
 
     public function send_sms($moblie, $message, $lang = "en") {
-        $_url = 'http://www.smartsmsgateway.com/api/api_http.php?username=tradinos&password=trd256&senderid=SMS%20Alert&to=00971' . $moblie . '&text=' . $message . '&type=text';
+        $_url = 'http://www.smartsmsgateway.com/api/api_http.php?username=tradinos&password=trd256&senderid=SMS%20Alert&to=971' . $moblie . '&text=' . $message . '&type=text';
         $_url = preg_replace("/ /", "%20", $_url);
         $result = file_get_contents($_url);
         return $result;

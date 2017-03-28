@@ -20,7 +20,7 @@ class user_permissions extends CI_Model {
         else
             throw new Permission_Denied_Exception();
     }
-    
+
     function password_permission($user, $user_id) {
         if ($user && (
                 ($user->role_id == ROLE::ADMIN && $user->user_id == $user_id) || $user->role_id == ROLE::SUPPORT
@@ -30,23 +30,35 @@ class user_permissions extends CI_Model {
         else
             throw new Permission_Denied_Exception();
     }
-    
+
     function support_permission($user) {
-        if ($user &&  $user->role_id == ROLE::SUPPORT)
+        if ($user && $user->role_id == ROLE::SUPPORT)
             return true;
         else
             throw new Permission_Denied_Exception();
     }
-    
+
     function is_player($user) {
-        if ($user &&  $user->player_id)
+        if ($user && $user->player_id)
             return true;
         else
             throw new Permission_Denied_Exception();
     }
-    
+
     function is_company($user) {
-        if ($user &&  $user->company_id)
+        if ($user && $user->company_id)
+            return true;
+        else
+            throw new Permission_Denied_Exception();
+    }
+
+    function company_booking($user, $booking) {
+        $this->load->model("Services/booking_service");
+        $booking = $this->booking_service->get($booking);
+        $this->load->model("Services/field_service");
+        $field = $this->field_service->get($booking->field_id);
+//        var_dump($field->company_id, $user->company_id);
+        if ($user && $user->company_id && $field->company_id == $user->company_id)
             return true;
         else
             throw new Permission_Denied_Exception();

@@ -13,13 +13,13 @@ class booking_service extends CI_Model {
     }
 
     public function create(
-    $field_id, $player_id, $date, $start, $duration, $notes, $user_id, $manually, $lang
+    $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $lang
     ) {
         $field = $this->field->get($field_id);
         if (!$field)
             throw new Field_Not_Found_Exception();
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
-        $endtime = strtotime($start) + doubleval($duration) * 3600;
+        $endtime = strtotime($start) + doubleval($duration) * 60;
         $end = strftime('%H:%M:%S', $endtime);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
@@ -42,8 +42,6 @@ class booking_service extends CI_Model {
         $state = BOOKING_STATE::PENDING;
         if ($manually == true || $field->auto_confirm == 1)
             $state = BOOKING_STATE::APPROVED;
-
-
         $booking_id = $this->booking->add(array(
             'field_id' => $field_id,
             'player_id' => $player_id,
@@ -53,6 +51,7 @@ class booking_service extends CI_Model {
             'notes' => $notes,
             'user_id' => $user_id,
             'manually' => $manually,
+            'game_type_id' => $game_type,
             'state_id' => $state
         ));
 
@@ -61,16 +60,18 @@ class booking_service extends CI_Model {
             $this->load->model('Services/notification_service');
             $message = "You have received a new booking No." . $booking_id;
             $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
+            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
         }
         return $booking;
     }
 
     public function update(
-    $booking_id, $field_id, $date, $start, $duration, $notes, $user_id, $lang
+    $booking_id, $field_id, $date, $start, $duration, $game_type, $notes, $user_id, $lang
     ) {
         $field = $this->field->get($field_id);
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
-        $endtime = strtotime($start) + doubleval($duration) * 3600;
+        $endtime = strtotime($start) + doubleval($duration) * 60;
         $end = strftime('%H:%M:%S', $endtime);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
@@ -96,6 +97,7 @@ class booking_service extends CI_Model {
             'date' => $date,
             'duration' => $duration,
             'notes' => $notes,
+            'game_type_id' => $game_type,
             'user_id' => $user_id
                 // 'total' => $total
         ));
@@ -116,9 +118,23 @@ class booking_service extends CI_Model {
     public function delete($booking_id) {
         $booking = $this->get($booking_id, "en");
         $this->booking->update($booking_id, array('deleted' => 1));
+    }
+
+    public function cancel($booking_id, $msg = "") {
+        $booking = $this->get($booking_id, "en");
+        if ($booking->state_id == BOOKING_STATE::CANCELLED)
+            throw new Parent_Exception("The booking is already canceled");
+        $this->booking->update($booking_id, array(
+            'state_id' => BOOKING_STATE::CANCELLED,
+            'cancellation_reason' => $msg
+                )
+        );
         $this->load->model('Services/notification_service');
-        $message = "Your booking No." . $booking_id . " has been cancelled. ";
-//        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_cancelled_message");
+        $message = $msg;
+        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $booking), "booking_cancelled_message");
+        $this->load->library('send_sms');
+        $this->send_sms->send_sms($booking->player_phone, $message);
+        return $this->get($booking_id, "en");
     }
 
     private function notification_object($booking) {
@@ -156,16 +172,35 @@ class booking_service extends CI_Model {
 
     public function approve($booking_id, $lang) {
         $booking = $this->get($booking_id, $lang);
+        if ($booking->state_id == BOOKING_STATE::APPROVED)
+            throw new Parent_Exception("The booking is already approved");
         $bookings = $this->booking->field_bookings_by_timing($booking->field_id, $booking->date, $booking->start, $booking->duration);
         if ($bookings)
             throw new Field_Not_Available_Exception();
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::APPROVED));
         $booking = $this->get($booking_id, $lang);
-        $this->load->model('Services/notification_service');
-        $message = array();
-        $message = "Your booking No." . $booking_id . " has been approved. ";
-//        $message["ar"] = "تم قبول الطلب رقم " . $booking_id;
-        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_confirmed_message");
+        try {
+            $this->load->model('Services/notification_service');
+            $player = $this->player_service->get($booking->player_id);
+            if ($player->active == 1) {
+                $this->load->model('Services/notification_service');
+                $message = array();
+                $message = "Your booking No." . $booking_id . " has been approved. ";
+                $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_confirmed_message");
+            }
+        } catch (Player_Not_Found_Exception $e) {
+            
+        }
+        $this->load->library('send_sms');
+        $msg = "Dear Player,%0AYour Field is booked.%0A"
+                . $booking->company_name . "%0A"
+                . "Field: " . $booking->field_name . "%0A"
+                . "On: " . date("D, d/m/Y", strtotime($booking->date)) . "%0A"
+                . "At: " . date('h:i A', strtotime($booking->start)) . "%0A"
+                . "For: " . $booking->duration/60 . " Hour%0A"
+                . "Enjoy the Game,%0A"
+                . "Fieldium";
+        $this->send_sms->send_sms($booking->player_phone, $msg);
         return $booking;
     }
 
@@ -191,10 +226,10 @@ class booking_service extends CI_Model {
         return $this->booking->company_bookings($company_id, $lang);
     }
 
-    public function pending_bookings(){
+    public function pending_bookings() {
         return $this->booking->pending_bookings();
     }
-    
+
     public function field_bookings($field_id, $lang) {
         return $this->booking->field_bookings($field_id, $lang);
     }

@@ -29,7 +29,7 @@ function set_upload_options() {
     $config = array();
     $config['upload_path'] = dirname($_SERVER["SCRIPT_FILENAME"]) . UPLOADED_IMAGES_PATH;
     $config['allowed_types'] = 'jpg|png|jpeg';
-    $config['max_size'] = 100;
+    $config['max_size'] = 2040;
 //    var_dump($config['upload_path']); die();
     return $config;
 }

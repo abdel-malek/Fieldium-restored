@@ -8,7 +8,7 @@ class area extends CI_Model {
 
     public function get_all($lang = "en") {
         return $this->db->select("area_id, " . $lang . "_name as name, "
-                                . "IFNULL((SELECT company.company_id from company where "
+                                . "IFNULL((SELECT company.company_id from company join field on field.company_id = company.company_id where "
                                 . "company.area_id = area.area_id group by company_id limit 1),0 ) as active", false)
                         ->from('area')
                         ->get()->result();

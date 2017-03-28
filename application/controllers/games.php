@@ -25,13 +25,14 @@ class games extends REST_Controller {
             $crud->set_theme('datatables')
                     ->set_table('game_type')
                     ->set_subject('game')
-                    ->columns('game_id', 'en_name', 'image', 'en_description')
+                    ->columns('game_id', 'en_name', 'image', 'minimum_duration', 'increament_factor', 'en_description')
                     ->display_as('game_id', 'id')
                     ->display_as('en_name', 'name')
                     ->display_as('en_description', 'description')
                     ->unset_edit_fields('ar_name', 'ar_description')
                     ->unset_add_fields('ar_name', 'ar_description')
                     ->required_fields('en_name')
+                    ->callback_column('minimum_duration', array($this, '_callback_duration_render'))
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->unset_export()
                     ->unset_read()
@@ -51,6 +52,11 @@ class games extends REST_Controller {
 
     function games_management_get($primary_key = null) {
         $this->games_management_post($primary_key);
+    }
+
+    public function _callback_duration_render($value, $row) {
+        $row->increament_factor = $row->increament_factor . " mins";
+        return $value . " mins";
     }
 
 }

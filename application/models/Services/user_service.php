@@ -124,6 +124,10 @@ class user_service extends CI_Model {
     public function get_company_users($company_id) {
         return $this->db->get_where('user', array('company_id' => $company_id, 'active' => 1, 'role_id' => ROLE::ADMIN))->result();
     }
+    
+    public function get_support_users() {
+        return $this->db->get_where('user', array('active' => 1, 'role_id' => ROLE::SUPPORT))->result();
+    }
 
     public function save_token(
     $user_id, $token, $os, $lang

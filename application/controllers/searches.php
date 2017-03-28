@@ -36,9 +36,12 @@ class searches extends REST_Controller {
         $game = 0;
         $game = $this->get('game_type');
         $area = $this->get('area_id');
-        if (!$this->get('game_type')) $game = 0;
-        if (!$this->get('area_id')) $area = 0;
+        if (!$this->get('game_type'))
+            $game = 0;
+        if (!$this->get('area_id'))
+            $area = 0;
         $timing = $this->get('timing');
+        $duration = $this->get('duration');
         if ($timing == 2) {
             if (!$this->get('date'))
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date is required.'));
@@ -50,6 +53,10 @@ class searches extends REST_Controller {
                 $this->response(array('status' => false, 'data' => null, 'message' => 'The date, start time and duration details are required.'));
             $start = $this->get('start');
             $duration = $this->get('duration');
+            $this->load->model("Services/game_service");
+            $g = $this->game_service->get($game);
+            if ($duration < $g->minimum_duration)
+                $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $g->minimum_duration . " mins."));
             $date = $this->get('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
@@ -57,7 +64,7 @@ class searches extends REST_Controller {
                 $start = "0" . $start;
         }
         $start = $this->get('start');
-        $duration = $this->get('duration');
+
         $date = $this->get('date');
         $results = $this->search_service->search($name, $game, $area, $timing, $start, $duration, $date, $this->response->lang);
         //$this->search_service->save_search($name, $game, $area, $timing, $start, $duration, $date, ($this->current_user) ? $this->current_user->player_id : null, $this->get('token'));

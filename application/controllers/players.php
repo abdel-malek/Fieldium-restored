@@ -70,7 +70,6 @@ class players extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'name', 'required');
-        $this->form_validation->set_rules('image_updated', 'image_updated', 'required');
         $this->form_validation->set_rules('email', 'email', 'valid_email');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
@@ -79,22 +78,7 @@ class players extends REST_Controller {
             $email = $this->input->post('email');
             $address = $this->input->post('address');
             $games = $this->input->post('prefered_games');
-            $updated = $this->input->post('image_updated');
-            $profile_picture = "";
-            if ($updated == 'true') {
-                try {
-                    $this->load->helper('image_uploader_helper');
-                    $image = upload_image($this);
-                    if (isset($image['profile_picture']))
-                        $profile_picture = $image['profile_picture']['upload_data']['file_name'];
-                } 
-                catch (Uploading_Image_Exception $ex) {
-                    $profile_picture = "";
-                }
-            } else if ($updated == false || $updated == 'false') {
-                $profile_picture = $this->input->post('profile_picture');
-            }
-            $player = $this->player_service->update($this->current_user->player_id, $name, $email, $address, $games, $profile_picture, $this->response->lang);
+            $player = $this->player_service->update($this->current_user->player_id, $name, $email, $address, $games, $this->response->lang);
             $this->response(array('status' => true, 'data' => $player, "message" => $this->lang->line('updated')));
         }
     }
@@ -165,14 +149,20 @@ class players extends REST_Controller {
     }
 
     function upload_image_post() {
-        $this->load->helper('image_uploader_helper');
-        $image_file = upload_image($this);
-        if (!isset($image_file['image']))
-            $this->response(array('status' => false, 'data' => null, "message" => "Uploading error"));
-        else
-            $image_name = $image_file['image']['upload_data']['file_name'];
+        $image_name = "";
+        if ($this->input->post('delete') && $this->input->post('delete') == 1) {
+            $image_name = "";
+        } else {
+            $this->load->helper('image_uploader_helper');
+            $image_file = upload_image($this);
+            if (!isset($image_file['image']))
+                $this->response(array('status' => false, 'data' => null, "message" => "Uploading error"));
+            else
+                $image_name = $image_file['image']['upload_data']['file_name'];
+        }
 
-        $this->response(array('status' => true, 'data' => array("image_name" => $image_name), "message" => $this->lang->line('image_saved')));
+        $this->player_service->update_player_image($this->current_user->player_id, $image_name);
+        $this->response(array('status' => true, 'data' => $this->player_service->get($this->current_user->player_id), "message" => $image_name == ""?"The image has been deleted":"the image has been saved on the server"));
     }
 
     function contact_us_post() {

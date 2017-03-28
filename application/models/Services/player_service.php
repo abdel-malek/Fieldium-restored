@@ -53,7 +53,7 @@ class player_service extends CI_Model {
         $player->server_id = md5($server_id);
         return $player;
     }
-    
+
     public function create($name, $phone) {
 
         $player = $this->player->get_by_phone($phone);
@@ -84,7 +84,7 @@ class player_service extends CI_Model {
                 'token' => "",
                 'address' => ""
             ));
-//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
         $player = $this->get($player_id);
 //        $player->server_id = $server_id;
@@ -95,7 +95,7 @@ class player_service extends CI_Model {
         $player = $this->player->get_by_phone($phone);
         $player = $this->player->verify($phone, $code);
         if (!$player) {
-            throw new Invalid_Activation_Code_Exception ($this->session->userdata('language'));
+            throw new Invalid_Activation_Code_Exception($this->session->userdata('language'));
         }
 
         $this->player->update($player->player_id, array(
@@ -110,16 +110,15 @@ class player_service extends CI_Model {
         if (!$res)
             throw new Player_Not_Found_Exception($lang);
         $res->prefered_games = $this->game->get_player_games($id, $lang);
-        if($res->profile_picture != "" && $res->profile_picture != null)
+        if ($res->profile_picture != "" && $res->profile_picture != null)
             $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
         return $res;
     }
 
-    public function update($player_id, $name, $email, $address, $games_types, $profile_picture, $lang) {
+    public function update($player_id, $name, $email, $address, $games_types, $lang) {
         $this->player->update($player_id, array(
             'name' => $name,
             'email' => $email,
-            'profile_picture' => $profile_picture,
             'address' => $address
         ));
         $this->game->delete_player_games($player_id);
@@ -155,7 +154,7 @@ class player_service extends CI_Model {
 //        }
         return $data;
     }
-    
+
     public function deactive($player_id) {
         $this->get($player_id);
         $this->player->update($player_id, array(
@@ -163,7 +162,7 @@ class player_service extends CI_Model {
             'server_id' => ''
         ));
     }
-    
+
     public function deactive_active($player_id) {
         $player = $this->get($player_id);
         $this->player->update($player_id, array(
@@ -179,11 +178,11 @@ class player_service extends CI_Model {
             $player_id = $player->player_id;
 
             $code = $this->generate_activation_code();
-            
+
             $this->player->update($player->player_id, array(
                 'verification_code' => $code
             ));
-            
+
 //            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
             return $this->get($player->player_id);
         } else {
@@ -192,7 +191,7 @@ class player_service extends CI_Model {
     }
 
     public function refresh_token($player_id, $token) {
-        
+
         $this->player->update($player_id, array(
             'token' => $token
         ));
@@ -221,6 +220,15 @@ class player_service extends CI_Model {
         ;
 
         return $randomString;
+    }
+
+    function update_player_image($player_id, $image_name) {
+        $image = $this->get($player_id);
+        $image = $image->profile_picture;
+        if ($image != "")
+            if (unlink(dirname($_SERVER["SCRIPT_FILENAME"]) . "/assets/uploaded_images/" . $image))
+                $true = true;
+        $this->player->update($player_id, array('profile_picture' => $image_name));
     }
 
 }
