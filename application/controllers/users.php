@@ -108,14 +108,21 @@ class users extends REST_Controller {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
             $user = $this->user_service->login($username, md5($password));
-            if($user->role_id != ROLE::ADMIN){
-                $this->user_service->logout();
-                $this->response(array('status' => false, 'data' => $user, "message" => "The username used is not a super admin user."));
+            if ($this->input->post('support') && $this->input->post('support') == "1") {
+                if ($user->role_id != ROLE::SUPPORT) {
+                    $this->user_service->logout();
+                    $this->response(array('status' => false, 'data' => null, "message" => "You do not have permission"));
+                }
+            } else {
+                if ($user->role_id != ROLE::ADMIN) {
+                    $this->user_service->logout();
+                    $this->response(array('status' => false, 'data' => null, "message" => "You do not have permission"));
+                }
             }
             $this->response(array('status' => true, 'data' => $user, "message" => "You are logged in."));
         }
     }
-    
+
     public function web_login_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -127,7 +134,6 @@ class users extends REST_Controller {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
             $user = $this->user_service->login($username, md5($password));
-            
             $this->response(array('status' => true, 'data' => $user, "message" => "You are logged in."));
         }
     }
@@ -143,7 +149,7 @@ class users extends REST_Controller {
     }
 
     function web_logout_get() {
-        $this->user_permissions->support_permission($this->current_user);
+//        $this->user_permissions->support_permission($this->current_user);
         $this->user_service->logout();
         redirect("dashboard");
     }

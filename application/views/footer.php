@@ -1,10 +1,3 @@
-<script type="text/javascript">
-    var site_url = "<?php echo site_url() ?>";
-    var base_url = "<?php echo base_url() ?>";
-    var lang = "<?php echo $this->session->userdata('language')?>";
-</script>
-
-
 <script type="text/javascript" src="<?php echo base_url('assets/js/bootstrap.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.touchSwipe.min.js') ?>"></script>
 <script type="text/javascript">

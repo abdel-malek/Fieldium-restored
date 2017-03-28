@@ -14,9 +14,16 @@ class bookings extends REST_Controller {
         $this->load->model('Permissions/user_permissions');
     }
 
-    public function calander_get() {
+    public function calendar_get() {
         $this->user_permissions->is_company($this->current_user);
-        $this->load->view('calander', array(
+        $this->load->model("Services/field_service");
+        $fields = $this->field_service->get_by_company($this->current_user->company_id, 0, 0, $this->response->lang);
+
+        $this->load->view('template.php', array(
+            'view' => 'calendar',
+            'fields' => $fields,
+//                'js_files' => $output->js_files,
+//                'css_files' => $output->css_files
                 )
         );
     }
@@ -351,7 +358,7 @@ class bookings extends REST_Controller {
 
     public function _callback_duration_render($value, $row) {
 
-        return $value . " h";
+        return $value . " Mins";
     }
 
     public function _callback_total_render($value, $row) {
@@ -381,6 +388,64 @@ class bookings extends REST_Controller {
                 'games' => $this->game_service->get_all($this->response->lang)
             )
             , 'message' => ""));
+    }
+
+    function company_pending_bookings_post($operation = null) {
+        $this->user_permissions->is_company($this->current_user);
+        $this->load->library('grocery_CRUD');
+        try {
+            $crud = new grocery_CRUD();
+            $this->load->model("Services/field_service");
+            $fields = $this->field_service->get_by_company($this->current_user->company_id, 0, 0, $this->response->lang);
+            $fields_ids = array();
+            foreach ($fields as $field) {
+                $fields_ids[] = $field->field_id;
+            }
+            $fields_ids = implode("','", $fields_ids);
+            $crud->set_theme('datatables')
+                    ->set_table('booking')
+                    ->set_subject('booking')
+                    ->where('booking.deleted', 0)
+                    ->where('booking.state_id', BOOKING_STATE::PENDING)
+                    ->where("booking.field_id IN ('" . $fields_ids . "')")
+                    ->columns('booking_id', 'field_id', 'player_id', 'state_id', 'creation_date', 'date', 'start', 'duration', 'total')
+                    ->order_by('booking_id')
+                    ->set_relation('field_id', 'field', 'en_name', array('deleted' => 0))
+                    ->set_relation('player_id', 'player', '{name} <br> {phone}')
+                    ->set_relation('state_id', 'state', 'en_name')
+                    ->set_relation('field_id', 'field', 'en_name', array('deleted' => 0))
+                    ->edit_fields('state_id', 'date', 'start', 'duration', 'notes')
+                    ->display_as('field_id', 'Field')
+                    ->display_as('player_id', 'Player')
+                    ->display_as('state_id', 'State')
+                    ->display_as('booking_id', 'ID')
+                    ->field_type('start', 'time')
+                    ->callback_column('duration', array($this, '_callback_duration_render'))
+                    ->callback_column('total', array($this, '_callback_total_render'))
+                    ->required_fields('date', 'start', 'duration', 'state_id')
+                    ->callback_delete(array($this, 'delete_booking'))
+                    ->unset_export()
+                    ->unset_add()
+                    ->unset_edit()
+                    ->unset_delete()
+                    ->unset_read()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->model("Services/booking_service");
+            $this->load->view('template.php', array(
+                'view' => 'bookings_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+        } catch (Exception $e) {
+            show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
+        }
+    }
+
+    function company_pending_bookings_get($operation = null) {
+        $this->company_pending_bookings_post($operation);
     }
 
 }

@@ -40,5 +40,10 @@
             text-decoration: underline;
         }
     </style>
+    <script type="text/javascript">
+        var site_url = "<?php echo site_url() ?>";
+        var base_url = "<?php echo base_url() ?>";
+        var lang = "<?php echo $this->session->userdata('language') ?>";
+    </script>
 </head>
 

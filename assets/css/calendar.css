@@ -1,0 +1,53 @@
+.blue{
+    color: #23b8d1 !important
+}
+.red{
+    color: #f2653a !important
+}
+.green{
+    color: #47b85d !important
+}
+.orange{
+    color: #f89732 !important
+}
+.fc-event-vert * {
+    font-size: 14px !important;
+    cursor: pointer
+}
+#booking_modal .modal-body *{
+    font-size: 16px;
+
+}
+
+#booking_modal .modal-body p{
+    display: inline;
+    margin-left:5px
+}
+.modal-header{
+    text-align: center
+}
+#booking_modal .modal-body {
+    margin-left:10%;
+    margin-right:10%;
+}
+.modal-dialog{
+    width: 35%;
+}
+#booking_modal .col-md-6:nth-child(even){
+    text-align: right
+}
+
+.ui-datepicker-trigger {
+    width:20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: -12px;
+    margin-right: 3px;
+}
+.fc-header-title h2 {
+    display: inline
+}
+@media print {
+  .visible-print  { display: inherit !important; }
+  .hidden-print   { display: none !important; }
+}

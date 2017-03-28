@@ -98,6 +98,24 @@ class booking extends CI_Model {
                         ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
                         ->where('company.company_id', $company_id)
                         ->where('booking.state_id != ', BOOKING_STATE::DECLINED)
+                        ->where('booking.state_id != ', BOOKING_STATE::CANCELLED)
+                        ->where('booking.deleted', 0)
+                        ->where('field.deleted', 0)
+                        ->order_by('booking.booking_id')
+                        ->get()->result();
+    }
+
+    public function company_bookings_calendar($company_id) {
+        return $this->db->select("booking.*"
+                        )
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->join('company', 'field.company_id = company.company_id')
+                        ->join('player', 'player.player_id = booking.player_id')
+                        ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
+                        ->where('company.company_id', $company_id)
+                        ->where('booking.state_id != ', BOOKING_STATE::DECLINED)
+                        ->where('booking.state_id != ', BOOKING_STATE::CANCELLED)
                         ->where('booking.deleted', 0)
                         ->where('field.deleted', 0)
                         ->order_by('booking.booking_id')
