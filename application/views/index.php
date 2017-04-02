@@ -11,7 +11,6 @@
     <body>
         <div class="login-page" style="text-align: center">
             <img src="<?php echo base_url('assets/images/logo.png') ?>" /> 
-            <br><br>
             <div class="form">
 
                 <form id="login_form" class="login-form">
