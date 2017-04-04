@@ -653,11 +653,12 @@ input {
     text-decoration: none;
     cursor: pointer
 }
- input[type=text], textArea {
+ input[type=text],input[type=search], textArea {
     border: none !important;
     border-bottom: 2px solid #e4930d !important;
     background-color: transparent !important;
     box-shadow: none !important;
+    border-radius: 4px;
 }
 
 textArea {
@@ -711,4 +712,8 @@ input[type=password], .form-control, .texteditor, .chosen-search input, .chosen-
     border-radius: 5px !important;
     border-bottom: 2px solid #e4930d !important;
     background:transparent !important;
+}
+
+.well {
+    padding: 10px !important
 }

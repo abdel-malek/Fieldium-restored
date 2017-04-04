@@ -41,7 +41,7 @@ class message_service extends CI_Model {
         $config['smtp_pass'] = 'vEMZOPdc9VVD';
         $config['smtp_timeout'] = '7';
         $config['newline'] = "\r\n";
-		$config['send_multipart'] = FALSE;
+        $config['send_multipart'] = FALSE;
         $config['wordwrap'] = TRUE;
         $this->load->library('email');
         foreach ($fieldiu_emails as $email) {

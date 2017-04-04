@@ -14,7 +14,10 @@
 
         <?php } else if ($this->session->userdata('USER_ROLE') == ROLE::ADMIN) { ?>
             <li><a href="<?php echo site_url() ?>/bookings/calendar">Calendar</a></li>
-            <li><a href="<?php echo site_url() ?>/bookings/company_pending_bookings">Pending Bookings</a></li>
+            <li><a href="<?php echo site_url() ?>/reports/show_report/reservations_report">Summary Report</a></li>
+            <li><a href="<?php echo site_url() ?>/reports/show_report/declined_reservations">Declined Reservations</a></li>
+            <li><a href="<?php echo site_url() ?>/reports/show_report/field_reservations">Approved Report</a></li>            
+    <!--<li><a href="<?php echo site_url() ?>/bookings/company_pending_bookings">Pending Reservations</a></li>-->
         <?php } ?>
         <li><a href="<?php echo site_url() ?>/users/web_logout">Sign Out</a></li>
     </ul>

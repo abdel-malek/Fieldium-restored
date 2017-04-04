@@ -268,7 +268,7 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
 
         if (!$total->bookings_number)
             return array();
-        $this->db->select('field.en_name as field_name, field.field_id,'
+        $this->db->select('field.en_name as field_name, field.field_id, field.hour_rate, '
                         . "game_type.en_name as game_type_name, game_type.image as game_image,"
                         . 'booking.booking_id, booking.date, booking.start, booking.duration,'
                         . 'booking.player_id, player.name as player_name, booking.manually,'
@@ -311,7 +311,7 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
 
         if (!$total->bookings_number)
             return array();
-        $this->db->select('field.en_name as field_name, field.field_id,'
+        $this->db->select('field.en_name as field_name, field.field_id, field.hour_rate, '
                         . "game_type.en_name as game_type_name, game_type.image as game_image,"
                         . 'booking.booking_id, booking.date, booking.start, booking.duration,'
                         . 'booking.player_id, player.name as player_name, booking.manually,'

@@ -330,7 +330,15 @@ class field_service extends CI_Model {
         }
         $this->field->update($field_id, array('deleted' => 1));
     }
-    
+
+    public function active($field_id) {
+        $this->get($field_id, "en");
+        $bookings = $this->booking_service->field_bookings($field_id, "en");
+        foreach ($bookings as $booking) {
+            $this->booking_service->cancel($booking->booking_id, 'Your booking has been canceled. Sorry for the inconvienve but the field is undergoing maintenance.');
+        }
+        $this->field->update($field_id, array('deleted' => 1));
+    }
 
     public function check_availability($field_id, $date, $game_type) {
         $field = $this->get($field_id);
@@ -339,7 +347,7 @@ class field_service extends CI_Model {
         if ($field->open_time < $field->close_time) {
             $time = $field->open_time;
             $end = $field->close_time;
-            
+
             foreach ($bookings as $key => $booking) {
                 $endtime = strftime('%H:%M:%S', strtotime($booking->start) + doubleval($booking->duration) * 60);
                 if ($booking->start >= $field->open_time && $booking->start < $field->close_time &&
@@ -404,21 +412,21 @@ class field_service extends CI_Model {
                     }
                 }
             }
-			if(count($bookings) == 0 ){
-				$result[] = $r1[0];
-				$result[] = $r1[1];
-				$result[] = $r2[0];
-				$result[] = $r2[1];
-			}else{
-				if ($time < $end && $time != "00:00:00") {
-					$result[] = $time;
-					$result[] = $end;
-				}
-				if ($end != "23:59:59") {
-					$result[] = $field->open_time;
-					$result[] = "23:59:59";
-				}
-			}
+            if (count($bookings) == 0) {
+                $result[] = $r1[0];
+                $result[] = $r1[1];
+                $result[] = $r2[0];
+                $result[] = $r2[1];
+            } else {
+                if ($time < $end && $time != "00:00:00") {
+                    $result[] = $time;
+                    $result[] = $end;
+                }
+                if ($end != "23:59:59") {
+                    $result[] = $field->open_time;
+                    $result[] = "23:59:59";
+                }
+            }
         }
         $available_times = $result;
         $times = array();
@@ -572,5 +580,7 @@ class field_service extends CI_Model {
         }
         return $result;
     }
+
 }
+
 ?>

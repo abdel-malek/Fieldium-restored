@@ -55,7 +55,7 @@ class fields extends REST_Controller {
                 $open_time = "0" . $open_time;
             if (strlen($cloes_time) == 7)
                 $cloes_time = "0" . $cloes_time;
-            if($cloes_time == $open_time){
+            if ($cloes_time == $open_time) {
                 $open_time = "00:00:00";
                 $cloes_time = "23:59:00";
             }
@@ -106,7 +106,7 @@ class fields extends REST_Controller {
                 $open_time = "0" . $open_time;
             if (strlen($cloes_time) == 7)
                 $cloes_time = "0" . $cloes_time;
-            if($cloes_time == $open_time){
+            if ($cloes_time == $open_time) {
                 $open_time = "00:00:00";
                 $cloes_time = "23:59:00";
             }
@@ -231,7 +231,7 @@ class fields extends REST_Controller {
             $this->response(array('status' => false, 'data' => null, "message" => "Uploading error"));
         else
             $image_name = $image_file['image']['upload_data']['file_name'];
-        
+
         $this->load->model('Services/image_service');
         $image = $this->image_service->save_image($image_name);
 
@@ -281,12 +281,12 @@ class fields extends REST_Controller {
                     ->callback_before_update(array($this, 'add_update_callback'))
                     ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'hour_rate')
                     ->callback_delete(array($this, 'delete_field'))
+                    ->add_action('active', '', '', 'recieve-icon', array($this, 'active_callback'))
                     ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
                     ->unset_export()
                     ->unset_print();
             $output = $crud->render();
-            if ($operation == "insert")
-                var_dump("amal");
+
             $this->load->model("Services/company_service");
             $this->load->view('template.php', array(
                 'view' => 'fields_management',
@@ -306,13 +306,18 @@ class fields extends REST_Controller {
     }
 
     function add_update_callback($post_array) {
-        if($post_array['open_time'] == $post_array['close_time']) {
+        if ($post_array['open_time'] == $post_array['close_time']) {
             $post_array['open_time'] = "00:00:00";
             $post_array['close_time'] = "23:59:00";
         }
         return $post_array;
     }
-    
+
+    function active_callback($primary_key, $row) {
+
+        return site_url('/fields/active/' . $primary_key);
+    }
+
     function view_images($primary_key, $row) {
         return site_url('/fields/field_images_management/' . $primary_key);
     }
@@ -321,6 +326,12 @@ class fields extends REST_Controller {
         $this->user_permissions->support_permission($this->current_user);
         $this->field_service->delete($primary_key);
         return true;
+    }
+
+    public function active($primary_key) {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->field_service->active($primary_key);
+        return site_url('/fields/field_images_management');
     }
 
     private $field_id;

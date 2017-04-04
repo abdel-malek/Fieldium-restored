@@ -1,5 +1,4 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/fullcalendar/fullcalendar.min.css') ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/calendar.css') ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/incoming_booking_sideMenu.css') ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap-datepicker.css') ?>" />
@@ -7,7 +6,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/card.css') ?>" />
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/font-awesome.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/fullcalendar/fullcalendar.print.css') ?>" media="print"/>
-<script type="text/javascript" src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/moment.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/fullcalendar.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/materialize.js') ?>"></script>
