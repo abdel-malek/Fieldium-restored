@@ -2,7 +2,7 @@
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.touchSwipe.min.js') ?>"></script>
 <script type="text/javascript">
     $(window).load(function() {
-        $("[data-toggle]").click(function () {
+        $("#sidebar-toggle").click(function () {
             var toggle_el = $(this).data("toggle");
             $(toggle_el).toggleClass("open-sidebar");
             if (lang == "arabic") {

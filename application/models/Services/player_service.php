@@ -84,7 +84,7 @@ class player_service extends CI_Model {
                 'token' => "",
                 'address' => ""
             ));
-            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+            //$this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
         $player = $this->get($player_id);
 //        $player->server_id = $server_id;

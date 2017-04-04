@@ -9,6 +9,8 @@
     <link type="text/css" rel="stylesheet" href="<?php echo base_url('assets/css/catalog.css') ?>" />  
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/loader.css') ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/multiple-select.css') ?>" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
     <?php
     if (!empty($output)) {
         foreach ($css_files as $file):
