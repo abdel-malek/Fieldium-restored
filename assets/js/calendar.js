@@ -46,6 +46,8 @@ $.ajax({
     success: function (response) {
         if (response.status == true) {
             var booking;
+            var pending_bookings_list=$('#pending_bookings_list');
+            pending_bookings_list.html('');
             bookings = response.data;
             for (var i = 0; i < bookings.length; i++) {
                 if (bookings[i].state_id == approved) {
@@ -73,6 +75,20 @@ $.ajax({
                     events.push(booking);
                 } else {
                     pending_bookings.push(bookings[i].booking_id);
+                    pending_bookings_list.append('<div class="col s12 m3" id="booking_'+bookings[i].booking_id+'" onclick="open_pending_booking_modal('+bookings[i].booking_id+')">'+
+                                                    '<div class="card horizontal">'+
+                                                      '<div class="card-image">'+
+                                                          '<label>322</label>'+
+                                                      '</div>'+
+                                                      '<div class="card-stacked">'+
+                                                        '<div class="card-content">'+
+                                                          '<p>'+bookings[i].player_name+'</p>'+
+                                                          '<p>'+bookings[i].date+' '+bookings[i].start+'</p>'+
+                                                          '<p>'+bookings[i].field_name+'</p>'+
+                                                        '</div>'+
+                                                      '</div>'+
+                                                    '</div>'+
+                                                  '</div>');
                 }
             }
         } else
@@ -372,4 +388,49 @@ function openNav() {
 /* Set the width of the side navigation to 0 */
 function closeNav() {
     document.getElementById("incoming_booking_Sidenav").style.width = "0";
+}
+
+function find_book_by_id(id){
+    for (var i = 0; i < bookings.length; i++) {
+     if(bookings[i].booking_id==id)
+         return bookings[i];
+    }
+}
+function open_pending_booking_modal(id){
+    var calEvent=find_book_by_id(id);
+    $('#pending_booking_modal #booking_num').html("Booking #" + calEvent.book_id);
+    $('#pending_booking_modal #booking_num').attr("book_id", calEvent.book_id);
+    $('#pending_booking_modal #player_name').html(calEvent.player_name);
+    $('#pending_booking_modal #player_phone').html(calEvent.player_phone);
+    $('#pending_booking_modal #start_label').html(moment(calEvent.start_time, "HH:mm:ss").format("HH:mm A"));
+    $('#pending_booking_modal #cost_label').html(calEvent.hour_rate + " AED");
+    $('#pending_booking_modal #total_label').html(calEvent.total + " AED");
+    $('#pending_booking_modal #duration_label').html(moment(calEvent.start_time, "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
+    $('#pending_booking_modal #date_label').html(calEvent.date);
+    $('#pending_booking_modal #game_label').html(calEvent.game_name);
+    $('#pending_booking_modal #note_label').html(calEvent.note);
+    $('#pending_booking_modal #field_label').html(calEvent.company_name + " - " + calEvent.field_name);
+    $('#pending_booking_modal').modal("show");
+}
+function booking_approve(){
+    var booking_id=$('#pending_booking_modal #booking_num').attr("book_id");
+     $.ajax({
+        url: site_url + '/bookings/approve/format/json?booking_id=' + booking_id ,
+        type: 'GET',
+        async: false,
+        success: function (response) {
+            if (response.status == true) {
+                var booking = response.data;
+                $('#pending_booking_modal').modal("hide");
+                $('#booking_'+booking_id).remove();
+                $('#calendar').fullCalendar('renderEvent', booking);
+                var index = $.inArray(book_id, pending_bookings);
+                if(index != -1)
+                {
+                  pending_bookings.splice(index, 1);
+                }
+            } else
+                alert(response.message);
+        }
+    });
 }

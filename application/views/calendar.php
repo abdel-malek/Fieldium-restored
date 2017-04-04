@@ -41,6 +41,7 @@
         <?php $this->load->view("show_booking_modal") ?>
         <?php $this->load->view("new_booking_modal") ?>
         <?php $this->load->view("cancel_booking_modal") ?>
+        <?php $this->load->view("pending_booking_modal") ?>
         <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.timepicker.js') ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('assets/js/calendar.js') ?>"></script>
         <script type="text/javascript" src="<?php echo base_url('assets/js/push.min.js') ?>"></script>
