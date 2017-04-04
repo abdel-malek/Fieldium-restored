@@ -47,5 +47,10 @@
         var base_url = "<?php echo base_url() ?>";
         var lang = "<?php echo $this->session->userdata('language') ?>";
     </script>
+    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/jquery-ui.css">
+    <link href="<?php echo base_url() ?>assets/datatables/datatables.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" />
 </head>
 

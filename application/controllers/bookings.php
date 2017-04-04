@@ -445,7 +445,17 @@ class bookings extends REST_Controller {
     }
 
     function company_pending_bookings_get($operation = null) {
-        $this->company_pending_bookings_post($operation);
+         try {
+            $this->user_permissions->is_company($this->current_user);
+        } catch (Permission_Denied_Exception $e) {
+            $this->user_permissions->support_permission($this->current_user);
+        }
+        if ($this->current_user->role_id == ROLE::SUPPORT)
+            $company_id = $this->input->get('company_id');
+        else
+            $company_id = $this->current_user->company_id;
+        $bookings = $this->booking_service->company_pending_bookings($company_id, $this->response->lang);
+        $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 
 }

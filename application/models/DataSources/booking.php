@@ -104,6 +104,26 @@ class booking extends CI_Model {
                         ->order_by('booking.booking_id')
                         ->get()->result();
     }
+    
+    public function company_pending_bookings($company_id, $lang = "en") {
+        return $this->db->select("booking.*,"
+                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "round((booking.duration*(field.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name,"
+                                . " player.name as player_name, player.phone as player_phone"
+                        )
+                        ->from('booking')
+                        ->join('field', 'field.field_id = booking.field_id')
+                        ->join('company', 'field.company_id = company.company_id')
+                        ->join('player', 'player.player_id = booking.player_id')
+                        ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
+                        ->where('company.company_id', $company_id)
+                        ->where('booking.state_id = ', BOOKING_STATE::PENDING)
+                        ->where('booking.deleted', 0)
+                        ->where('field.deleted', 0)
+                        ->order_by('booking.booking_id')
+                        ->get()->result();
+    }
 
     public function company_bookings_calendar($company_id) {
         return $this->db->select("booking.*"
