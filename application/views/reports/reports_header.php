@@ -1,4 +1,9 @@
 <!--<link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />-->
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/jquery-ui.css">
+<link href="<?php echo base_url() ?>assets/datatables/datatables.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" />
 <link href="<?php echo base_url() ?>assets/datatables/buttons.datatables.css" rel="stylesheet" type="text/css" />
 <!--<script src="<?php echo base_url() ?>assets/datatables/complete.js"></script>-->
 <script src="<?php echo base_url() ?>assets/datatables/datatables.js"></script>

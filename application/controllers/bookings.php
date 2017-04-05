@@ -20,8 +20,9 @@ class bookings extends REST_Controller {
         $fields = $this->field_service->get_by_company($this->current_user->company_id, 0, 0, $this->response->lang);
 
         $this->load->view('template.php', array(
-            'view' => 'calendar',
+            'view' => 'admin_dashboard/calendar',
             'fields' => $fields,
+            'company_id' => $this->current_user->company_id
 //                'js_files' => $output->js_files,
 //                'css_files' => $output->css_files
                 )
@@ -445,7 +446,7 @@ class bookings extends REST_Controller {
     }
 
     function company_pending_bookings_get($operation = null) {
-         try {
+        try {
             $this->user_permissions->is_company($this->current_user);
         } catch (Permission_Denied_Exception $e) {
             $this->user_permissions->support_permission($this->current_user);

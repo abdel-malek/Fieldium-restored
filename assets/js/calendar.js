@@ -4,7 +4,8 @@ fields = JSON.parse(fields);
 var fieldscolors = [];
 var resources = [];
 var j = 0;
-var pending_bookings = [];
+var bookings = [];
+var bookings_ids = [];
 for (var i = 0; i < fields.length; i++) {
     if (j == colors.length)
         j = 0;
@@ -36,65 +37,59 @@ $.ajax({
                         .text(msgs[i].message));
             }
         } else
-            alert("Error in loading bookings");
+            show_error("Error in loading bookings");
     }
 });
-$.ajax({
-    url: site_url + '/bookings/company_bookings/format/json',
-    type: 'GET',
-    async: false,
-    success: function (response) {
-        if (response.status == true) {
-            var booking;
-            var pending_bookings_list=$('#pending_bookings_list');
-            pending_bookings_list.html('');
-            bookings = response.data;
-            for (var i = 0; i < bookings.length; i++) {
-                if (bookings[i].state_id == approved) {
-                    start = new Date(bookings[i].start);
-                    end = moment(bookings[i].start, "HH:mm:ss").add(parseInt(bookings[i].duration), "minutes").format("HH:mm:ss");
-                    booking = {
-                        id: bookings[i].booking_id,
-                        start: bookings[i].date + "T" + bookings[i].start,
-                        end: bookings[i].date + "T" + end,
-                        color: fieldscolors[bookings[i].field_id],
-                        resources: [bookings[i].field_id],
-                        player_name: bookings[i].player_name,
-                        title: "#" + bookings[i].booking_id + " " + bookings[i].player_name,
-                        player_phone: bookings[i].player_phone,
-                        field_name: bookings[i].field_name,
-                        company_name: bookings[i].company_name,
-                        game_name: bookings[i].game_type_name,
-                        hour_rate: bookings[i].hour_rate,
-                        total: bookings[i].total,
-                        duration: bookings[i].duration,
-                        start_time: bookings[i].start,
-                        date: bookings[i].date,
-                        note: bookings[i].note,
-                    };
-                    events.push(booking);
-                } else {
-                    pending_bookings.push(bookings[i].booking_id);
-                    pending_bookings_list.append('<div class="col s12 m3" id="booking_'+bookings[i].booking_id+'" onclick="open_pending_booking_modal('+bookings[i].booking_id+')">'+
-                                                    '<div class="card horizontal">'+
-                                                      '<div class="card-image">'+
-                                                          '<label>322</label>'+
-                                                      '</div>'+
-                                                      '<div class="card-stacked">'+
-                                                        '<div class="card-content">'+
-                                                          '<p>'+bookings[i].player_name+'</p>'+
-                                                          '<p>'+bookings[i].date+' '+bookings[i].start+'</p>'+
-                                                          '<p>'+bookings[i].field_name+'</p>'+
-                                                        '</div>'+
-                                                      '</div>'+
-                                                    '</div>'+
-                                                  '</div>');
-                }
-            }
-        } else
-            alert("Error in loading bookings");
+
+function append_new_booking(booking) {
+    bookings.push(booking);
+    bookings_ids.push(booking.booking_id);
+    if (booking.state_id == approved) {
+        render_event(booking);
+    } else {
+        $('#pending_bookings_list').append(
+                '<div class="col s12 m3" id="booking_' + booking.booking_id + '" onclick="open_pending_booking_modal(' + booking.booking_id + ')">' +
+                '<div class="card horizontal">' +
+                '<div class="card-image"><div class="circle">' +
+                '<span>' + booking.booking_id + '</span></div>' +
+                '</div>' +
+                '<div class="card-stacked">' +
+                '<div class="card-content">' +
+                '<p>' + booking.player_name + '</p>' +
+                '<p>' + booking.date + ' ' + booking.start + '</p>' +
+                '<p>' + booking.field_name + '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>');
     }
-});
+}
+function render_event(booking) {
+    start = new Date(booking.start);
+    end = moment(booking.start, "HH:mm:ss").add(parseInt(booking.duration), "minutes").format("HH:mm:ss");
+    new_booking = {
+        id: booking.booking_id,
+        booking_id: booking.booking_id,
+        start: booking.date + "T" + booking.start,
+        end: booking.date + "T" + end,
+        color: fieldscolors[booking.field_id],
+        resources: [booking.field_id],
+        player_name: booking.player_name,
+        title: "#" + booking.booking_id + " " + booking.player_name,
+        player_phone: booking.player_phone,
+        field_name: booking.field_name,
+        company_name: booking.company_name,
+        game_name: booking.game_type_name,
+        hour_rate: booking.hour_rate,
+        total: booking.total,
+        duration: booking.duration,
+        start_time: booking.start,
+        date: booking.date,
+        note: booking.note,
+    };
+    events.push(new_booking);
+    $('#calendar').fullCalendar('renderEvent', new_booking, true);
+}
 var calendar = $('#calendar').fullCalendar({
     header: {
         right: 'title',
@@ -108,26 +103,15 @@ var calendar = $('#calendar').fullCalendar({
     axisFormat: 'h(:mm)a',
     allDaySlot: false,
     slotEventOverlap: false,
+    lazyFetching: true,
     events: events,
     titleFormat: 'DD/MM/YYYY',
     allDaySlot: false,
     eventClick: function (calEvent, jsEvent, view) {
-        $('#booking_num').html("Booking #" + calEvent.id);
-        $('#booking_num').attr("book_id", calEvent.id);
-        $('#player_name').html(calEvent.player_name);
-        $('#player_phone').html(calEvent.player_phone);
-        $('#start_label').html(moment(calEvent.start_time, "HH:mm:ss").format("HH:mm A"));
-        $('#cost_label').html(calEvent.hour_rate + " AED");
-        $('#total_label').html(calEvent.total + " AED");
-        $('#duration_label').html(moment(calEvent.start_time, "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
-        $('#date_label').html(calEvent.date);
-        $('#game_label').html(calEvent.game_name);
-        $('#note_label').html(calEvent.note);
-        $('#field_label').html(calEvent.company_name + " - " + calEvent.field_name);
-        $('#booking_modal').modal("show");
-
+        $('#new_btns').hide();
+        $('#show_btns').show();
+        fill_booking_info(calEvent);
     },
-
     dayClick: function (date, jsEvent, view) {
 
         //alert('Clicked on: ' + date.format());
@@ -150,7 +134,22 @@ var calendar = $('#calendar').fullCalendar({
 
         $('#booking_date').text($.datepicker.formatDate('yy-mm-dd', new Date(date)));
         $('#new_booking_modal').modal("show");
-
+    }
+});
+$.ajax({
+    url: site_url + '/bookings/company_bookings/format/json',
+    type: 'GET',
+    async: false,
+    success: function (response) {
+        if (response.status == true) {
+            var booking;
+            $('#pending_bookings_list').html('');
+            result = response.data;
+            for (var i = 0; i < result.length; i++) {
+                append_new_booking(result[i]);
+            }
+        } else
+            show_error("Error in loading bookings");
     }
 });
 $('.fc-header-title').prepend('<input type="hidden" id="datepicker"></input>');
@@ -168,44 +167,7 @@ $('#datepicker').datepicker({
 function open_datepicker() {
     $('#datepicker').focus().hide();
 }
-$.ajax({
-    url: site_url + '/bookings/company_bookings/format/json',
-    type: 'GET',
-    async: false,
-    success: function (response) {
-        if (response.status == true) {
-            var booking;
-            bookings = response.data;
-            for (var i = 0; i < bookings.length; i++) {
-//                if (bookings[i].state_id == approved) {
-                start = new Date(bookings[i].start);
-                end = moment(bookings[i].start, "HH:mm:ss").add(parseInt(bookings[i].duration), "minutes").format("HH:mm:ss");
-                booking = {
-                    id: bookings[i].booking_id,
-                    start: bookings[i].date + "T" + bookings[i].start,
-                    end: bookings[i].date + "T" + end,
-                    color: fieldscolors[bookings[i].field_id],
-                    resources: [bookings[i].field_id],
-                    player_name: bookings[i].player_name,
-                    title: "#" + bookings[i].booking_id + " " + bookings[i].player_name,
-                    player_phone: bookings[i].player_phone,
-                    field_name: bookings[i].field_name,
-                    company_name: bookings[i].company_name,
-                    game_name: bookings[i].game_type_name,
-                    hour_rate: bookings[i].hour_rate,
-                    total: bookings[i].total,
-                    duration: bookings[i].duration,
-                    start_time: bookings[i].start,
-                    date: bookings[i].date,
-                    note: bookings[i].note,
-                };
-                events.push(booking);
-//                }
-            }
-        } else
-            alert("Error in loading bookings");
-    }
-});
+
 function get_all_fields() {
     $select = $('#fields-list');
     $select.html("");
@@ -278,11 +240,8 @@ function open_booking_datepicker() {
     $('#booking_datepicker').focus().hide();
 }
 
-
-
 function booking_create() {
     var Data = {};
-
     Data['field_id'] = $('#fields-list').find(":selected").attr("id");
     Data['game_type'] = $('#games-list').find(":selected").attr("id");
     Data['player_phone'] = $('#new_booking_modal #player_phone').val();
@@ -291,7 +250,6 @@ function booking_create() {
     Data['duration'] = parseFloat($('#hours-list').find(":selected").attr("value") * 60) + parseFloat($('#minutes-list').find(":selected").attr("value"));
     Data['date'] = $('#new_booking_modal #booking_date').html();
     Data['notes'] = $('#new_booking_modal #note').val();
-
     $.ajax({
         url: site_url + '/bookings/create_manually/format/json',
         type: 'POST',
@@ -301,31 +259,9 @@ function booking_create() {
             if (response.status == true) {
                 close();
                 var booking = response.data;
-                start = new Date(booking.start);
-                end = moment(booking.start, "HH:mm:ss").add(parseInt(booking.duration), "minutes").format("HH:mm:ss");
-                booking = {
-                    id: booking.booking_id,
-                    start: booking.date + "T" + booking.start,
-                    end: booking.date + "T" + end,
-                    color: fieldscolors[booking.field_id],
-                    resources: [booking.field_id],
-                    player_name: booking.player_name,
-                    title: "#" + booking.booking_id + " " + booking.player_name,
-                    player_phone: booking.player_phone,
-                    field_name: booking.field_name,
-                    company_name: booking.company_name,
-                    game_name: booking.game_type_name,
-                    hour_rate: booking.hour_rate,
-                    total: booking.total,
-                    duration: booking.duration,
-                    start_time: booking.start,
-                    date: booking.date,
-                    note: booking.note,
-                };
-                events.push(booking);
-                $('#calendar').fullCalendar('renderEvent', booking);
+                render_event(booking);
             } else
-                alert(response.message);
+                show_error(response.message);
         }
     });
 }
@@ -340,7 +276,7 @@ function booking_cancel() {
     var note = $('#new-cancel-msg').val();
     var data = "";
     if (reason_id == -1 && note == '') {
-        alert('Please select a message or write one!');
+        show_error('Please select a message or write one!');
         return;
     }
     if (reason_id != -1) {
@@ -357,9 +293,9 @@ function booking_cancel() {
             if (response.status == true) {
                 $('#cancel_booking_modal').modal("hide");
                 $('#booking_modal').modal("hide");
-                $('#calendar').fullCalendar('removeEvents', booking_id);
+                remove_booking(booking_id);
             } else
-                alert(response.message);
+                show_error(response.message);
         }
     });
 }
@@ -390,47 +326,92 @@ function closeNav() {
     document.getElementById("incoming_booking_Sidenav").style.width = "0";
 }
 
-function find_book_by_id(id){
+function find_book_by_id(id) {
     for (var i = 0; i < bookings.length; i++) {
-     if(bookings[i].booking_id==id)
-         return bookings[i];
+        if (bookings[i].booking_id == id)
+            return bookings[i];
     }
 }
-function open_pending_booking_modal(id){
-    var calEvent=find_book_by_id(id);
-    $('#pending_booking_modal #booking_num').html("Booking #" + calEvent.book_id);
-    $('#pending_booking_modal #booking_num').attr("book_id", calEvent.book_id);
-    $('#pending_booking_modal #player_name').html(calEvent.player_name);
-    $('#pending_booking_modal #player_phone').html(calEvent.player_phone);
-    $('#pending_booking_modal #start_label').html(moment(calEvent.start_time, "HH:mm:ss").format("HH:mm A"));
-    $('#pending_booking_modal #cost_label').html(calEvent.hour_rate + " AED");
-    $('#pending_booking_modal #total_label').html(calEvent.total + " AED");
-    $('#pending_booking_modal #duration_label').html(moment(calEvent.start_time, "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
-    $('#pending_booking_modal #date_label').html(calEvent.date);
-    $('#pending_booking_modal #game_label').html(calEvent.game_name);
-    $('#pending_booking_modal #note_label').html(calEvent.note);
-    $('#pending_booking_modal #field_label').html(calEvent.company_name + " - " + calEvent.field_name);
-    $('#pending_booking_modal').modal("show");
+function fill_booking_info(calEvent) {
+    $('#booking_num').html("Booking #" + calEvent.booking_id);
+    $('#booking_num').attr("book_id", calEvent.booking_id);
+    $('#player_name').html(calEvent.player_name);
+    $('#player_phone').html(calEvent.player_phone);
+    $('#start_label').html(moment(calEvent.start_time, "HH:mm:ss").format("HH:mm A"));
+    $('#cost_label').html(calEvent.hour_rate + " AED");
+    $('#total_label').html(calEvent.total + " AED");
+    $('#duration_label').html(moment(calEvent.start_time, "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
+    $('#date_label').html(calEvent.date);
+    $('#game_label').html(calEvent.game_name);
+    $('#note_label').html(calEvent.note);
+    $('#field_label').html(calEvent.company_name + " - " + calEvent.field_name);
+    $('#booking_modal').modal("show");
 }
-function booking_approve(){
-    var booking_id=$('#pending_booking_modal #booking_num').attr("book_id");
-     $.ajax({
-        url: site_url + '/bookings/approve/format/json?booking_id=' + booking_id ,
+function open_pending_booking_modal(id) {
+    var calEvent = find_book_by_id(id);
+    $('#new_btns').show();
+    $('#show_btns').hide();
+    fill_booking_info(calEvent);
+}
+function booking_approve() {
+    var booking_id = $('#booking_num').attr("book_id");
+    $.ajax({
+        url: site_url + '/bookings/approve/format/json?booking_id=' + booking_id,
         type: 'GET',
         async: false,
         success: function (response) {
             if (response.status == true) {
                 var booking = response.data;
-                $('#pending_booking_modal').modal("hide");
-                $('#booking_'+booking_id).remove();
-                $('#calendar').fullCalendar('renderEvent', booking);
-                var index = $.inArray(book_id, pending_bookings);
-                if(index != -1)
-                {
-                  pending_bookings.splice(index, 1);
-                }
+                $('#booking_modal').modal("hide");
+                $('#booking_' + booking_id).remove();
+                render_event(booking);
             } else
-                alert(response.message);
+                show_error(response.message);
         }
     });
+}
+function decline_booking() {
+    var booking_id = $('#booking_num').attr("book_id");
+    $.ajax({
+        url: site_url + '/bookings/decline/format/json?booking_id=' + booking_id,
+        type: 'GET',
+        async: false,
+        success: function (response) {
+            if (response.status == true) {
+                var booking = response.data;
+                $('#booking_modal').modal("hide");
+                remove_booking(booking_id);
+            } else
+                show_error(response.message);
+        }
+    });
+}
+function show_error(msg) {
+    alertify.defaults.glossary.title = 'Error';
+    alertify
+            .alert(msg, function () {
+                alertify.message('OK');
+            });
+}
+function confirm_decline() {
+    var booking_id = $('#booking_num').attr("book_id");
+    alertify.defaults.glossary.title = 'Booking #' + booking_id;
+    alertify.confirm("Are you sure you want to decline booking no." + booking_id + " ?",
+            function () {
+                decline_booking();
+            }
+    ,
+            function () {
+
+            }
+    );
+}
+function remove_booking(booking_id) {
+    $('#booking_' + booking_id).remove();
+    $('#calendar').fullCalendar('removeEvents', booking_id);
+    var index = $.inArray(booking_id, bookings_ids);
+    if (index != -1)
+    {
+        bookings_ids.splice(index, 1);
+    }
 }

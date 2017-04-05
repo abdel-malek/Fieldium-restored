@@ -183,7 +183,7 @@ class player_service extends CI_Model {
                 'verification_code' => $code
             ));
 
-//            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
             return $this->get($player->player_id);
         } else {
             throw new Player_Not_Found_Exception($this->session->userdata('language'));

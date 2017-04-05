@@ -4,6 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 style="display: inline;">New Booking</h3>
+                 <button type="button" class="close" data-dismiss="modal" >&times</button>
             </div>
             <div class="modal-body" >
                 <div class="row margin-top-5px">

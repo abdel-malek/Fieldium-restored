@@ -4,6 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 style="display: inline;">Select a message to send to the client</h3>
+                 <button type="button" class="close" data-dismiss="modal" >&times</button>
             </div>
             <div class="modal-body" >
                 <div class="row margin-top-5px center">

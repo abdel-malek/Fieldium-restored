@@ -248,7 +248,11 @@ class fields extends REST_Controller {
 
     function fields_management_post($primary_key = null, $operation = null) {
 
-        $this->user_permissions->support_permission($this->current_user);
+        try {
+            $this->user_permissions->management_permission($this->current_user, $primary_key);
+        } catch (Permission_Denied_Exception $e) {
+            $this->user_permissions->support_permission($this->current_user);
+        }
         $this->COMPANY_ID = $primary_key;
         $this->load->library('grocery_CRUD');
         try {

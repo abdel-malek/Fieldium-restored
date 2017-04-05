@@ -105,7 +105,7 @@ class companies extends REST_Controller {
             $latitude = $this->input->post('latitude');
             $this->company_service
                     ->update_location(
-                    $company_id, $longitude, $latitude
+                            $company_id, $longitude, $latitude
             );
             $company = $this->company_service
                     ->get($company_id, $this->response->lang);
@@ -151,7 +151,15 @@ class companies extends REST_Controller {
     }
 
     public function companies_management_post($operation = null) {
-        $this->user_permissions->support_permission($this->current_user);
+        if ($operation == "edit" || $operation == "update" || $operation == "update_validation") {
+            try {
+                $this->user_permissions->is_company($this->current_user);
+            } catch (Permission_Denied_Exception $e) {
+                $this->user_permissions->support_permission($this->current_user);
+            }
+        } else {
+            $this->user_permissions->support_permission($this->current_user);
+        }
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();

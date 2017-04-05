@@ -16,7 +16,9 @@
 .cat_content{
     margin-left: 5px;
 }
-
+.form-field-box.even {
+    background: white !important;
+}
 // gallery
 
 
@@ -628,23 +630,31 @@ input {
 .slide-bg.slide-one {
     background-size: 30% auto !important;
 }
-
-.edit_button, .delete_button, .add_button, .ui-input-button  {
-    background: #23b8d1;
-    color:white;
-    border: none !important;
-    display: inline-block;
-    position: relative;
-    padding: 0;
-    line-height: normal;
-    margin-right: .1em;
-    cursor: pointer;
-    vertical-align: middle;
-    text-align: center;
-    overflow: visible;
-    border-radius: 4px
+.fc-state-default.fc-corner-right {
+    margin-left: 2px;
 }
-
+.btn-info {
+    background: #23b8d1 !important;
+}
+.edit_button, .delete_button, .add_button, .ui-input-button, .btn-custom, .dt-button, .paginate_button, .fc-button    {
+    background: #23b8d1 !important;
+    color:white !important;
+    border: none !important;
+    display: inline-block !important;
+    position: relative !important;
+    padding: 0 ;
+    line-height: normal ;
+    margin-right: .1em ;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    overflow: visible !important;
+    border-radius: 4px !important
+}
+div.dt-buttons {
+    float: none !important;
+    text-align: center;
+}
 .ui-input-button {
     padding: 6px !important;
 }
@@ -653,7 +663,7 @@ input {
     text-decoration: none;
     cursor: pointer
 }
- input[type=text],input[type=search], textArea {
+input[type=text],input[type=search], textArea {
     border: none !important;
     border-bottom: 2px solid #e4930d !important;
     background-color: transparent !important;

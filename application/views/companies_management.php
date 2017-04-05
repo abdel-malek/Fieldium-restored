@@ -25,12 +25,12 @@
                  margin-left:5%;
                  direction: <?php echo ($this->session->userdata('language') == "arabic") ? "rtl" : "ltr"; ?>
                  "> 
-                <br><br>
+                <br>
                 <h1 style="text-align: left">
                     <?php echo $this->lang->line('companies_management') ?>:
                 </h1>
+                <br>
                 <div style="clear: both"></div>
-                <br><br>
                 <?php echo $output; ?>
             </div>
         </div>

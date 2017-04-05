@@ -16,9 +16,10 @@ class site extends REST_Controller {
             if ($this->current_user->role_id == ROLE::SUPPORT)
                 redirect('dashboard');
             else if ($this->current_user->role_id == ROLE::ADMIN) {
+                $this->session->set_userdata(array('company_id' => $this->current_user->company_id));
                 redirect('bookings/calendar');
             }
-        }else {
+        } else {
             $featured_places = $this->field_service->get_featured_places();
             $games = $this->game_service->get_all();
             $this->load->view('index', array(

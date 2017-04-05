@@ -44,7 +44,7 @@
                         </select>
                     </div>
                     <div class="col-md-2 pull-right">
-                        <input class="form-control btn btn-warning" style="padding: 0px" onclick="get_data()" type="button" id="search" value="Get"/>  
+                        <input class="form-control btn btn-custom" style="padding: 0px" onclick="get_data()" type="button" id="search" value="Get"/>  
                     </div>
                 </div>
                 <div style="clear: both"></div>

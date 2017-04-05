@@ -29,7 +29,7 @@
                 <h1 style="text-align: left">
                     <?php echo $company->name ?> fields:
                 </h1>
-                <a style="cursor: pointer" href="<?php echo site_url('companies/companies_management') ?>">< Back to companies list</a>
+                <!--<a style="cursor: pointer" href="<?php echo site_url('companies/companies_management') ?>">< Back to companies list</a>-->
 
                 <div style="clear: both"></div>
                 <br><br>

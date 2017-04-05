@@ -1,6 +1,6 @@
 /* The side navigation menu */
 .sidenav {
-    background-color: #3D3D3D !important;
+    background-color: #23b8d1 !important;
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
@@ -54,10 +54,10 @@
     transition: margin-left .5s;
     padding: 20px;
 }
-
+/*.sidenav {padding-top: 15px;}*/
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
+    /*.sidenav {padding-top: 15px;}*/
     .sidenav a {
         font-size: 18px;
     }
@@ -69,4 +69,18 @@
 .closebtn {
     border: none !important;
     background: none !important;
+}
+
+#incoming_header {
+    color: white;
+    text-align: center;
+    margin-top: 0px;
+}
+
+#pending_bookings_list {
+    background-color: #ededed;
+    margin-top: 40px;
+    padding-top: 15px;
+    height: 100%;
+    min-height: 100%;
 }

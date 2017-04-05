@@ -1,4 +1,4 @@
-<div  class="modal" id="pending_booking_modal" >
+<div  class="modal" id="booking_modal" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -78,11 +78,21 @@
                 </div>
                 <br>
                 <div class="modal-footer">
-                    <div class="col-md-6 left">
-                        <button class="btn btn-primary close-btn" onclick="booking_approve()">approve</button>
+                    <div class="row" id="show_btns">
+                        <div class="col-md-6 left">
+                            <button class="btn btn-danger close-btn" onclick="show_booking_model()">Cancel Reservation</button>
+                        </div>
+                        <div class="col-md-6 right">
+                            <button class="btn btn-warning" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
-                    <div class="col-md-6 right">
-                        <button class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <div class="row" id="new_btns">
+                        <div class="col-md-6 left">
+                            <button class="btn btn-success close-btn" onclick="booking_approve()">Approve</button>
+                        </div>
+                        <div class="col-md-6 right">
+                            <button class="btn btn-warning" onclick="confirm_decline()">Decline</button>
+                        </div>
                     </div>
                 </div>
             </div>
