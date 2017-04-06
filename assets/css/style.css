@@ -633,11 +633,27 @@ input {
 .fc-state-default.fc-corner-right {
     margin-left: 2px;
 }
-.btn-info {
+.btn-info,.ajs-ok {
     background: #23b8d1 !important;
 }
-.edit_button, .delete_button, .add_button, .ui-input-button, .btn-custom, .dt-button, .paginate_button, .fc-button    {
+.edit_button,.ajs-ok, .delete_button, .add_button, .ui-input-button, .btn-custom, .dt-button, .paginate_button, .fc-button    {
     background: #23b8d1 !important;
+    color:white !important;
+    border: none !important;
+    display: inline-block !important;
+    position: relative !important;
+    padding: 0 ;
+    line-height: normal ;
+    margin-right: .1em ;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    overflow: visible !important;
+    border-radius: 4px !important
+}
+
+.ajs-cancel {
+    background: #f0ad4e !important;
     color:white !important;
     border: none !important;
     display: inline-block !important;

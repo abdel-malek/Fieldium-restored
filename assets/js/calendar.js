@@ -47,6 +47,7 @@ function append_new_booking(booking) {
     if (booking.state_id == approved) {
         render_event(booking);
     } else {
+        $('#badge').html(parseInt($('#badge').html()) + 1);
         $('#pending_bookings_list').append(
                 '<div class="col s12 m3" id="booking_' + booking.booking_id + '" onclick="open_pending_booking_modal(' + booking.booking_id + ')">' +
                 '<div class="card horizontal">' +
@@ -337,10 +338,10 @@ function fill_booking_info(calEvent) {
     $('#booking_num').attr("book_id", calEvent.booking_id);
     $('#player_name').html(calEvent.player_name);
     $('#player_phone').html(calEvent.player_phone);
-    $('#start_label').html(moment(calEvent.start_time, "HH:mm:ss").format("HH:mm A"));
+    $('#start_label').html(moment((calEvent.start_time?calEvent.start_time:calEvent.start), "HH:mm:ss").format("HH:mm A"));
     $('#cost_label').html(calEvent.hour_rate + " AED");
     $('#total_label').html(calEvent.total + " AED");
-    $('#duration_label').html(moment(calEvent.start_time, "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
+    $('#duration_label').html(moment((calEvent.start_time?calEvent.start_time:calEvent.start), "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
     $('#date_label').html(calEvent.date);
     $('#game_label').html(calEvent.game_name);
     $('#note_label').html(calEvent.note);
@@ -381,6 +382,7 @@ function decline_booking() {
                 var booking = response.data;
                 $('#booking_modal').modal("hide");
                 remove_booking(booking_id);
+                $('#badge').html(parseInt($('#badge').html()) - 1);
             } else
                 show_error(response.message);
         }

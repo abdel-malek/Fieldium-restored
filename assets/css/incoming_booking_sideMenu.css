@@ -79,8 +79,35 @@
 
 #pending_bookings_list {
     background-color: #ededed;
-    margin-top: 40px;
+    margin-top: 30px;
     padding-top: 15px;
     height: 100%;
     min-height: 100%;
+}
+
+.item {
+    position:relative;
+    padding-top:8px;
+    display:inline-block;
+    float: right
+}
+.badge{
+    position: absolute;
+    right: -10px;
+    top: 1px;
+    background: red;
+    text-align: center;
+    /*border-radius: 30px 30px 30px 30px;*/
+    color: white;
+    /*padding: 5px 5px;*/
+    /* font-size: 20px; */
+}
+
+.close_pending {
+    color: white;
+    opacity: 10;
+    float: left;
+    font-size: 24px;
+    margin-left: 10px;
+    background: none;
 }
