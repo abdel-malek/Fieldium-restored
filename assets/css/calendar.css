@@ -14,7 +14,7 @@
     color: #f89732 !important
 }
 .fc-event-vert * {
-    font-size: 14px !important;
+    font-size: 18px !important;
     cursor: pointer
 }
 #booking_modal .modal-body *{
@@ -133,4 +133,11 @@ hr{
     width: 90%;
     padding: 0.5em 3.5em 0.5em 1em;
 
+}
+#fieldium_logo{
+    background-color: white;
+}
+.export{
+    margin-bottom: 5px;
+    background-color: teal !important;
 }

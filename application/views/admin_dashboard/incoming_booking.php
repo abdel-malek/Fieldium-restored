@@ -23,7 +23,7 @@
 <div class="item" onclick="openNav();">
     <a href="#">
         <span class="badge" id="badge">0</span>
-        <img src="<?php echo base_url()?>assets/images/logo.png" width="30px" height="45px"  alt="" />
+        <img id="fieldium_logo" src="<?php echo base_url()?>assets/images/logo.png" width="30px" height="45px"  alt="" />
     </a>
 </div>
 <div style="clear: both"></div>

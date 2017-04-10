@@ -11,11 +11,12 @@
  */
 
 .fc {
-	max-width: 100% !important;
+	max-width: 200% !important;
 }
 
-accepted
-I put it in Iframe and it works properly. Due to conflict its not display properly.. Thank you for giving me suggestions. I also edited in fullcalendar.print.css.
+
+/*accepted
+I put it in Iframe and it works properly. Due to conflict its not display properly.. Thank you for giving me suggestions. I also edited in fullcalendar.print.css.*/
 
 .fc-event {
    background: #ffffff !important;

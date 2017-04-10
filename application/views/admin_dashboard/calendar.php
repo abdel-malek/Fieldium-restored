@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/fullcalendar/fullcalendar.min.css') ?>" />
+<link href="<?php echo base_url('assets/fullcalendar/fullcalendar.print.css') ?>" rel="stylesheet" type="text/css" id="fullcalendar_print" disabled="true"/>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/calendar.css') ?>" />
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" />
@@ -9,8 +10,9 @@
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/font-awesome.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/fullcalendar/fullcalendar.print.css') ?>" media="print"/>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/moment.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/FileSaver.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/jspdf.js')?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/fullcalendar.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/materialize.js') ?>"></script>
 <script type="text/javascript" src="<?php // echo base_url('assets/fullcalendar/fullcalendar-columns.js')           ?>"></script>
 <script type="text/javascript">
     var fields = '<?php echo json_encode($fields) ?>';
@@ -36,6 +38,7 @@
                     <?php echo $fields[0]->company_name?>:
                 </h1>
                 <!--<button onclick="window.print()">print</button>-->
+                <span onclick="print_calender();" class="export fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right">Export</span>
                 <div id='calendar'></div>
             </div>
         </div>

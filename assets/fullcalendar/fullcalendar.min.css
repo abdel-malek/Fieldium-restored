@@ -4,6 +4,9 @@
  * (c) 2014 Adam Shaw, Sean Kenny
  */
 
+[class^='fc-slot'], [class*='fc-slot'] {
+      height: 30px !important;
+}
 
 .fc {
 	direction: ltr;

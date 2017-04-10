@@ -20,7 +20,7 @@
                         <b>Player Phone: </b>
                     </div>
                     <div class="col-md-8">
-                        <input id="player_phone" type="text" class="form-control" placeholder="Player Phone`" aria-describedby="sizing-addon1">
+                        <input id="player_phone" type="text" class="form-control" placeholder="Player Phone" aria-describedby="sizing-addon1">
                     </div>
                 </div>
                 <div class="row margin-top-5px"> 

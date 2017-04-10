@@ -68,6 +68,15 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-6">
+                        <b>Note: </b>
+                    </div>
+                    <div class="col-md-6">
+                        <p id="note_label"></p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
                         <b>Total: </b>
                     </div>
                     <div class="col-md-6">

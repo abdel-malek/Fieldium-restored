@@ -86,7 +86,7 @@ function render_event(booking) {
         duration: booking.duration,
         start_time: booking.start,
         date: booking.date,
-        note: booking.note,
+        notes: booking.notes,
     };
     events.push(new_booking);
     $('#calendar').fullCalendar('renderEvent', new_booking, true);
@@ -102,6 +102,7 @@ var calendar = $('#calendar').fullCalendar({
     defaultView: 'resourceDay',
     resources: resources,
     axisFormat: 'h(:mm)a',
+    height: 999999999,
     allDaySlot: false,
     slotEventOverlap: false,
     lazyFetching: true,
@@ -114,9 +115,9 @@ var calendar = $('#calendar').fullCalendar({
         fill_booking_info(calEvent);
     },
     dayClick: function (date, jsEvent, view) {
-
-        //alert('Clicked on: ' + date.format());
         get_all_fields();
+        $('#fields-list option[value=' + jsEvent['data'].id + ']').prop('selected', true);
+        get_current_field_games();
         init_hours_select();
         init_minutes_select();
         $('#timepicker_div').html('<input class="timepicker form-control" type="text" >');
@@ -166,7 +167,7 @@ $('#datepicker').datepicker({
     }
 });
 function open_datepicker() {
-    $('#datepicker').focus().hide();
+    $("#datepicker").datepicker("show");
 }
 
 function get_all_fields() {
@@ -174,12 +175,11 @@ function get_all_fields() {
     $select.html("");
     for (var i = 0; i < fields.length; i++) {
         $select.append($("<option></option>")
-                .attr("value", fields[i].name)
+                .attr("value", fields[i].field_id)
                 .attr("id", fields[i].field_id)
                 .attr("index", i)
                 .text(fields[i].name));
     }
-    get_current_field_games();
 }
 
 function get_current_field_games() {
@@ -230,8 +230,6 @@ function update_total() {
 $('#booking_datepicker').datepicker({
     buttonImage: base_url + 'assets/images/calendar.png',
     buttonImageOnly: true,
-//    changeMonth: true,
-//    changeYear: true,
     showOn: 'both',
     onSelect: function (value) {
         $('#booking_date').text($.datepicker.formatDate('yy-mm-dd', new Date(value)));
@@ -240,7 +238,10 @@ $('#booking_datepicker').datepicker({
 function open_booking_datepicker() {
     $('#booking_datepicker').focus().hide();
 }
-
+$('#booking_date').click(function (event) {
+    event.preventDefault();
+    $("#booking_datepicker").datepicker("show");
+});
 function booking_create() {
     var Data = {};
     Data['field_id'] = $('#fields-list').find(":selected").attr("id");
@@ -260,6 +261,7 @@ function booking_create() {
             if (response.status == true) {
                 close();
                 var booking = response.data;
+                bookings_ids.push(booking.booking_id);
                 render_event(booking);
             } else
                 show_error(response.message);
@@ -338,13 +340,13 @@ function fill_booking_info(calEvent) {
     $('#booking_num').attr("book_id", calEvent.booking_id);
     $('#player_name').html(calEvent.player_name);
     $('#player_phone').html(calEvent.player_phone);
-    $('#start_label').html(moment((calEvent.start_time?calEvent.start_time:calEvent.start), "HH:mm:ss").format("HH:mm A"));
+    $('#start_label').html(moment((calEvent.start_time ? calEvent.start_time : calEvent.start), "HH:mm:ss").format("HH:mm A"));
     $('#cost_label').html(calEvent.hour_rate + " AED");
     $('#total_label').html(calEvent.total + " AED");
-    $('#duration_label').html(moment((calEvent.start_time?calEvent.start_time:calEvent.start), "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
+    $('#duration_label').html(moment((calEvent.start_time ? calEvent.start_time : calEvent.start), "HH:mm:ss").add(parseInt(calEvent.duration), "minutes").format("HH:mm A"));
     $('#date_label').html(calEvent.date);
     $('#game_label').html(calEvent.game_name);
-    $('#note_label').html(calEvent.note);
+    $('#note_label').html(calEvent.notes);
     $('#field_label').html(calEvent.company_name + " - " + calEvent.field_name);
     $('#booking_modal').modal("show");
 }
@@ -416,4 +418,70 @@ function remove_booking(booking_id) {
     {
         bookings_ids.splice(index, 1);
     }
+}
+function print_calender() {
+    $("#fullcalendar_print").prop('disabled', false);
+    var $wrapper = document.getElementById('calendar');
+    var setFonSizeOfWrapper = setFonSize.bind(null, $wrapper);
+    setFonSizeOfWrapper(NORMAL_FONTSIZE);  // or save the current size for later use
+
+
+    /* --- when you want to render with html2canvas --- */
+    setFonSizeOfWrapper(HIGHRES_FONTSIZE); //enlarge dom
+    html2canvas($wrapper, {
+        onrendered: function (canvas) {
+            var imgData = canvas.toDataURL(
+                    'image/png');
+
+            //Fieldium Logo init
+            var img = new Image();
+
+            img.onload = function(){
+                var dataURI = getBase64Image(img);
+                return dataURI;
+
+            }
+
+            img.src = $('#fieldium_logo').attr('src');
+
+            var doc = new jsPDF('p', 'mm');
+            doc.text(fields[0]['company_name'], 10, 10);
+            doc.setFontSize(9);
+            doc.text($.datepicker.formatDate('yy-mm-dd', new Date()), 10, 16);
+            doc.addImage(imgData, 'PNG', 15, 20, 180, 240);
+            doc.addImage(img.onload(), 'JPEG', 190, 5,10,13);
+            doc.save('sample-file.pdf');
+            $("#fullcalendar_print").attr("disabled", "disabled");
+
+            //now image src is in high res, 
+            //and you can scale its size down. e.g: img.width = ...
+
+            setFonSizeOfWrapper(NORMAL_FONTSIZE); //set dom back to normal size
+        }
+    });
+}
+
+var NORMAL_FONTSIZE = '20pt';
+var HIGHRES_FONTSIZE = '70pt';
+
+function setFonSize(elm, fontsize) {
+    elm.style.fontSize = fontsize;
+}
+
+function getBase64Image(img) {
+
+    var canvas = document.createElement("canvas");
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle='white';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.drawImage(img, 0, 0);
+
+    var dataURL = canvas.toDataURL("image/jpeg");
+
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
 }
