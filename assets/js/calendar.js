@@ -449,8 +449,8 @@ function print_calender() {
             doc.setFontSize(9);
             doc.text($.datepicker.formatDate('yy-mm-dd', new Date()), 10, 16);
             doc.addImage(imgData, 'PNG', 15, 20, 180, 240);
-            doc.addImage(img.onload(), 'JPEG', 190, 5,10,13);
-            doc.save('sample-file.pdf');
+           // doc.addImage(img.onload(), 'png', 190, 5,10,13);
+            doc.save('Fieldium_calendar.pdf');
             $("#fullcalendar_print").attr("disabled", "disabled");
 
             //now image src is in high res, 

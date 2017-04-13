@@ -21,7 +21,6 @@
 <body> 
     <div class="container" style="">
         <?php $this->load->view('sideMenu') ?>
-
         <div class="main-content">
             <div class="swipe-area"></div>
             <a href="#" data-toggle=".container" id="sidebar-toggle">
@@ -36,9 +35,10 @@
                  "> 
                 <h1 style="text-align: left">
                     <?php echo $fields[0]->company_name?>:
+                    <span onclick="print_calender();" class="export fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right">Export</span>
                 </h1>
                 <!--<button onclick="window.print()">print</button>-->
-                <span onclick="print_calender();" class="export fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right">Export</span>
+                
                 <div id='calendar'></div>
             </div>
         </div>

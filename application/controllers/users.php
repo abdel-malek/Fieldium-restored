@@ -193,7 +193,7 @@ class users extends REST_Controller {
                     ->display_as('role_id', 'Role')
                     ->display_as('company_id', 'Company')
                     ->display_as('user_id', 'User')
-                    ->edit_fields('name', 'phone', 'email', 'password', 'role_id', 'company_id')
+                    ->edit_fields('name', 'phone', 'password', 'role_id', 'company_id')
                     ->add_fields('name', 'username', 'phone', 'email', 'password', 'role_id', 'company_id')
                     ->required_fields('name', 'username', 'role_id')
                     ->unique_fields('email')

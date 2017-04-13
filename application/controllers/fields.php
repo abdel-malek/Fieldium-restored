@@ -285,7 +285,7 @@ class fields extends REST_Controller {
                     ->callback_before_update(array($this, 'add_update_callback'))
                     ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'hour_rate')
                     ->callback_delete(array($this, 'delete_field'))
-                    ->add_action('active', '', '', 'recieve-icon', array($this, 'active_callback'))
+//                    ->add_action('active', '', '', 'recieve-icon', array($this, 'active_callback'))
                     ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
                     ->unset_export()
                     ->unset_print();

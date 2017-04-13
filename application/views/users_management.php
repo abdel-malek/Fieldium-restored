@@ -30,7 +30,6 @@
                     Users Management:
                 </h1>
                 <div style="clear: both"></div>
-                <br><br>
                 <?php echo $output; ?>
             </div>
         </div>

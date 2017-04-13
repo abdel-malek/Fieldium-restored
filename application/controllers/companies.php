@@ -151,7 +151,7 @@ class companies extends REST_Controller {
     }
 
     public function companies_management_post($operation = null) {
-        if ($operation == "edit" || $operation == "update" || $operation == "update_validation") {
+        if ($operation == "edit" || $operation == "update" || $operation == "update_validation" || $operation == "upload_file") {
             try {
                 $this->user_permissions->is_company($this->current_user);
             } catch (Permission_Denied_Exception $e) {

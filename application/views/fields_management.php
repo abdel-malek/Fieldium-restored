@@ -32,7 +32,6 @@
                 <!--<a style="cursor: pointer" href="<?php echo site_url('companies/companies_management') ?>">< Back to companies list</a>-->
 
                 <div style="clear: both"></div>
-                <br><br>
                 <?php echo $output; ?>
             </div>
         </div>
