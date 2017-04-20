@@ -16,6 +16,8 @@
 <script type="text/javascript" src="<?php // echo base_url('assets/fullcalendar/fullcalendar-columns.js')           ?>"></script>
 <script type="text/javascript">
     var fields = '<?php echo json_encode($fields) ?>';
+    var max_time = '<?php echo ($times->max_time) ?>';
+    var min_time = '<?php echo ($times->min_time) ?>';
     var approved = "<?php echo BOOKING_STATE::APPROVED ?>";
 </script>
 <body> 
@@ -40,6 +42,7 @@
                 <!--<button onclick="window.print()">print</button>-->
                 
                 <div id='calendar'></div>
+                <br><br>
             </div>
         </div>
         <?php $this->load->view("admin_dashboard/show_booking_modal") ?>

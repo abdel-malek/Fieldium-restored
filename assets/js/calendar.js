@@ -107,6 +107,8 @@ var calendar = $('#calendar').fullCalendar({
     slotEventOverlap: false,
     lazyFetching: true,
     events: events,
+    maxTime: max_time,
+    minTime: min_time,
     titleFormat: 'DD/MM/YYYY',
     allDaySlot: false,
     eventClick: function (calEvent, jsEvent, view) {

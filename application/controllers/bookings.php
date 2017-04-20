@@ -17,12 +17,14 @@ class bookings extends REST_Controller {
     public function calendar_get() {
         $this->user_permissions->is_company($this->current_user);
         $this->load->model("Services/field_service");
+        $this->load->model("Services/company_service");
         $fields = $this->field_service->get_by_company($this->current_user->company_id, 0, 0, $this->response->lang);
-
+        $times = $this->company_service->start_and_end_time($this->current_user->company_id);
         $this->load->view('template.php', array(
             'view' => 'admin_dashboard/calendar',
             'fields' => $fields,
-            'company_id' => $this->current_user->company_id
+            'company_id' => $this->current_user->company_id,
+            'times' => $times
 //                'js_files' => $output->js_files,
 //                'css_files' => $output->css_files
                 )

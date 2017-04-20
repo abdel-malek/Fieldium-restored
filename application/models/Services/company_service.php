@@ -98,6 +98,10 @@ class company_service extends CI_Model {
                 )
         );
     }
+    
+    public function start_and_end_time($company_id){
+        return $this->company->start_and_end_time($company_id);
+    }
 
 }
 
