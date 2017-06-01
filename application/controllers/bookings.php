@@ -54,7 +54,7 @@ class bookings extends REST_Controller {
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             else if (strtotime($date) == strtotime(date('Y-m-d')) && strtotime($start) < strtotime(date('H:i:s')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid time"));
-            else if (strtotime($start) > strtotime($end))
+            else if (strtotime($start) > strtotime($end) && $end != "00:00:00")
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid start and end time."));
 
             $game_type = $this->input->post('game_type');
@@ -107,7 +107,7 @@ class bookings extends REST_Controller {
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             else if (strtotime($date) == strtotime(date('Y-m-d')) && strtotime($start) < strtotime(date('H:i:s')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid time"));
-            else if (strtotime($start) > strtotime($end))
+            else if (strtotime($start) > strtotime($end) && $end != "00:00:00")
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid start and end time."));
             $game_type = $this->input->post('game_type');
             $game = $this->game_service->get($game_type);

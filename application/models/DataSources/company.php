@@ -60,7 +60,7 @@ class company extends CI_Model {
     }
 
     public function start_and_end_time($company_id) {
-        return $this->db->select('min(field.open_time) as min_time, max(field.close_time) as max_time')
+        return $this->db->select('min(LEAST(field.open_time,field.close_time)) as min_time, max(GREATEST(field.open_time,field.close_time)) as max_time', false)
                         ->from('field')
                         ->join('company', 'company.company_id = field.company_id')
                         ->where('field.company_id', $company_id)

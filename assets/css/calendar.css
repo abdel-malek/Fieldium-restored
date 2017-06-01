@@ -109,7 +109,12 @@
 hr{
     margin:4px;
 }
-#hours-list,#minutes-list,#fields-list,#games-list, #refuse_msgs-list {
+#select_field_list {
+    float: right;
+    width: 180px !important;
+    margin-bottom: 10px !important
+}
+#hours-list,#minutes-list,#fields-list,#games-list, #refuse_msgs-list, #select_field_list {
     background: linear-gradient(45deg, transparent 50%, #7d7c7c 50%), linear-gradient(135deg, #7d7c7c 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
     background-position: calc(100% - 11px) calc(1em + 2px),
         calc(100% - 6px) calc(1em + 2px),

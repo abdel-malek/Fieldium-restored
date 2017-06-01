@@ -11,13 +11,14 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/fullcalendar/fullcalendar.print.css') ?>" media="print"/>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/moment.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/FileSaver.js') ?>"></script>
-<script src="<?php echo base_url('assets/js/jspdf.js')?>"></script>
+<script src="<?php echo base_url('assets/js/jspdf.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/fullcalendar.min.js') ?>"></script>
-<script type="text/javascript" src="<?php // echo base_url('assets/fullcalendar/fullcalendar-columns.js')           ?>"></script>
+<script type="text/javascript" src="<?php // echo base_url('assets/fullcalendar/fullcalendar-columns.js')             ?>"></script>
 <script type="text/javascript">
     var fields = '<?php echo json_encode($fields) ?>';
     var max_time = '<?php echo ($times->max_time) ?>';
     var min_time = '<?php echo ($times->min_time) ?>';
+    console.log(max_time,min_time,"a");
     var approved = "<?php echo BOOKING_STATE::APPROVED ?>";
 </script>
 <body> 
@@ -36,11 +37,17 @@
                  margin-left: 2%;
                  "> 
                 <h1 style="text-align: left">
-                    <?php echo $fields[0]->company_name?>:
+                    <?php echo $fields[0]->company_name ?>:
                     <span onclick="print_calender();" class="export fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right">Export</span>
                 </h1>
+                <select class="form-control" id="select_field_list">
+                    <option value="0">All Fields</option>
+                    <?php foreach ($fields as $field) { ?>
+                        <option value="<?php echo $field->field_id?>"><?php echo $field->name?></option>
+                    <?php } ?>
+                </select>
                 <!--<button onclick="window.print()">print</button>-->
-                
+
                 <div id='calendar'></div>
                 <br><br>
             </div>

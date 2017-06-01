@@ -39,7 +39,7 @@ class user_permissions extends CI_Model {
     }
 
     function is_player($user) {
-        if ($user && $user->player_id)
+        if ($user && isset($user->player_id))
             return true;
         else
             throw new Permission_Denied_Exception();

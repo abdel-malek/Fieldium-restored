@@ -358,6 +358,7 @@ class fields extends REST_Controller {
                     ->callback_before_insert(array($this, 'add_field_id'))
                     ->field_type('field_id', 'hidden')
                     ->unset_read()
+                    ->unset_edit()
                     ->unset_export()
                     ->unset_print();
 
