@@ -18,17 +18,22 @@ class booking_service extends CI_Model {
         $field = $this->field->get($field_id);
         if (!$field)
             throw new Field_Not_Found_Exception();
+        $fendtime = strtotime($start) + doubleval($duration) * 60;
+        $fend = strftime('%H:%M:%S', $fendtime);
+        if ($fend == "00:00:00" && $field->close_time == "00:00:00")
+            $duration--;
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 60;
         $end = strftime('%H:%M:%S', $endtime);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
+
             $accepted = !(
                     ($start >= $field->close_time && $start < $field->open_time) ||
                     ($end > $field->close_time && $end <= $field->open_time)
                     )
             ;
-        } else {
+        } else if ($field->close_time > $field->open_time) {
             $accepted = ($start >= $field->open_time && $start < $field->close_time &&
                     $end > $field->open_time && $end <= $field->close_time)
             ;
@@ -37,6 +42,8 @@ class booking_service extends CI_Model {
         ) {
             throw new Field_Not_Available_Exception();
         }
+        if ($fend == "00:00:00" && $field->close_time == "00:00:00")
+            $duration++;
         $total = ($duration * $field->hour_rate);
 
         $state = BOOKING_STATE::PENDING;
@@ -52,7 +59,8 @@ class booking_service extends CI_Model {
             'user_id' => $user_id,
             'manually' => $manually,
             'game_type_id' => $game_type,
-            'state_id' => $state
+            'state_id' => $state,
+            'hour_rate' => $field->hour_rate
         ));
 
         $booking = $this->get($booking_id, $lang);
@@ -67,20 +75,28 @@ class booking_service extends CI_Model {
     }
 
     public function update(
-    $booking_id, $field_id, $date, $start, $duration, $game_type, $notes, $user_id, $lang
+    $booking_id, $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $lang
     ) {
+        $this->get($booking_id);
         $field = $this->field->get($field_id);
-        $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
+        if (!$field)
+            throw new Field_Not_Found_Exception();
+        $fendtime = strtotime($start) + doubleval($duration) * 60;
+        $fend = strftime('%H:%M:%S', $fendtime);
+        if ($fend == "00:00:00" && $field->close_time == "00:00:00")
+            $duration--;
+        $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration, $booking_id);
         $endtime = strtotime($start) + doubleval($duration) * 60;
         $end = strftime('%H:%M:%S', $endtime);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
+
             $accepted = !(
                     ($start >= $field->close_time && $start < $field->open_time) ||
                     ($end > $field->close_time && $end <= $field->open_time)
                     )
             ;
-        } else {
+        } else if ($field->close_time > $field->open_time) {
             $accepted = ($start >= $field->open_time && $start < $field->close_time &&
                     $end > $field->open_time && $end <= $field->close_time)
             ;
@@ -89,20 +105,31 @@ class booking_service extends CI_Model {
         ) {
             throw new Field_Not_Available_Exception();
         }
+        if ($fend == "00:00:00" && $field->close_time == "00:00:00")
+            $duration++;
         $total = ($duration * $field->hour_rate);
 
-        $booking = $this->booking->update($booking_id, array(
+        $this->booking->update($booking_id, array(
             'field_id' => $field_id,
+            'player_id' => $player_id,
             'start' => $start,
             'date' => $date,
             'duration' => $duration,
             'notes' => $notes,
+            'user_id' => $user_id,
+            'manually' => $manually,
             'game_type_id' => $game_type,
-            'user_id' => $user_id
-                // 'total' => $total
+            'hour_rate' => $field->hour_rate
         ));
 
         $booking = $this->get($booking_id, $lang);
+
+        $this->load->model('Services/notification_service');
+        $message = array();
+        $message = "Your booking No." . $booking_id . " has been updated. ";
+//        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
+        $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_updated_message");
+
         return $booking;
     }
 
@@ -197,7 +224,7 @@ class booking_service extends CI_Model {
                 . "Field: " . $booking->field_name . "%0A"
                 . "On: " . date("D, d/m/Y", strtotime($booking->date)) . "%0A"
                 . "At: " . date('h:i A', strtotime($booking->start)) . "%0A"
-                . "For: " . $booking->duration/60 . " Hour%0A"
+                . "For: " . $booking->duration / 60 . " Hour%0A"
                 . "Enjoy the Game,%0A"
                 . "Fieldium";
         $this->send_sms->send_sms($booking->player_phone, $msg);
@@ -225,11 +252,11 @@ class booking_service extends CI_Model {
     public function company_bookings($company_id, $lang) {
         return $this->booking->company_bookings($company_id, $lang);
     }
-    
+
     public function company_pending_bookings($company_id, $lang) {
         return $this->booking->company_pending_bookings($company_id, $lang);
     }
-    
+
     public function company_bookings_calendar($company_id) {
         return $this->booking->company_bookings_calendar($company_id);
     }

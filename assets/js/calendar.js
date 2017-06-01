@@ -17,6 +17,7 @@ for (var i = 0; i < fields.length; i++) {
     });
     j++;
 }
+
 $.ajax({
     url: site_url + '/bookings/get_cancellation_reasons/format/json',
     type: 'GET',
@@ -45,7 +46,7 @@ function append_new_booking(booking) {
     bookings.push(booking);
     bookings_ids.push(booking.booking_id);
     if (booking.state_id == approved) {
-        render_event(booking);
+        render_event(booking, false);
     } else {
         $('#badge').html(parseInt($('#badge').html()) + 1);
         $('#pending_bookings_list').append(
@@ -65,7 +66,11 @@ function append_new_booking(booking) {
                 '</div>');
     }
 }
-function render_event(booking) {
+function render_event(booking, updated) {
+    var title = "";
+    title += "#" + booking.booking_id + " " + booking.player_name;
+    if (booking.notes != "")
+        title += "\n " + booking.notes;
     start = new Date(booking.start);
     end = moment(booking.start, "HH:mm:ss").add(parseInt(booking.duration), "minutes").format("HH:mm:ss");
     new_booking = {
@@ -76,70 +81,130 @@ function render_event(booking) {
         color: fieldscolors[booking.field_id],
         resources: [booking.field_id],
         player_name: booking.player_name,
-        title: "#" + booking.booking_id + " " + booking.player_name,
+        title: title,
         player_phone: booking.player_phone,
         field_name: booking.field_name,
         company_name: booking.company_name,
         game_name: booking.game_type_name,
         hour_rate: booking.hour_rate,
+        field_id: booking.field_id,
         total: booking.total,
         duration: booking.duration,
         start_time: booking.start,
+        manually: booking.manually,
         date: booking.date,
         notes: booking.notes,
     };
-    events.push(new_booking);
-    $('#calendar').fullCalendar('renderEvent', new_booking, true);
-}
-var calendar = $('#calendar').fullCalendar({
-    header: {
-        right: 'title',
-        center: '',
-        left: 'today prev,next',
-    },
-//    title: 
-    theme: false,
-    defaultView: 'resourceDay',
-    resources: resources,
-    axisFormat: 'h(:mm)a',
-    height: 999999999,
-    allDaySlot: false,
-    slotEventOverlap: false,
-    lazyFetching: true,
-    events: events,
-    maxTime: max_time,
-    minTime: min_time,
-    titleFormat: 'DD/MM/YYYY',
-    allDaySlot: false,
-    eventClick: function (calEvent, jsEvent, view) {
-        $('#new_btns').hide();
-        $('#show_btns').show();
-        fill_booking_info(calEvent);
-    },
-    dayClick: function (date, jsEvent, view) {
-        get_all_fields();
-        $('#fields-list option[value=' + jsEvent['data'].id + ']').prop('selected', true);
-        get_current_field_games();
-        init_hours_select();
-        init_minutes_select();
-        $('#timepicker_div').html('<input class="timepicker form-control" type="text" >');
-
-        $('.timepicker').timepicker({
-            timeFormat: 'H:mm',
-            interval: 60,
-            minTime: date.format("H:mm"),
-            maxTime: '11:00pm',
-            defaultTime: date.format("H:mm"),
-            startTime: date.format("H:mm"),
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true,
-        });
-
-        $('#booking_date').text($.datepicker.formatDate('yy-mm-dd', new Date(date)));
-        $('#new_booking_modal').modal("show");
+    if (updated == true) {
+        $('#calendar').fullCalendar('removeEvents', new_booking.id);
+    } else {
+        events.push(new_booking);
     }
+    $('#calendar').fullCalendar('renderEvent', new_booking, true);
+
+}
+function config_array(id) {
+    var res = [], eve = [], max, min;
+    if (id == 0) {
+        res = resources;
+        eve = events;
+        max = max_time;
+        min = min_time
+    } else {
+        for (var i = 0; i < resources.length; i++) {
+            if (resources[i].id == id)
+                res.push(resources[i]);
+        }
+        for (var i = 0; i < events.length; i++) {
+            if (events[i].field_id == id)
+                eve.push(events[i]);
+        }
+
+        for (var i = 0; i < fields.length; i++) {
+            if (fields[i].field_id == id) {
+                min = fields[i].open_time;
+                max = fields[i].close_time;
+            }
+        }
+    }
+    var config = {
+        header: {
+            right: 'title',
+            center: '',
+            left: 'resourceDay resWeek today prev,next',
+        },
+        views: {
+            resWeek: {
+                type: 'agenda',
+                duration: {days: 4},
+                buttonText: '4 day',
+                groupByResource: true,
+                groupByDateAndResource: true
+            }
+        },
+        theme: false,
+
+        defaultView: 'resourceDay',
+        resources: res,
+        refetchResources: true,
+        axisFormat: 'h(:mm)a',
+        height: 999999999,
+        allDaySlot: false,
+        slotEventOverlap: false,
+        lazyFetching: true,
+        events: eve,
+        maxTime: max,
+        minTime: min,
+        titleFormat: 'DD/MM/YYYY',
+        allDaySlot: false,
+        eventClick: function (calEvent, jsEvent, view) {
+            $('#new_btns').hide();
+            $('#show_btns').show();
+            fill_booking_info(calEvent);
+        },
+        dayClick: function (date, jsEvent, view) {
+            booking_modal();
+            $('#fields-list option[value=' + jsEvent['data'].id + ']').prop('selected', true);
+            $('.timepicker').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 60,
+                minTime: date.format("HH:mm"),
+                maxTime: '11:00pm',
+                defaultTime: date.format("HH:mm"),
+                startTime: date.format("HH:mm"),
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true,
+            });
+
+            $('#booking_date').text($.datepicker.formatDate('yy-mm-dd', new Date(date)));
+
+        }
+    };
+    return config;
+}
+var calendar = $('#calendar').fullCalendar(config_array(0));
+$('#select_field_list').change(function () {
+    var field = $(this).val();
+    calendar.fullCalendar('destroy');
+    calendar = $('#calendar').fullCalendar(config_array(field));
+    append_date_picker();
 });
+
+function append_date_picker() {
+    $('.fc-header-title').prepend('<input type="hidden" id="datepicker"></input>');
+    $('.fc-header-title h2').attr("onclick", "open_datepicker()");
+    $('#datepicker').datepicker({
+        buttonImage: base_url + 'assets/images/calendar.png',
+        buttonImageOnly: true,
+//    changeMonth: true,
+//    changeYear: true,
+        showOn: 'both',
+        onSelect: function (value) {
+            calendar.fullCalendar('gotoDate', value);
+        }
+    });
+}
 $.ajax({
     url: site_url + '/bookings/company_bookings/format/json',
     type: 'GET',
@@ -156,18 +221,7 @@ $.ajax({
             show_error("Error in loading bookings");
     }
 });
-$('.fc-header-title').prepend('<input type="hidden" id="datepicker"></input>');
-$('.fc-header-title h2').attr("onclick", "open_datepicker()");
-$('#datepicker').datepicker({
-    buttonImage: base_url + 'assets/images/calendar.png',
-    buttonImageOnly: true,
-//    changeMonth: true,
-//    changeYear: true,
-    showOn: 'both',
-    onSelect: function (value) {
-        calendar.fullCalendar('gotoDate', value);
-    }
-});
+append_date_picker();
 function open_datepicker() {
     $("#datepicker").datepicker("show");
 }
@@ -254,19 +308,38 @@ function booking_create() {
     Data['duration'] = parseFloat($('#hours-list').find(":selected").attr("value") * 60) + parseFloat($('#minutes-list').find(":selected").attr("value"));
     Data['date'] = $('#new_booking_modal #booking_date').html();
     Data['notes'] = $('#new_booking_modal #note').val();
+    var url = "";
+    if ($('[name=booking_id]').val() != "") {
+        Data['booking_id'] = $('[name=booking_id]').val();
+        url = site_url + '/bookings/update/format/json';
+    } else
+        url = site_url + '/bookings/create_manually/format/json';
+    HoldOn.open({
+        theme: "sk-bounce"
+    });
     $.ajax({
-        url: site_url + '/bookings/create_manually/format/json',
+        url: url,
         type: 'POST',
         data: Data,
         async: false,
         success: function (response) {
+            HoldOn.close();
             if (response.status == true) {
                 close();
                 var booking = response.data;
-                bookings_ids.push(booking.booking_id);
-                render_event(booking);
+                if ($('[name=booking_id]').val() != "")
+                    render_event(booking, true);
+                else {
+                    bookings_ids.push(booking.booking_id);
+                    render_event(booking, false);
+                }
+                $('#new_booking_modal').modal("hide");
+                $('#booking_modal').modal("hide");
             } else
                 show_error(response.message);
+        },
+        error: function (res) {
+            HoldOn.close();
         }
     });
 }
@@ -350,6 +423,10 @@ function fill_booking_info(calEvent) {
     $('#game_label').html(calEvent.game_name);
     $('#note_label').html(calEvent.notes);
     $('#field_label').html(calEvent.company_name + " - " + calEvent.field_name);
+    if (calEvent.manually == 1)
+        $('.edit_btn').show();
+    else
+        $('.edit_btn').hide();
     $('#booking_modal').modal("show");
 }
 function open_pending_booking_modal(id) {
@@ -369,7 +446,8 @@ function booking_approve() {
                 var booking = response.data;
                 $('#booking_modal').modal("hide");
                 $('#booking_' + booking_id).remove();
-                render_event(booking);
+                render_event(booking, false);
+                $('#badge').html(parseInt($('#badge').html()) - 1);
             } else
                 show_error(response.message);
         }
@@ -438,7 +516,7 @@ function print_calender() {
             //Fieldium Logo init
             var img = new Image();
 
-            img.onload = function(){
+            img.onload = function () {
                 var dataURI = getBase64Image(img);
                 return dataURI;
 
@@ -451,7 +529,7 @@ function print_calender() {
             doc.setFontSize(9);
             doc.text($.datepicker.formatDate('yy-mm-dd', new Date()), 10, 16);
             doc.addImage(imgData, 'PNG', 15, 20, 180, 240);
-           // doc.addImage(img.onload(), 'png', 190, 5,10,13);
+            // doc.addImage(img.onload(), 'png', 190, 5,10,13);
             doc.save('Fieldium_calendar.pdf');
             $("#fullcalendar_print").attr("disabled", "disabled");
 
@@ -477,8 +555,8 @@ function getBase64Image(img) {
     canvas.width = img.width;
     canvas.height = img.height;
     var ctx = canvas.getContext("2d");
-    ctx.fillStyle='white';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.drawImage(img, 0, 0);
 
@@ -486,4 +564,53 @@ function getBase64Image(img) {
 
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 
+}
+
+function fill_booking_form() {
+    var booking_id = $('#booking_num').attr("book_id");
+    $.ajax({
+        url: site_url + '/bookings/show/format/json?booking_id=' + booking_id,
+        type: 'GET',
+        async: false,
+        success: function (response) {
+            if (response.status == true) {
+                booking_modal();
+                var book = response.data;
+                $('[name=booking_id]').val(book.booking_id);
+                $('#fields-list').val(book.field_id);
+                $('#games-list option[value=' + book.game_type_id + ']').prop('selected', true);
+                $('#new_booking_modal #player_phone').val(book.player_phone);
+                $('#new_booking_modal #player_name').val(book.player_name);
+                $('#new_booking_modal #note').val(book.notes);
+                $('#hours-list option[value=' + (book.duration / 60) + ']').prop('selected', true);
+                $('#minutes-list option[value=' + (book.duration % 60) + ']').prop('selected', true);
+                $('.timepicker').timepicker({
+                    timeFormat: 'H:mm',
+                    interval: 60,
+                    minTime: "00:00am",
+                    maxTime: '11:00pm',
+                    defaultTime: book.start,
+                    startTime: "00:00am",
+                    dynamic: false,
+                    dropdown: true,
+                    scrollbar: true,
+                });
+
+                $('#booking_date').text($.datepicker.formatDate('yy-mm-dd', new Date(book.date)));
+//                $('#booking_modal').modal("hide");
+                $('#new_booking_modal').modal("show");
+            } else
+                show_error(response.message);
+        }
+    });
+}
+function booking_modal() {
+    $('[name=booking_id]').val("");
+    get_all_fields();
+    get_current_field_games();
+    init_hours_select();
+    init_minutes_select();
+    $('#timepicker_div').html('<input class="timepicker form-control" type="text" >');
+
+    $('#new_booking_modal').modal("show");
 }

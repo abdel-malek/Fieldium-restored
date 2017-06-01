@@ -151,42 +151,58 @@ class bookings extends REST_Controller {
         $this->form_validation->set_rules('start', 'Start time', 'required|trim|min_length[7]|max_length[8]|callback_validate_time');
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('game_type', 'game type', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('player_name', 'Player name', 'required');
+        $this->form_validation->set_rules('player_phone', 'Player phone', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
-            $this->user_permissions->update_booking_permission($this->current_user);
             $booking_id = $this->input->post('booking_id');
             $field_id = $this->input->post('field_id');
+            $this->user_permissions->is_company($this->current_user);
+            $this->user_permissions->management_permission($this->current_user, $this->current_user->company_id);
             $date = $this->input->post('date');
             $start = $this->input->post('start');
             $start = date("H:i:s", strtotime($start));
             $duration = $this->input->post('duration');
             $endtime = strtotime($start) + doubleval($duration) * 60;
             $end = strftime('%H:%M:%S', $endtime);
+
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
             else if (strtotime($date) == strtotime(date('Y-m-d')) && strtotime($start) < strtotime(date('H:i:s')))
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid time"));
-            else if (strtotime($start) > strtotime($end))
+            else if (strtotime($start) > strtotime($end) && $end != "00:00:00")
                 $this->response(array('status' => false, 'data' => null, 'message' => "Invalid start and end time."));
             $game_type = $this->input->post('game_type');
             $game = $this->game_service->get($game_type);
             if ($duration < $game->minimum_duration)
                 $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $game->minimum_duration . " mins."));
             $notes = $this->input->post('notes');
+            $name = $this->input->post('player_name');
+            $phone = $this->input->post('player_phone');
+            $manually = true;
+            $player = $this->player_service->create($name, $phone);
             $user_id = $this->current_user->user_id;
             if (strlen($start) == 7)
                 $start = "0" . $start;
             $booking = $this->booking_service
                     ->update(
-                    $booking_id, $field_id, $date, $start, $duration, $game_type, $notes, $user_id, $this->response->lang
+                    $booking_id, $field_id, $player->player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $this->response->lang
             );
-            $this->response(array(
-                'status' => true,
-                'data' => $booking,
-                'message' => $this->lang->line('created')
-                    )
-            );
+            $sms = $this->post('sms_option') == 'true' || $this->post('sms_option') == 1 ? true : false;
+            if ($sms == true) {
+                $this->load->library('send_sms');
+                $msg = "Dear Player,%0AYour booking number." . $booking_id . " is updated.%0A"
+                        . $booking->company_name . "%0A"
+                        . "Field: " . $booking->field_name . "%0A"
+                        . "On: " . date("D, d/m/Y", strtotime($booking->date)) . "%0A"
+                        . "At: " . date('h:i A', strtotime($booking->start)) . "%0A"
+                        . "For: " . $booking->duration / 60 . " Hour%0A"
+                        . "Enjoy the Game,%0A"
+                        . "Fieldium";
+                $this->send_sms->send_sms($phone, $msg);
+            }
+            $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('updated')));
         }
     }
 

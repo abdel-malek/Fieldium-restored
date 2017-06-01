@@ -104,7 +104,7 @@ class booking extends CI_Model {
                         ->order_by('booking.booking_id')
                         ->get()->result();
     }
-    
+
     public function company_pending_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
@@ -175,12 +175,15 @@ class booking extends CI_Model {
                         ->get()->result();
     }
 
-    public function field_bookings_by_timing($field_id, $date, $start, $duration) {
+    public function field_bookings_by_timing($field_id, $date, $start, $duration, $booking_id = null) {
+        $where = "";
+        if ($booking_id != null)
+            $where .= "booking.booking_id != " . $booking_id . " and ";
         return $this->db->query("SELECT booking.*,
             game_type.en_name as game_type_name, game_type.image as game_image, round((booking.duration*(booking.hour_rate/60))) as total FROM booking
 JOIN field on field.field_id = booking.field_id 
 JOIN game_type on game_type.game_type_id = booking.game_type_id 
-WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted = 0 and booking.state_id =" . BOOKING_STATE::APPROVED . " and ("
+WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.deleted = 0 and booking.state_id =" . BOOKING_STATE::APPROVED . " and ("
                         . "( "
                         . "booking.start >= time('$start')"
                         . "and booking.start < (time('$start') + INTERVAL $duration MINUTE)"
@@ -356,5 +359,4 @@ WHERE booking.field_id =$field_id and booking.date = '$date' and booking.deleted
             "details" => $details
         );
     }
-
 }

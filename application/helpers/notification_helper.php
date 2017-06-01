@@ -6,7 +6,7 @@
  * @author Amal Abdulraouf
  */
 class NotificationHelper {
-z
+
     function __construct() {
         
     }

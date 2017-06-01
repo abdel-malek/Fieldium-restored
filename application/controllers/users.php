@@ -101,7 +101,7 @@ class users extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[30]');
+        $this->form_validation->set_rules('password', 'Password', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
@@ -127,7 +127,7 @@ class users extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[30]');
+        $this->form_validation->set_rules('password', 'Password', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
@@ -198,7 +198,7 @@ class users extends REST_Controller {
                     ->required_fields('name', 'username', 'role_id')
                     ->unique_fields('email')
                     ->field_type('phone', 'integer')
-                    ->set_rules('name', 'Name', 'required|min_length[3]|max_length[16]')
+                    ->set_rules('name', 'Name', 'required|min_length[3]|max_length[30]')
                     ->callback_before_update(array($this, 'encrypt_password_callback'))
                     ->callback_edit_field('password', array($this, '_callback_password'))
                     ->callback_column('active', array($this, '_callback_active_render'))
@@ -215,7 +215,7 @@ class users extends REST_Controller {
                     throw new Permission_Denied_Exception ();
                 $crud
                         ->set_rules('password', 'Password', 'required|min_length[6]|max_length[30]')
-                        ->set_rules('username', 'User Name', 'required|min_length[3]|max_length[16]|is_unique[user.username]');
+                        ->set_rules('username', 'User Name', 'required|min_length[3]|max_length[30]|is_unique[user.username]');
             } else {
                 $crud
                         ->set_rules('password', 'Password', 'min_length[6]|max_length[30]');

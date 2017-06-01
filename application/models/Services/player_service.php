@@ -55,28 +55,14 @@ class player_service extends CI_Model {
     }
 
     public function create($name, $phone) {
-
         $player = $this->player->get_by_phone($phone);
         if ($player) {
             $player_id = $player->player_id;
-//            $code = $this->generate_activation_code();
-//            $server_id = uniqid();
-//            while ($this->player->check_server_id(md5($server_id))) {
-//                $server_id = uniqid();
-//            }
-//            $this->player->update($player_id, array(
-//                'phone' => $phone,
-//                'os' => $os,
-//                'server_id' => md5($server_id),
-//                'verification_code' => $code
-//            ));
-////            $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
+            $this->player->update($player_id, array(
+                'phone' => $phone,
+                'name' => $name
+            ));
         } else {
-//            $code = $this->generate_activation_code();
-//            $server_id = uniqid();
-//            while ($this->player->check_server_id($server_id)) {
-//                $server_id = uniqid();
-//            }
             $player_id = $this->player->register(array(
                 'phone' => $phone,
                 'name' => $name,
@@ -84,10 +70,8 @@ class player_service extends CI_Model {
                 'token' => "",
                 'address' => ""
             ));
-            //$this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
         $player = $this->get($player_id);
-//        $player->server_id = $server_id;
         return $player;
     }
 

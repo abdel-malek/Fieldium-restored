@@ -89,10 +89,10 @@
                 <div class="modal-footer">
                     <div class="row" id="show_btns">
                         <div class="col-md-6 left">
-                            <button class="btn btn-danger close-btn" onclick="show_booking_model()">Cancel Reservation</button>
+                            <button class="btn btn-success edit_btn" onclick="fill_booking_form()">Edit</button>
                         </div>
                         <div class="col-md-6 right">
-                            <button class="btn btn-success edit_btn" onclick="edit_booking()">Edit</button>
+                            <button class="btn btn-danger close-btn" onclick="show_booking_model()">Cancel Reservation</button>
                         </div>
 <!--                        <div class="col-md-4 right">
                             <button class="btn btn-warning" data-dismiss="modal">Close</button>

@@ -6,6 +6,7 @@
                 <h3 style="display: inline;">New Booking</h3>
                  <button type="button" class="close" data-dismiss="modal" >&times</button>
             </div>
+            <input type="hidden" name="booking_id" />
             <div class="modal-body" >
                 <div class="row margin-top-5px">
                     <div class="col-md-3">
@@ -95,8 +96,9 @@
                 <br>
                 <div class="modal-footer">
                     <div class="col-md-6 left">
-                        <button class="btn btn-info create-btn" onclick="booking_create();">Create</button>
+                        <button class="btn btn-info create-btn" onclick="booking_create();">Save</button>
                     </div>
+                  
                     <div class="col-md-6 right">
                         <button class="btn btn-warning" id="close">Close</button>
                     </div>
