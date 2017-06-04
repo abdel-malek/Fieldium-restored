@@ -53,7 +53,7 @@ function append_new_booking(booking) {
                 '<div class="col s12 m3" id="booking_' + booking.booking_id + '" onclick="open_pending_booking_modal(' + booking.booking_id + ')">' +
                 '<div class="card horizontal">' +
                 '<div class="card-image"><div class="circle">' +
-                '<span>' + booking.booking_id + '</span></div>' +
+                '<span>' + booking.reference + '</span></div>' +
                 '</div>' +
                 '<div class="card-stacked">' +
                 '<div class="card-content">' +
@@ -68,11 +68,13 @@ function append_new_booking(booking) {
 }
 function render_event(booking, updated) {
     var title = "";
-    title += "#" + booking.booking_id + " " + booking.player_name;
+    title += "#" + booking.booking_id + " NO." + booking.reference + " " + booking.player_name;
     if (booking.notes != "")
         title += "\n " + booking.notes;
     start = new Date(booking.start);
     end = moment(booking.start, "HH:mm:ss").add(parseInt(booking.duration), "minutes").format("HH:mm:ss");
+    if (end == "00:00:00")
+        end = "24:00:00";
     new_booking = {
         id: booking.booking_id,
         booking_id: booking.booking_id,
@@ -82,6 +84,7 @@ function render_event(booking, updated) {
         resources: [booking.field_id],
         player_name: booking.player_name,
         title: title,
+        reference: booking.reference,
         player_phone: booking.player_phone,
         field_name: booking.field_name,
         company_name: booking.company_name,
@@ -127,6 +130,9 @@ function config_array(id) {
             }
         }
     }
+    if (max == "23:59:00")
+        max = "24:00:00";
+    console.log(max, min);
     var config = {
         header: {
             right: 'title',
@@ -157,6 +163,7 @@ function config_array(id) {
         minTime: min,
         titleFormat: 'DD/MM/YYYY',
         allDaySlot: false,
+        timezone: "local",
         eventClick: function (calEvent, jsEvent, view) {
             $('#new_btns').hide();
             $('#show_btns').show();
@@ -411,7 +418,7 @@ function find_book_by_id(id) {
     }
 }
 function fill_booking_info(calEvent) {
-    $('#booking_num').html("Booking #" + calEvent.booking_id);
+    $('#booking_num').html("Booking #" + calEvent.booking_id + " <br>NO." + calEvent.reference);
     $('#booking_num').attr("book_id", calEvent.booking_id);
     $('#player_name').html(calEvent.player_name);
     $('#player_phone').html(calEvent.player_phone);

@@ -13,7 +13,6 @@
 <script type="text/javascript" src="<?php echo base_url('assets/js/FileSaver.js') ?>"></script>
 <script src="<?php echo base_url('assets/js/jspdf.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/fullcalendar.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/fullcalendar/resourceWeek.js')?>"></script>
 <script type="text/javascript">
     var fields = '<?php echo json_encode($fields) ?>';
     var max_time = '<?php echo ($times->max_time) ?>';

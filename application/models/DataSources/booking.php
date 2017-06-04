@@ -45,6 +45,15 @@ class booking extends CI_Model {
         }
     }
 
+    public function get_max_id($field_id) {
+        return $this->db->select('max(reference) as ref')
+                        ->from('booking')
+                        ->join('field base_field', 'base_field.field_id = booking.field_id')
+                        ->where('base_field.field_id', $field_id)
+                        ->where('booking.field_id IN(select field_id from `field` where field.company_id = base_field.company_id)')
+                        ->get()->row();
+    }
+
     public function get_my_bookings($player_id, $lang = "en") {
         return $this->db->select(
                                 "booking.*,"
@@ -293,7 +302,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
             return array();
         $this->db->select('field.en_name as field_name, field.field_id, booking.hour_rate, '
                         . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                        . 'booking.booking_id, booking.date, booking.start, booking.duration,'
+                        . 'booking.booking_id,booking.reference, booking.date, booking.start, booking.duration,'
                         . 'booking.player_id, player.name as player_name, booking.manually,'
                         . 'round((booking.duration*(booking.hour_rate/60))) as total')
                 ->from('booking')
@@ -336,7 +345,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
             return array();
         $this->db->select('field.en_name as field_name, field.field_id, booking.hour_rate, '
                         . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                        . 'booking.booking_id, booking.date, booking.start, booking.duration,'
+                        . 'booking.booking_id,booking.reference, booking.date, booking.start, booking.duration,'
                         . 'booking.player_id, player.name as player_name, booking.manually,'
                         . 'round((booking.duration*(booking.hour_rate/60))) as total')
                 ->from('booking')
@@ -359,4 +368,5 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
             "details" => $details
         );
     }
+
 }

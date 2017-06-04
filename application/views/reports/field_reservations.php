@@ -68,6 +68,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>NO.</th>
                             <th>Field</th>
                             <th>Player</th>
                             <th>Game</th>
@@ -83,6 +84,7 @@
                     </tbody>
                     <tfoot>
                         <tr> 
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -125,6 +127,7 @@
                                                     html1 +=
                                                             '<tr>' +
                                                             '<td>' + data['data']['details'][i].booking_id + '</td>' +
+                                                            '<td>' + data['data']['details'][i].reference + '</td>' +
                                                             '<td>' + data['data']['details'][i].field_name + '</td>' +
                                                             '<td>' + data['data']['details'][i].player_name + '</td>' +
                                                             '<td>' + data['data']['details'][i].game_type_name + '</td>' +

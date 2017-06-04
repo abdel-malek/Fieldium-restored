@@ -20,7 +20,7 @@ class booking_service extends CI_Model {
             throw new Field_Not_Found_Exception();
         $fendtime = strtotime($start) + doubleval($duration) * 60;
         $fend = strftime('%H:%M:%S', $fendtime);
-        if ($fend == "00:00:00" && $field->close_time == "00:00:00")
+        if ($fend == "00:00:00" && $field->close_time == "23:59:00")
             $duration--;
         $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 60;
@@ -42,13 +42,15 @@ class booking_service extends CI_Model {
         ) {
             throw new Field_Not_Available_Exception();
         }
-        if ($fend == "00:00:00" && $field->close_time == "00:00:00")
+        if ($fend == "00:00:00" && $field->close_time == "23:59:00")
             $duration++;
         $total = ($duration * $field->hour_rate);
 
         $state = BOOKING_STATE::PENDING;
         if ($manually == true || $field->auto_confirm == 1)
             $state = BOOKING_STATE::APPROVED;
+        $reference = $this->booking->get_max_id($field_id);
+
         $booking_id = $this->booking->add(array(
             'field_id' => $field_id,
             'player_id' => $player_id,
@@ -60,6 +62,7 @@ class booking_service extends CI_Model {
             'manually' => $manually,
             'game_type_id' => $game_type,
             'state_id' => $state,
+            'reference' => ($reference->ref + 1),
             'hour_rate' => $field->hour_rate
         ));
 

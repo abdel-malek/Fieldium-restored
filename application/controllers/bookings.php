@@ -14,6 +14,28 @@ class bookings extends REST_Controller {
         $this->load->model('Permissions/user_permissions');
     }
 
+    public function set_up_get() {
+        $this->load->database();
+        $companies = $this->db->select('*')
+                        ->from('company')
+                        ->get()->result();
+
+        foreach ($companies as $company) {
+            $reference = 0;
+            $bookings = $this->db->select('*')
+                            ->from('booking')
+                            ->where('booking.deleted', 0)
+                            ->where('booking.state_id !=', 4)
+                            ->where('booking.field_id IN (select field_id from `field` where field.company_id = ' . $company->company_id . ")")
+                            ->get()->result();
+            foreach ($bookings as $booking) {
+                $reference++;
+                $this->db->where('booking_id', $booking->booking_id)
+                        ->update('booking', array('reference' => $reference));
+            }
+        }
+    }
+
     public function calendar_get() {
         $this->user_permissions->is_company($this->current_user);
         $this->load->model("Services/field_service");
