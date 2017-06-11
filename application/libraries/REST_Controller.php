@@ -55,7 +55,7 @@ abstract class REST_Controller extends CI_Controller {
      * @var object
      */
     protected $response = NULL;
-
+    public $language = "en";
     /**
      * Stores DB, keys, key level, etc
      *
@@ -285,8 +285,8 @@ abstract class REST_Controller extends CI_Controller {
         }
 
         $this->response->lang = $this->_detect_lang();
-        $this->load->language(array('controllers', 'views'), ($this->response->lang == "en") ? "english" : "arabic");
-
+        $this->load->language(array('controllers', 'views', 'form_validation'), ($this->response->lang == "en") ? "english" : "arabic");
+        $this->language = $this->response->lang;
         $this->rest = new StdClass();
         // Load DB if its enabled
         if (config_item('rest_database_group') AND ( config_item('rest_enable_keys') OR config_item('rest_enable_logging'))) {

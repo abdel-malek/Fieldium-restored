@@ -13,8 +13,12 @@ class booking_service extends CI_Model {
     }
 
     public function create(
-    $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $lang
+    $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $lang = "en", $voucher = null
     ) {
+        if ($voucher) {
+            $this->load->model("Services/voucher_service");
+            $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
+        }
         $field = $this->field->get($field_id);
         if (!$field)
             throw new Field_Not_Found_Exception();
@@ -38,18 +42,32 @@ class booking_service extends CI_Model {
                     $end > $field->open_time && $end <= $field->close_time)
             ;
         }
+
         if ($bookings || !$accepted
         ) {
             throw new Field_Not_Available_Exception();
         }
         if ($fend == "00:00:00" && $field->close_time == "23:59:00")
             $duration++;
-        $total = ($duration * $field->hour_rate);
+        $subtotal = ($duration * ($field->hour_rate / 60));
+        $total = $subtotal;
 
         $state = BOOKING_STATE::PENDING;
         if ($manually == true || $field->auto_confirm == 1)
             $state = BOOKING_STATE::APPROVED;
         $reference = $this->booking->get_max_id($field_id);
+
+        if ($voucher) {
+            $vou = $this->voucher_service->get($voucher);
+            if ($vou->type == 1) {
+                $total = $subtotal - ($subtotal * $vou->value / 100);
+            } else if ($vou->type == 2) {
+                if ($vou->value > $duration)
+                    $total = 0;
+                else
+                    $total = ($duration - $vou->value) * ($field->hour_rate / 60);
+            }
+        }
 
         $booking_id = $this->booking->add(array(
             'field_id' => $field_id,
@@ -63,9 +81,16 @@ class booking_service extends CI_Model {
             'game_type_id' => $game_type,
             'state_id' => $state,
             'reference' => ($reference->ref + 1),
-            'hour_rate' => $field->hour_rate
+            'hour_rate' => $field->hour_rate,
+            'subtotal' => round($subtotal),
+            'total' => round($total),
+            'voucher' => $voucher
         ));
-
+        if ($voucher) {
+            $vou = $this->voucher_service->get($voucher);
+            if ($vou->one_time == 1)
+                $this->voucher_service->update($vou->voucher_id, array('valid' => 0));
+        }
         $booking = $this->get($booking_id, $lang);
         if ($manually == false) {
             $this->load->model('Services/notification_service');
@@ -129,8 +154,8 @@ class booking_service extends CI_Model {
 
         $this->load->model('Services/notification_service');
         $message = array();
-        $message = "Your booking No." . $booking_id . " has been updated. ";
-//        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
+        $message['en'] = "Your booking No." . $booking_id . " has been updated. ";
+        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
         $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_updated_message");
 
         return $booking;
@@ -193,8 +218,8 @@ class booking_service extends CI_Model {
         $booking = $this->get($booking_id);
         $this->load->model('Services/notification_service');
         $message = array();
-        $message = "Your booking No." . $booking_id . " has been declined. ";
-//        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
+        $message['en'] = "Your booking No." . $booking_id . " has been declined. ";
+        $message["ar"] = "تم رفض الطلب رقم " . $booking_id;
         $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_declined_message");
 
         return true;
@@ -215,7 +240,8 @@ class booking_service extends CI_Model {
             if ($player->active == 1) {
                 $this->load->model('Services/notification_service');
                 $message = array();
-                $message = "Your booking No." . $booking_id . " has been approved. ";
+                $message['en'] = "لقد تم قبول طلبك " . $booking_id;
+                $message['ar'] = "Your booking No." . $booking_id . " has been approved. ";
                 $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_confirmed_message");
             }
         } catch (Player_Not_Found_Exception $e) {

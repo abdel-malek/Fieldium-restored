@@ -34,14 +34,16 @@ class notification_service extends CI_Model {
 //        $this->email->subject($this->lang->line('estore'));
 //        $this->email->message($message["ar"]."<br>".$message["en"]);
 //        $this->email->send();
+        $message = $message[$player->lang];
+        
         $notification_helper = new NotificationHelper();
         $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os);
-        $this->notification->save_notification(array(
-            'player_id' => $player->player_id,
-            'content' => $message,
-            'booking_id' => $data["booking"]->booking_id
-                )
-        );
+//        $this->notification->save_notification(array(
+//            'player_id' => $player->player_id,
+//            'content' => $message,
+//            'booking_id' => $data["booking"]->booking_id
+//                )
+//        );
     }
 
     public function send_notification_admin($company_id, $message, $data, $message_key) {

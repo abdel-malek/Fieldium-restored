@@ -13,7 +13,7 @@ class player_service extends CI_Model {
         $this->load->library('send_sms');
     }
 
-    public function register($phone, $os, $name) {
+    public function register($phone, $os, $name, $lang) {
 
         $player = $this->player->get_by_phone($phone);
         if ($player) {
@@ -30,7 +30,8 @@ class player_service extends CI_Model {
                 'name' => $name,
                 'server_id' => md5($server_id),
                 'verification_code' => $code,
-                'active' => 0
+                'active' => 0,
+                'lang' => $lang
             ));
             $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         } else {
@@ -45,7 +46,8 @@ class player_service extends CI_Model {
                 'token' => '',
                 'name' => $name,
                 'server_id' => md5($server_id),
-                'verification_code' => $code
+                'verification_code' => $code,
+                'lang' => $lang
             ));
             $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
@@ -103,7 +105,8 @@ class player_service extends CI_Model {
         $this->player->update($player_id, array(
             'name' => $name,
             'email' => $email,
-            'address' => $address
+            'address' => $address,
+            'lang' => $lang
         ));
         $this->game->delete_player_games($player_id);
         if ($games_types) {
@@ -194,7 +197,7 @@ class player_service extends CI_Model {
 
     function generate_activation_code() {
 
-        $digites = '0123456789';
+        $digites = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $randomString = $digites[rand(0, strlen($digites) - 1)]
                 . $digites[rand(0, strlen($digites) - 1)]
                 . $digites[rand(0, strlen($digites) - 1)]

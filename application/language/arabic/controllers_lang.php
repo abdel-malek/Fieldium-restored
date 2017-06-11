@@ -3,7 +3,13 @@
 $lang['created'] = "تم تخزين المعلومات بنجاح";
 $lang['updated'] = "تم تعديل المعلومات بنجاح";
 $lang['required'] = "مطلوب";
+$lang['name'] = "الاسم";
+$lang['phone'] = "الرقم";
+$lang['email'] = "البريد الالكتروني";
+$lang['lang'] = "اللغة";
+$lang['valid_lang'] = "اللغة غير صالحة";
 $lang['booking_id'] = "رقم الحجز";
+$lang['voucher'] = "رمز القسيمة";
 $lang['company_id'] = "رقم الشركة";
 $lang['user_id'] = "رقم المستخدم";
 $lang['long_lat_req'] = "الطول والعرض على الخريطة مطلوبان";

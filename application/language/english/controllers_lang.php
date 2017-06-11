@@ -1,8 +1,15 @@
 <?php
+
 $lang['created'] = "The data has been stored successfully.";
 $lang['updated'] = "The data has been updated successfully.";
 $lang['required'] = "is required";
 $lang['booking_id'] = "booking id";
+$lang['name'] = "name";
+$lang['email'] = "email";
+$lang['lang'] = "language";
+$lang['phone'] = "phone";
+$lang['valid_lang'] = "it is not a valid lang";
+$lang['voucher'] = "voucher code";
 $lang['company_id'] = "company id";
 $lang['user_id'] = "user id";
 $lang['long_lat_req'] = "The longitude and latitude are required.";

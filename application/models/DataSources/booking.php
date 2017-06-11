@@ -10,7 +10,7 @@ class booking extends CI_Model {
         return $this->db->select(
                                 "booking.*, "
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, player.name as player_name,"
                                 . " player.phone as player_phone, company." . $lang . "_address as address,"
                                 . " company." . $lang . "_name as company_name, company.logo"
@@ -58,7 +58,7 @@ class booking extends CI_Model {
         return $this->db->select(
                                 "booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total,  " . ENTITY::FIELD . ", "
+                                . "booking.total,  " . ENTITY::FIELD . ", "
                                 . "field.$lang" . "_name as field_name, company." . $lang . "_name as company_name, "
                                 . "company." . $lang . "_address as address, company.logo"
                         )
@@ -77,7 +77,7 @@ class booking extends CI_Model {
         return $this->db->select(
                                 "booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name, "
                                 . "player.name as player_name, player.phone as player_phone"
                         )
@@ -96,7 +96,7 @@ class booking extends CI_Model {
     public function company_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name,"
                                 . " player.name as player_name, player.phone as player_phone"
                         )
@@ -117,7 +117,7 @@ class booking extends CI_Model {
     public function company_pending_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name,"
                                 . " player.name as player_name, player.phone as player_phone"
                         )
@@ -154,7 +154,7 @@ class booking extends CI_Model {
     public function field_bookings($field_id, $lang = "en") {
         return $this->db->select("booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, player.name as player_name,"
                                 . " player.phone as player_phone")
                         ->from('booking')
@@ -170,7 +170,7 @@ class booking extends CI_Model {
     public function field_bookings_by_date($field_id, $date, $lang = "en") {
         return $this->db->select("booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . "round((booking.duration*(booking.hour_rate/60))) as total, " . ENTITY::FIELD . ","
+                                . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name")
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
@@ -189,7 +189,7 @@ class booking extends CI_Model {
         if ($booking_id != null)
             $where .= "booking.booking_id != " . $booking_id . " and ";
         return $this->db->query("SELECT booking.*,
-            game_type.en_name as game_type_name, game_type.image as game_image, round((booking.duration*(booking.hour_rate/60))) as total FROM booking
+            game_type.en_name as game_type_name, game_type.image as game_image, booking.total FROM booking
 JOIN field on field.field_id = booking.field_id 
 JOIN game_type on game_type.game_type_id = booking.game_type_id 
 WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.deleted = 0 and booking.state_id =" . BOOKING_STATE::APPROVED . " and ("
@@ -207,7 +207,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
         $date = date('Y-m-d');
         $time = date("H:i:s");
         return $this->db->query("
-            SELECT booking.*,game_type.en_name as game_type_name, game_type.image as game_image,round((booking.duration*(booking.hour_rate/60))) as total,  field.$lang" . "_name as field_name, company." . $lang . "_name as comapny_name, company." . $lang . "_address as address, company.logo,
+            SELECT booking.*,game_type.en_name as game_type_name, game_type.image as game_image,booking.total,  field.$lang" . "_name as field_name, company." . $lang . "_name as comapny_name, company." . $lang . "_address as address, company.logo,
                 company.company_id FROM booking
                 JOIN field on field.field_id = booking.field_id
                 JOIN game_type on game_type.game_type_id = booking.game_type_id 
@@ -228,7 +228,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
         return $this->db->select("DISTINCT(`booking`.`field_id`),booking.booking_id, company.company_id ,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
                                 . "booking.player_id,(booking.date) as date, (booking.start),"
-                                . " booking.duration, booking.state_id,round((booking.duration*(booking.hour_rate/60))) as total, booking.notes,"
+                                . " booking.duration, booking.state_id,booking.total, booking.notes,"
                                 . "  field.$lang" . "_name as field_name, company." . $lang . "_address as address, "
                                 . "company." . $lang . "_name as company_name, company.logo")
                         ->DISTINCT()
@@ -250,7 +250,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
     public function reservations_report($company_id, $from_date, $to_date) {
         $this->db->query("SET sql_mode = ''");
         $total = $this->db->select('count(booking.booking_id) as bookings_number, '
-                                . 'sum(round((booking.duration*(booking.hour_rate/60)))) as total')
+                                . 'sum(booking.total) as total')
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->where('field.company_id', $company_id)
@@ -264,7 +264,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
         $details = $this->db->select('field.en_name as field_name, field.field_id,'
                                 . 'count(booking.booking_id) as bookings_number, '
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
-                                . 'sum(round((booking.duration*(booking.hour_rate/60)))) as total')
+                                . 'sum(booking.total) as total')
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
@@ -285,7 +285,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
 
     public function field_reservations_report($company_id, $field_id, $from_date, $to_date) {
         $this->db->select('count(booking.booking_id) as bookings_number, '
-                        . 'sum(round((booking.duration*(booking.hour_rate/60)))) as total')
+                        . 'sum(booking.total) as total')
                 ->from('booking')
                 ->join('field', 'field.field_id = booking.field_id')
                 ->where('field.company_id', $company_id);
@@ -304,7 +304,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
                         . "game_type.en_name as game_type_name, game_type.image as game_image,"
                         . 'booking.booking_id,booking.reference, booking.date, booking.start, booking.duration,'
                         . 'booking.player_id, player.name as player_name, booking.manually,'
-                        . 'round((booking.duration*(booking.hour_rate/60))) as total')
+                        . 'booking.total')
                 ->from('booking')
                 ->join('field', 'field.field_id = booking.field_id')
                 ->join('player', 'player.player_id = booking.player_id')
@@ -328,7 +328,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
 
     public function declined_reservations_report($company_id, $field_id, $from_date, $to_date) {
         $this->db->select('count(booking.booking_id) as bookings_number, '
-                        . 'sum(round((booking.duration*(booking.hour_rate/60)))) as total')
+                        . 'sum(booking.total) as total')
                 ->from('booking')
                 ->join('field', 'field.field_id = booking.field_id')
                 ->where('field.company_id', $company_id);
@@ -347,7 +347,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
                         . "game_type.en_name as game_type_name, game_type.image as game_image,"
                         . 'booking.booking_id,booking.reference, booking.date, booking.start, booking.duration,'
                         . 'booking.player_id, player.name as player_name, booking.manually,'
-                        . 'round((booking.duration*(booking.hour_rate/60))) as total')
+                        . 'booking.total')
                 ->from('booking')
                 ->join('field', 'field.field_id = booking.field_id')
                 ->join('player', 'player.player_id = booking.player_id')

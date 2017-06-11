@@ -91,7 +91,7 @@ class bookings extends REST_Controller {
                 $start = "0" . $start;
             $booking = $this->booking_service
                     ->create(
-                    $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $this->response->lang
+                    $field_id, $player_id, $date, $start, $duration, $game_type, $notes, $user_id, $manually, $this->response->lang, $this->input->post('voucher')
             );
             $this->response(array(
                 'status' => true,
