@@ -29,16 +29,17 @@ class voucher extends CI_Model {
     }
 
     public function get_voucher_users($voucher_id) {
-        return $this->db->select('*')
+        return $this->db->select('voucher_player.*, player.name as player_name')
                         ->from('voucher_player')
+                        ->join('player', 'player.player_id = voucher_player.player_id', 'left')
                         ->where('voucher_id', $voucher_id)
                         ->get()->result();
     }
 
-    public function get_voucher_fields($voucher_id) {
-        return $this->db->select('voucher_field.field_id,field.' . $this->LANG . '_name as field_name')
-                        ->from('voucher_field')
-                        ->join('field', 'field.field_id = voucher_field.field_id')
+    public function get_voucher_companies($voucher_id) {
+        return $this->db->select('voucher_company.company_id,company.' . $this->LANG . '_name as company_name')
+                        ->from('voucher_company')
+                        ->join('company', 'company.company_id = voucher_company.company_id')
                         ->where('voucher_id', $voucher_id)
                         ->get()->result();
     }
@@ -52,8 +53,8 @@ class voucher extends CI_Model {
         }
     }
 
-    public function add_field($data) {
-        if ($this->db->insert('voucher_field', $data)) {
+    public function add_company($data) {
+        if ($this->db->insert('voucher_company', $data)) {
             $id = $this->db->insert_id();
             return $id;
         } else {
@@ -74,7 +75,7 @@ class voucher extends CI_Model {
         $this->db->where('voucher_id', $voucher_id)
                 ->delete('voucher_player');
         $this->db->where('voucher_id', $voucher_id)
-                ->delete('voucher_field');
+                ->delete('voucher_company');
         $this->db->where('voucher_id', $voucher_id)
                 ->delete('voucher');
     }
@@ -104,11 +105,11 @@ class voucher extends CI_Model {
             return false;
     }
 
-    public function check_field($voucher_id, $field_id) {
+    public function check_company($voucher_id, $company_id) {
         $valid = $this->db->select('*')
-                        ->from('voucher_field')
-                        ->where('voucher_field.voucher_id', $voucher_id)
-                        ->where('voucher_field.field_id', $field_id)
+                        ->from('voucher_company')
+                        ->where('voucher_company.voucher_id', $voucher_id)
+                        ->where('voucher_company.company_id', $company_id)
                         ->get()->row();
         if ($valid)
             return true;
@@ -123,6 +124,7 @@ class voucher extends CI_Model {
                         ->join('voucher', 'voucher.voucher_id = voucher_player.voucher_id')
                         ->join('player', 'player.phone = voucher_player.phone', 'left')
                         ->where('(voucher_player.player_id = ' . $player_id . ' OR player.player_id = ' . $player_id . ")")
+                        ->where('voucher.valid', 1)
                         ->group_by('voucher.voucher_id')
                         ->get()->result();
     }

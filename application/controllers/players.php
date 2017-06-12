@@ -194,4 +194,10 @@ class players extends REST_Controller {
         }
     }
 
+    public function get_all_get() {
+        $this->user_permissions->support_permission($this->current_user);
+        $players = $this->player_service->get_all();
+        $this->response(array('status' => true, 'data' => $players, 'message' => $this->lang->line('message_sent')));
+    }
+
 }

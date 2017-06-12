@@ -65,4 +65,9 @@ class player extends CI_Model {
                         ->get()->row();
     }
 
+    public function get_all(){
+        return $this->db->select('*, CONCAT(player.name, " ", player.phone) as text, player.player_id as id', false)
+                ->from('player')
+                ->get()->result();
+    }
 }

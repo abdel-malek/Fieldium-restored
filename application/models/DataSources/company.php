@@ -10,6 +10,8 @@ class company extends CI_Model {
 
         $this->db->select(ENTITY::COMPANY . ", "
                         . $lang . "_name as name, "
+                        . $lang . "_name as text, "
+                        . "company.company_id as id, "
                         . $lang . "_description as description, "
                         . $lang . "_address as address, "
                         . " sqrt(pow(longitude- $lon,2) + pow(latitude - $lat,2)) as distance, "

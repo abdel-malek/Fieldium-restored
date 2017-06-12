@@ -34,7 +34,7 @@
         body
         {
             font-family: Arial;
-            font-size: 14px;
+            font-size: 16px;
         }
         a {
             color: blue;

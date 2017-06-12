@@ -17,8 +17,8 @@ class vouchers extends REST_Controller {
             $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('voucher') . " " . $this->lang->line('required')));
         else {
             $voucher = $this->voucher_service->check_validity(
-                    $this->get('voucher'), $this->get('field_id'), $this->current_user->player_id, $this->get('date'), $this->get('start'), $this->get('duration')
-                    );
+                    $this->get('voucher'), $this->get('field_id'), $this->current_user->player_id, $this->get('date'), $this->get('start'), $this->get('duration'), $this->get('game_type')
+            );
             $this->response(array(
                 'status' => true,
                 'data' => $voucher,
@@ -39,7 +39,7 @@ class vouchers extends REST_Controller {
     }
 
     public function create_post() {
-//        $this->user_permissions->support_permission($this->current_user);
+        $this->user_permissions->support_permission($this->current_user);
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('type', 'Type', 'required|callback_valid_voucher_type');
@@ -56,12 +56,13 @@ class vouchers extends REST_Controller {
                 'type' => $this->input->post('type'),
                 'voucher' => $this->input->post('voucher'),
                 'value' => $this->input->post('value'),
-                'creator' => $this->current_user->player_id,
+                'user_id' => $this->current_user->user_id,
                 'expiry_date' => date('Y-m-d', strtotime($this->input->post('expiry_date'))),
                 'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
                 'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
                 'description_en' => $this->input->post('description_en'),
-                'description_ar' => $this->input->post('description_ar')
+                'description_ar' => $this->input->post('description_ar'),
+                'game_type_id' => $this->input->post('game_type_id')==0?null:$this->input->post('game_type_id')
             );
             if ($this->input->post('start_date') != "" && $this->input->post('start_date') != null)
                 if (strtotime($data['expiry_date']) < $this->input->post('start_date'))
@@ -85,13 +86,13 @@ class vouchers extends REST_Controller {
                 $data['public_field'] = 1;
             else {
                 $data['public_field'] = 0;
-                $fields = $this->input->post('fields');
-                if (!is_array($fields) || count($fields) == 0)
+                $companies = $this->input->post('companies');
+                if (!is_array($companies) || count($companies) == 0)
                     $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one field"));
             }
             $voucher = $this->voucher_service
                     ->create(
-                    $data, $users, $phones, $fields
+                    $data, $users, $phones, $companies
             );
             $this->response(array(
                 'status' => true,
@@ -133,6 +134,15 @@ class vouchers extends REST_Controller {
         }
     }
 
+    public function delete_get() {
+        if (!$this->get('voucher'))
+            $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('voucher') . " " . $this->lang->line('required')));
+        else {
+            $voucher = $this->voucher_service->delete($this->get('voucher'));
+            $this->response(array('status' => true, 'data' => $voucher, 'message' => ""));
+        }
+    }
+
     public function my_vouchers_get() {
         $this->user_permissions->is_player($this->current_user);
         $vouchers = $this->voucher_service->get_my_vouchers($this->current_user->player_id);
@@ -144,6 +154,7 @@ class vouchers extends REST_Controller {
             return true;
         if (strlen($str) == 7)
             $str = "0" . $str;
+        $str = date('H:i:s', strtotime($str));
         $this->form_validation->set_message('validate_time', $str . ' is not a valid time. Ex:( 10:00:00 )');
         if (strrchr($str, ":")) {
             list($hh, $mm, $ss) = explode(':', $str);
@@ -166,32 +177,24 @@ class vouchers extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-
             $crud->set_theme('datatables')
                     ->set_table('voucher')
                     ->set_subject('voucher')
-//                    ->where('booking.deleted', 0)
-//                    ->columns('booking_id', 'field_id', 'player_id', 'state_id', 'creation_date', 'date', 'start', 'duration', 'total')
-//                    ->order_by('booking_id')
-                    ->set_relation('field_id', 'field', 'en_name', array('deleted' => 0))
-//                    ->set_relation('player_id', 'player', '{name} <br> {phone}')
-//                    ->set_relation('state_id', 'state', 'en_name')
-//                    ->edit_fields('state_id', 'date', 'start', 'duration', 'notes')
-//                    ->display_as('field_id', 'Field')
-//                    ->display_as('player_id', 'Player')
-//                    ->display_as('state_id', 'State')
-//                    ->display_as('booking_id', 'ID')
-//                    ->field_type('start', 'time')
-//                    ->callback_column('duration', array($this, '_callback_duration_render'))
-//                    ->callback_column('total', array($this, '_callback_total_render'))
-//                    ->required_fields('date', 'start', 'duration', 'state_id')
-//                    ->callback_delete(array($this, 'delete_booking'))
+                    ->order_by('voucher_id', 'desc')
+                    ->columns('voucher', 'type', 'value', 'user_id', 'players', 'companies', 'start_date', 'expiry_date', 'from_hour', 'to_hour', 'actions')
+                    ->set_relation_n_n('players', 'voucher_player', 'player', 'voucher_id', 'player_id', 'name')
+                    ->set_relation('user_id', 'user', 'name', array('deleted' => 0))
+                    ->display_as('user_id', 'Created by')
+                    ->callback_column('players', array($this, '_callback_players_render'))
+                    ->callback_column('start_date', array($this, '_callback_date_render'))
+                    ->field_type('type', 'dropdown', array(1 => 'discount', 2 => 'free hours'))
                     ->unset_export()
                     ->unset_add()
+                    ->unset_edit()
+                    ->unset_delete()
                     ->unset_read()
                     ->unset_print();
             $output = $crud->render();
-//            $this->load->model("Services/booking_service");
             $this->load->view('template.php', array(
                 'view' => 'vouchers_management',
                 'output' => $output->output,
@@ -208,9 +211,40 @@ class vouchers extends REST_Controller {
         $this->vouchers_management_post($operation);
     }
 
-    public function _callback_duration_render($value, $row) {
+    public function _callback_players_render($value, $row) {
+        if ($row->type == "discount")
+            $row->value = $row->value . " %";
+        else
+            $row->value = $row->value . " h";
+        $player_str = "";
+        if ($row->public_field == 1)
+            $row->fields = "Public";
+        if ($row->public_user == 1)
+            $player_str = "Public";
+        $voucher = $this->voucher_service->get($row->voucher);
+        $players = array();
+        foreach ($voucher->users as $value) {
+            if ($value->player_id == null)
+                array_push($players, $value->phone);
+            else
+                array_push($players, $value->player_name);
+        }
+        $player_str = implode(', ', $players);
+        $fields = array();
+        foreach ($voucher->companies as $value) {
+            array_push($fields, $value->company_name);
+        }
+        $row->companies = implode(', ', $fields);
 
-        return $value . " Mins";
+        return $player_str;
+    }
+
+    public function _callback_date_render($value, $row) {
+        $row->actions = "<button class='btn btn-success' onclick='edit_voucher(\"" . $row->voucher . "\")'><span class='glyphicon glyphicon-pencil'></span></button>"
+                . "<button class='btn btn-danger' onclick='delete_voucher(\"" . $row->voucher . "\")'>X</button>";
+        $row->from_hour = date('H:i A', strtotime($row->from_hour));
+        $row->to_hour = date('H:i A', strtotime($row->to_hour));
+        return date('Y-m-d', strtotime($value));
     }
 
 }

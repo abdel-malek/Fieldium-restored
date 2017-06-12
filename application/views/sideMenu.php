@@ -9,6 +9,7 @@
             <li><a href="<?php echo site_url() ?>/games/games_management">Games</a></li>
             <li><a href="<?php echo site_url() ?>/areas/areas_management">Areas</a></li>
             <li><a href="<?php echo site_url() ?>/players/players_management">Players</a></li>
+            <li><a href="<?php echo site_url() ?>/vouchers/vouchers_management">Vouchers</a></li>
             <li><a href="<?php echo site_url() ?>/users/users_management">Users</a></li>
 
         <?php } else if ($this->session->userdata('USER_ROLE') == ROLE::ADMIN) { ?>

@@ -218,6 +218,10 @@ class player_service extends CI_Model {
         $this->player->update($player_id, array('profile_picture' => $image_name));
     }
 
+    function get_all() {
+        return $this->player->get_all();
+    }
+
 }
 
 ?>

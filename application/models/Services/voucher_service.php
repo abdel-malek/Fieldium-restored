@@ -21,35 +21,49 @@ class voucher_service extends CI_Model {
         return $voucher;
     }
 
-    public function check_validity($voucher, $field_id = null, $player_id = null, $date = null, $start = null, $duration = 0) {
+    public function check_validity($voucher, $field_id = null, $player_id = null, $date = null, $start = null, $duration = 0, $game = null) {
         $res = $this->voucher->get_by_voucher($voucher);
 
         //Voucher is not valid
         if (!$res || $res->valid == 0) {
-            throw new Parent_Exception("It is not a valid voucher");
+            return array(
+                'valid' => 0,
+                'message' => $this->lang->line('It is not a valid voucher')
+            );
         }
 
         //The voucher is expired
         if ($res->expiry_date != null && strtotime($res->expiry_date) < strtotime(date('Y-m-d'))) {
-            //$this->voucher->update($res->voucher_id, array('valid' => 0));
-            throw new Parent_Exception("It is not a valid voucher");
+            return array(
+                'valid' => 0,
+                'message' => $this->lang->line('It is not a valid voucher')
+            );
         }
 
         //The voucher is not valid for the selected date
         if ($date != null) {
             if ($res->expiry_date != null && strtotime($res->expiry_date) < strtotime($date)) {
-                throw new Parent_Exception("It is not a valid voucher");
+                return array(
+                    'valid' => 0,
+                    'message' => $this->lang->line('It is not a valid voucher')
+                );
             }
         }
 
         //The voucher is not valid for the selected time
         if ($start != null) {
             if ($res->from_hour != null && strtotime($res->from_hour) > strtotime($start))
-                throw new Parent_Exception("It is not a valid voucher");
+                return array(
+                    'valid' => 0,
+                    'message' => $this->lang->line('It is not a valid voucher')
+                );
             $endtime = strtotime($start) + doubleval($duration) * 60;
             $end = strftime('%H:%M:%S', $endtime);
             if ($res->to_hour != null && strtotime($res->to_hour) < strtotime($end))
-                throw new Parent_Exception("It is not a valid voucher");
+                return array(
+                    'valid' => 0,
+                    'message' => $this->lang->line('It is not a valid voucher')
+                );
         }
 
         //The voucher is not available for selectd user
@@ -57,16 +71,31 @@ class voucher_service extends CI_Model {
             $this->load->model("Services/player_service");
             $this->player_service->get($player_id);
             if (!$this->voucher->check_player($res->voucher_id, $player_id))
-                throw new Parent_Exception("It is not a valid voucher");
+                return array(
+                    'valid' => 0,
+                    'message' => $this->lang->line('It is not a valid voucher')
+                );
         }
         //The voucher is not available for selectd field
         if ($field_id != null && $res->public_field != 1) {
             $this->load->model("Services/field_service");
-            $this->field_service->get($field_id);
-            if (!$this->voucher->check_field($res->voucher_id, $field_id))
-                throw new Parent_Exception("It is not a valid voucher");
+            $f = $this->field_service->get($field_id);
+            if (!$this->voucher->check_company($res->voucher_id, $f->company_id))
+                return array(
+                    'valid' => 0,
+                    'message' => $this->lang->line('It is not a valid voucher')
+                );
         }
-        return $this->get($res->voucher_id);
+
+        if ($game != null && $res->game_type_id != null && $res->game_type_id != $game)
+            return array(
+                'valid' => 0,
+                'message' => $this->lang->line('It is not a valid voucher')
+            );
+        return array(
+            'valid' => 1,
+            'message' => ""
+        );
     }
 
     function generate_activation_code() {
@@ -82,7 +111,7 @@ class voucher_service extends CI_Model {
     }
 
     public function create(
-    $data, $users, $phones, $fields
+    $data, $users, $phones, $companies
     ) {
         $voucher_id = $this->voucher->add($data);
         if ($data['public_user'] == 0) {
@@ -127,29 +156,22 @@ class voucher_service extends CI_Model {
             }
         }
         if ($data['public_field'] == 0) {
-            $this->load->model("Services/field_service");
-            foreach ($fields as $field) {
-                $res = $this->field_service->get($field);
+            $this->load->model("Services/company_service");
+            foreach ($companies as $company) {
+                $res = $this->company_service->get($company);
                 if (!$res) {
                     $this->delete($voucher_id);
-                    throw new Field_Not_Found_Exception();
+                    throw new Company_Not_Found_Exception();
                 }
-                $this->voucher->add_field(
+                $this->voucher->add_company(
                         array(
-                            'field_id' => $field,
+                            'company_id' => $company,
                             'voucher_id' => $voucher_id
                         )
                 );
             }
         }
         $voucher = $this->get($voucher_id);
-        if ($manually == false) {
-
-            $message = "You have received a new booking No." . $booking_id;
-            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
-            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
-            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
-        }
         return $voucher;
     }
 
@@ -159,8 +181,8 @@ class voucher_service extends CI_Model {
             $voucher = $this->voucher->get_by_voucher($voucher_id);
         if (!$voucher)
             throw new Parent_Exception("It is not a valid voucher");
-        $voucher->users = $this->voucher->get_voucher_users($voucher_id);
-        $voucher->fields = $this->voucher->get_voucher_fields($voucher_id);
+        $voucher->users = $this->voucher->get_voucher_users($voucher->voucher_id);
+        $voucher->companies = $this->voucher->get_voucher_companies($voucher->voucher_id);
         return $voucher;
     }
 
@@ -170,14 +192,14 @@ class voucher_service extends CI_Model {
 
     public function delete($voucher_id) {
         $voucher = $this->get($voucher_id);
-        $this->voucher->delete($voucher_id);
+        $this->voucher->delete($voucher->voucher_id);
     }
 
     public function get_my_vouchers($palyer_id) {
         $vouchers = $this->voucher->get_my_vouchers($palyer_id);
         foreach ($vouchers as $voucher) {
-            $voucher->users = $this->voucher->get_voucher_users($voucher_id);
-            $voucher->fields = $this->voucher->get_voucher_fields($voucher_id);
+            $voucher->users = $this->voucher->get_voucher_users($voucher->voucher_id);
+            $voucher->companies = $this->voucher->get_voucher_companies($voucher->voucher_id);
         }
         return $vouchers;
     }

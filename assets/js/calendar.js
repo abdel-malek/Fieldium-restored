@@ -477,12 +477,9 @@ function decline_booking() {
         }
     });
 }
-function show_error(msg) {
+function show_error(msg) {  
     alertify.defaults.glossary.title = 'Error';
-    alertify
-            .alert(msg, function () {
-                alertify.message('OK');
-            });
+    alertify.error(msg);
 }
 function confirm_decline() {
     var booking_id = $('#booking_num').attr("book_id");
