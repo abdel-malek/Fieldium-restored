@@ -59,7 +59,7 @@
                  "> 
                 <br>
                 <h1 style="text-align: left">
-                    Vouchers Management:
+                    Vouchers Management: <button class="btn btn-info" onclick="clear_voucher();$('#voucher_modal').modal('show')">New Voucher</button>
                 </h1>
                 <div style="clear: both"></div>
                 <?php echo $output; ?>

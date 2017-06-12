@@ -1,5 +1,53 @@
 function fill_voucher(voucher) {
+    var form = $('#voucher_modal');
+    $('#voucher').val(voucher.voucher);
+    $('#voucher').prop("disabled", true);
+    $('#type').val(voucher.type);
+    $('#value').val(voucher.value);
+    $('#start_date').val(voucher.start_date);
+    $('#expiry_date').val(voucher.expiry_date);
+    $('#from_hour').val(voucher.from_hour);
+    $('#to_hour').val(voucher.to_hour);
+    $('#all_users').prop("checked", voucher.public_user==0?false:true);
+    $('#all_fields').prop("checked", voucher.public_field==0?false:true);
+    $('#players').val();
+    $('#phones').tagsinput('items');
+    $('#game').val(voucher.game_type_id);
+    $('#companies').val();
+    $('#voucher_id').val(voucher.voucher_id);
+    $('#voucher_header').text("Voucher " + voucher.voucher);
+    var players = [];
+    for (var i = 0; i < voucher.users.length; i++) {
+        if (voucher.users[i].player_id != null)
+            players.push(voucher.users[i].player_id);
+        else
+            $('#phones').tagsinput('add', voucher.users[i].phone);
+    }
+    $('#players').val(players).change();
+    var companies = [];
+    for (var i = 0; i < voucher.companies.length; i++) {
+        if (voucher.companies[i].company_id != null)
+            companies.push(voucher.companies[i].company_id);
+    }
+    $('#companies').val(companies).change();
+    form.find('.create-btn').hide();
+}
 
+function clear_voucher() {
+    var form = $('#voucher_modal');
+    form.find('input').val("");
+    $('#voucher').prop("disabled", false);
+    form.find('select option').prop("selected", false);
+    form.find('[type=checkbox]').prop("checked", false);
+    $("#players").select2({
+        placeholder: "Select player"
+    });
+    $("#companies").select2({
+        placeholder: "Select company"
+    });
+    $('#phones').tagsinput('removeAll');
+    $('#voucher_header').text("Voucher");
+    form.find('.create-btn').show();
 }
 
 function edit_voucher(voucher) {
@@ -10,6 +58,8 @@ function edit_voucher(voucher) {
         success: function (response) {
             if (response.status == true) {
                 var data = response.data;
+                clear_voucher();
+                fill_voucher(data);
                 $('#voucher_modal').modal("show");
             } else
                 show_error("Error in loading bookings");
@@ -78,8 +128,15 @@ function save_voucher() {
     HoldOn.open({
         theme: "sk-bounce"
     });
+    var url = "";
+    if ($('#voucher_id').val() == "")
+        url = site_url + '/vouchers/create/format/json';
+    else {
+        url = site_url + '/vouchers/update/format/json';
+        data['voucher_id'] = $('#voucher_id').val();
+    }
     $.ajax({
-        url: site_url + '/vouchers/create/format/json',
+        url: url,
         type: 'POST',
         data: data,
         async: false,

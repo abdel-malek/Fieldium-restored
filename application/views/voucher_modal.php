@@ -3,11 +3,12 @@
     <div class="modal-dialog" style="width: 90%">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 style="display: inline;">New Booking</h3>
+                <h3 id="voucher_header" style="display: inline;">Voucher</h3>
                 <button type="button" class="close" data-dismiss="modal" >&times</button>
             </div>
             <input type="hidden" name="booking_id" />
             <div class="modal-body" >
+                <input type="hidden" id="voucher_id" />
                 <div class="row margin-top-5px">
                     <div class="col-md-2">
                         <b>Voucher Code: </b>
@@ -80,6 +81,7 @@
                         <b>Game: </b>
                     </div>
                     <div class="col-md-2" style="padding: 0px">
+                        
                         <select id="games" class="form-control">
    
                         </select>
@@ -91,6 +93,9 @@
                         <label>Companies</label>
                     </div>
                     <div class="col-md-10">
+                        <label for="all_fields">
+                            <input id="all_fields" type="checkbox"/> All fields 
+                        </label><br>
                         <select id="companies" class="js-example-basic-multiple js-states form-control" multiple="multiple">
 
                         </select>

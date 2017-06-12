@@ -53,6 +53,72 @@ class vouchers extends REST_Controller {
             throw new Validation_Exception(validation_errors());
         } else {
             $data = array(
+            'type' => $this->input->post('type'),
+            'voucher' => $this->input->post('voucher'),
+            'value' => $this->input->post('value'),
+            'user_id' => $this->current_user->user_id,
+            'expiry_date' =>  ($this->input->post('expiry_date') != "")?date('Y-m-d', strtotime($this->input->post('expiry_date'))):null,
+            'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
+            'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
+            'description_en' => $this->input->post('description_en'),
+            'description_ar' => $this->input->post('description_ar'),
+            'game_type_id' => $this->input->post('game_type_id') == 0 ? null : $this->input->post('game_type_id')
+            );
+            if ($this->input->post('start_date') != "" && $this->input->post('start_date') != null)
+                if (strtotime($data['expiry_date']) < $this->input->post('start_date'))
+                    $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('voucher') . " " . $this->lang->line('required')));
+                else
+                    $data['start_date'] = $this->input->post('start_date');
+            $users = array();
+            if ($this->input->post('all_users') == true)
+                $data['public_user'] = 1;
+            else {
+                $data['public_user'] = 0;
+                $users = $this->input->post('users');
+                if (!is_array($users) || count($users) == 0)
+                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one user"));
+            }
+            $phones = array();
+            if ($this->input->post('phones'))
+                $phones = $this->input->post('phones');
+            $companies = array();
+            if ($this->input->post('all_fields') == true)
+                $data['public_field'] = 1;
+            else {
+                $data['public_field'] = 0;
+                $companies = $this->input->post('companies');
+                if (!is_array($companies) || count($companies) == 0)
+                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one field"));
+            }
+            $voucher = $this->voucher_service
+                    ->create(
+                    $data, $users, $phones, $companies
+            );
+            $this->response(array(
+                'status' => true,
+                'data' => $voucher,
+                'message' => ''
+                    )
+            );
+        }
+    }
+
+    public function update_post() {
+        $this->user_permissions->support_permission($this->current_user);
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('voucher_id', 'Voucher', 'required');
+        $this->form_validation->set_rules('type', 'Type', 'required|callback_valid_voucher_type');
+        $this->form_validation->set_rules('voucher', 'voucher code', 'required|is_unique[voucher.voucher]');
+        $this->form_validation->set_rules('value', 'value', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('start_date', 'start_date', 'callback_check_date_format');
+        $this->form_validation->set_rules('expiry_date', 'expiry_date', 'callback_check_date_format');
+        $this->form_validation->set_rules('from_hour', 'from_hour', 'callback_validate_time');
+        $this->form_validation->set_rules('to_hour', 'to_hour', 'callback_validate_time');
+        if (!$this->form_validation->run()) {
+            throw new Validation_Exception(validation_errors());
+        } else {
+            $data = array(
                 'type' => $this->input->post('type'),
                 'voucher' => $this->input->post('voucher'),
                 'value' => $this->input->post('value'),
@@ -62,7 +128,7 @@ class vouchers extends REST_Controller {
                 'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
                 'description_en' => $this->input->post('description_en'),
                 'description_ar' => $this->input->post('description_ar'),
-                'game_type_id' => $this->input->post('game_type_id')==0?null:$this->input->post('game_type_id')
+                'game_type_id' => $this->input->post('game_type_id') == 0 ? null : $this->input->post('game_type_id')
             );
             if ($this->input->post('start_date') != "" && $this->input->post('start_date') != null)
                 if (strtotime($data['expiry_date']) < $this->input->post('start_date'))
@@ -81,7 +147,7 @@ class vouchers extends REST_Controller {
             $phones = array();
             if ($this->input->post('phones'))
                 $phones = $this->input->post('phones');
-            $fields = array();
+            $companies = array();
             if ($this->input->post('all_fields') == 1)
                 $data['public_field'] = 1;
             else {
@@ -240,8 +306,8 @@ class vouchers extends REST_Controller {
     }
 
     public function _callback_date_render($value, $row) {
-        $row->actions = "<button class='btn btn-success' onclick='edit_voucher(\"" . $row->voucher . "\")'><span class='glyphicon glyphicon-pencil'></span></button>"
-                . "<button class='btn btn-danger' onclick='delete_voucher(\"" . $row->voucher . "\")'>X</button>";
+        $row->actions = "<button class='btn btn-success' onclick='edit_voucher(\"" . $row->voucher . "\")'><span class='glyphicon glyphicon-pencil'></span></button>";
+        $row->actions .= "<button class='btn btn-danger' onclick='delete_voucher(\"" . $row->voucher . "\")'>X</button>";
         $row->from_hour = date('H:i A', strtotime($row->from_hour));
         $row->to_hour = date('H:i A', strtotime($row->to_hour));
         return date('Y-m-d', strtotime($value));
