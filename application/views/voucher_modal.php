@@ -58,6 +58,19 @@
                 </div>
                 <hr>
                 <div class="row margin-top-5px">
+                    <div class="col-md-2">
+                        <b>Country: </b>
+                    </div>
+                    <div class="col-md-2" style="padding: 0px">
+
+                        <select id="games" class="form-control">
+                            <option value="1">UAE</option>
+                            <option value="2">Syria</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="row margin-top-5px">
 
                     <div class="col-md-2">
                         <b>Players: </b>
@@ -81,9 +94,9 @@
                         <b>Game: </b>
                     </div>
                     <div class="col-md-2" style="padding: 0px">
-                        
+
                         <select id="games" class="form-control">
-   
+
                         </select>
                     </div>
                 </div>

@@ -117,8 +117,8 @@ function save_voucher() {
         'expiry_date': $('#expiry_date').val(),
         'from_hour': $('#from_hour').val(),
         'to_hour': $('#to_hour').val(),
-        'all_users': $('#all_users').prop("checked"),
-        'all_fields': $('#all_fields').prop("checked"),
+        'all_users': $('#all_users').prop("checked")==true?1:0,
+        'all_fields': $('#all_fields').prop("checked")==true?1:0,
         'users': $('#players').val(),
         'phones': $('#phones').tagsinput('items'),
         'game_type_id': $('#game').val(),
@@ -143,7 +143,7 @@ function save_voucher() {
         success: function (response) {
             if (response.status == true) {
                 HoldOn.close();
-                location.reload();
+//                location.reload();
                 console.log(date);
             } else {
                 HoldOn.close();

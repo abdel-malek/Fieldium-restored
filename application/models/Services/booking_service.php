@@ -17,7 +17,7 @@ class booking_service extends CI_Model {
     ) {
         if ($voucher) {
             $this->load->model("Services/voucher_service");
-            $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
+//            $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
         }
         $field = $this->field->get($field_id);
         if (!$field)
@@ -92,13 +92,13 @@ class booking_service extends CI_Model {
                 $this->voucher_service->update($vou->voucher_id, array('valid' => 0));
         }
         $booking = $this->get($booking_id, $lang);
-        if ($manually == false) {
-            $this->load->model('Services/notification_service');
-            $message = "You have received a new booking No." . $booking_id;
-            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
-            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
-            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
-        }
+//        if ($manually == false) {
+//            $this->load->model('Services/notification_service');
+//            $message = "You have received a new booking No." . $booking_id;
+//            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+//            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
+//            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
+//        }
         return $booking;
     }
 

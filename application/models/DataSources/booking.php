@@ -8,7 +8,7 @@ class booking extends CI_Model {
 
     public function get($booking_id, $lang = "en") {
         return $this->db->select(
-                                "booking.*, "
+                                "booking.*, voucher.value as voucher_value, voucher.type as voucher_type,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, player.name as player_name,"
@@ -18,6 +18,7 @@ class booking extends CI_Model {
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('company', 'company.company_id = field.company_id')
+                        ->join('voucher', 'voucher.voucher = booking.voucher', 'left')
                         ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
                         ->join('player', 'player.player_id = booking.player_id', 'left')
                         ->where('booking_id', $booking_id)
