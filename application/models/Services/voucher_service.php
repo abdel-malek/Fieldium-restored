@@ -24,7 +24,7 @@ class voucher_service extends CI_Model {
     public function check_validity($voucher, $field_id = null, $player_id = null, $date = null, $start = null, $duration = 0, $game = null) {
         $res = $this->voucher->get_by_voucher($voucher);
 
-        //Voucher is not valid
+//Voucher is not valid
         if (!$res || $res->valid == 0) {
             return array(
                 'valid' => 0,
@@ -32,7 +32,7 @@ class voucher_service extends CI_Model {
             );
         }
 
-        //The voucher is expired
+//The voucher is expired
         if ($res->expiry_date != null && strtotime($res->expiry_date) < strtotime(date('Y-m-d'))) {
             return array(
                 'valid' => 0,
@@ -40,7 +40,7 @@ class voucher_service extends CI_Model {
             );
         }
 
-        //The voucher is not valid for the selected date
+//The voucher is not valid for the selected date
         if ($date != null) {
             if ($res->expiry_date != null && strtotime($res->expiry_date) < strtotime($date)) {
                 return array(
@@ -50,7 +50,7 @@ class voucher_service extends CI_Model {
             }
         }
 
-        //The voucher is not valid for the selected time
+//The voucher is not valid for the selected time
         if ($start != null) {
             if ($res->from_hour != null && strtotime($res->from_hour) > strtotime($start))
                 return array(
@@ -66,7 +66,7 @@ class voucher_service extends CI_Model {
                 );
         }
 
-        //The voucher is not available for selectd user
+//The voucher is not available for selectd user
         if ($player_id != null && $res->public_user != 1) {
             $this->load->model("Services/player_service");
             $this->player_service->get($player_id);
@@ -76,7 +76,7 @@ class voucher_service extends CI_Model {
                     'message' => $this->lang->line('It is not a valid voucher')
                 );
         }
-        //The voucher is not available for selectd field
+//The voucher is not available for selectd field
         if ($field_id != null && $res->public_field != 1) {
             $this->load->model("Services/field_service");
             $f = $this->field_service->get($field_id);
@@ -87,11 +87,16 @@ class voucher_service extends CI_Model {
                 );
         }
 
-        if ($game != null && $res->game_type_id != null && $res->game_type_id != $game)
-            return array(
-                'valid' => 0,
-                'message' => $this->lang->line('It is not a valid voucher')
-            );
+//The voucher is not available for selectd game
+        if ($game != null && $res->all_games != 1) {
+            $this->load->model("Services/game_service");
+            $this->game_service->get($game);
+            if (!$this->voucher->check_game($res->voucher_id, $game))
+                return array(
+                    'valid' => 0,
+                    'message' => $this->lang->line('It is not a valid voucher')
+                );
+        }
         $res->message = $this->lang->line('valid_voucher');
         return $res;
     }
@@ -109,18 +114,17 @@ class voucher_service extends CI_Model {
     }
 
     public function create(
-    $data, $users, $phones, $companies
+    $data, $users, $phones, $companies, $games
     ) {
         $voucher_id = $this->voucher->add($data);
         if ($data['public_user'] == 0) {
             $this->load->model("Services/player_service");
             $this->load->model('Services/notification_service');
             foreach ($users as $user) {
-
-                $res = $this->player_service->get($user);
-                if (!$res) {
+                try {
+                    $res = $this->player_service->get($user);
+                } catch (Player_Not_Found_Exception $e) {
                     $this->delete($voucher_id);
-                    throw new Player_Not_Found_Exception($lang);
                 }
                 $this->voucher->add_player(
                         array(
@@ -156,14 +160,26 @@ class voucher_service extends CI_Model {
         if ($data['public_field'] == 0) {
             $this->load->model("Services/company_service");
             foreach ($companies as $company) {
-                $res = $this->company_service->get($company);
-                if (!$res) {
+                try {
+                    $res = $this->company_service->get($company);
+                } catch (Company_Not_Found_Exception $e) {
                     $this->delete($voucher_id);
-                    throw new Company_Not_Found_Exception();
                 }
                 $this->voucher->add_company(
                         array(
                             'company_id' => $company,
+                            'voucher_id' => $voucher_id
+                        )
+                );
+            }
+        }
+        if ($data['all_games'] == 0) {
+            $this->load->model("Services/game_service");
+            foreach ($games as $game) {
+                $res = $this->game_service->get($game);
+                $this->voucher->add_game(
+                        array(
+                            'game_type_id' => $game,
                             'voucher_id' => $voucher_id
                         )
                 );
@@ -181,6 +197,7 @@ class voucher_service extends CI_Model {
             throw new Parent_Exception("It is not a valid voucher");
         $voucher->users = $this->voucher->get_voucher_users($voucher->voucher_id);
         $voucher->companies = $this->voucher->get_voucher_companies($voucher->voucher_id);
+        $voucher->games = $this->voucher->get_voucher_games($voucher->voucher_id);
         return $voucher;
     }
 
@@ -193,11 +210,12 @@ class voucher_service extends CI_Model {
         $this->voucher->delete($voucher->voucher_id);
     }
 
-    public function get_my_vouchers($palyer_id) {
-        $vouchers = $this->voucher->get_my_vouchers($palyer_id);
+    public function get_my_vouchers($palyer_id, $field_id = null, $date = null, $start = null, $duration = 0, $game = null) {
+        $vouchers = $this->voucher->get_my_vouchers($palyer_id, $field_id, $date, $start, $duration, $game);
         foreach ($vouchers as $voucher) {
             $voucher->users = $this->voucher->get_voucher_users($voucher->voucher_id);
             $voucher->companies = $this->voucher->get_voucher_companies($voucher->voucher_id);
+            $voucher->games = $this->voucher->get_voucher_games($voucher->voucher_id);
         }
         return $vouchers;
     }

@@ -14,6 +14,7 @@ $lang['company_id'] = "company id";
 $lang['user_id'] = "user id";
 $lang['long_lat_req'] = "The longitude and latitude are required.";
 $lang['field_id'] = "field id";
+$lang['offer_id'] = "offer id";
 $lang['deleted'] = "The data has been deleted successfully";
 $lang['declined'] = "The booking has been declined";
 $lang['approved'] = "The booking has been approved";

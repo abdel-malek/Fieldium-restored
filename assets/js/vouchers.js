@@ -8,13 +8,17 @@ function fill_voucher(voucher) {
     $('#expiry_date').val(voucher.expiry_date);
     $('#from_hour').val(voucher.from_hour);
     $('#to_hour').val(voucher.to_hour);
-    $('#all_users').prop("checked", voucher.public_user==0?false:true);
-    $('#all_fields').prop("checked", voucher.public_field==0?false:true);
-    $('#players').val();
+    $('#all_users').prop("checked", voucher.public_user == 0 ? false : true);
+    $('#all_fields').prop("checked", voucher.public_field == 0 ? false : true);
+    $('#all_games').prop("checked", voucher.all_games == 0 ? false : true);
+    $('#players').val("");
+    $('#games').val("");
     $('#phones').tagsinput('items');
     $('#game').val(voucher.game_type_id);
     $('#companies').val();
     $('#voucher_id').val(voucher.voucher_id);
+    $('#description_en').val(voucher.description_en);
+    $('#description_ar').val(voucher.description_ar);
     $('#voucher_header').text("Voucher " + voucher.voucher);
     var players = [];
     for (var i = 0; i < voucher.users.length; i++) {
@@ -30,17 +34,29 @@ function fill_voucher(voucher) {
             companies.push(voucher.companies[i].company_id);
     }
     $('#companies').val(companies).change();
+    var games = [];
+    for (var i = 0; i < voucher.games.length; i++) {
+        if (voucher.games[i].game_type_id != null)
+            games.push(voucher.games[i].game_type_id);
+    }
+    $('#games').val(games).change();
     form.find('.create-btn').hide();
 }
 
 function clear_voucher() {
     var form = $('#voucher_modal');
     form.find('input').val("");
+    form.find('textarea').val("");
+    form.find('textarea').html("");
     $('#voucher').prop("disabled", false);
     form.find('select option').prop("selected", false);
     form.find('[type=checkbox]').prop("checked", false);
     $("#players").select2({
         placeholder: "Select player"
+    });
+    $("#games").select2({
+        placeholder: "Select game",
+        maximumSelectionLength: 1
     });
     $("#companies").select2({
         placeholder: "Select company"
@@ -112,19 +128,21 @@ function save_voucher() {
     var data = {
         'voucher': $('#voucher').val(),
         'type': $('#type').val(),
-        'value': $('#value').val(),
+        'value': $('#value').val() * 60,
+        'description_en': $('#description_en').val(),
+        'description_ar': $('#description_ar').val(),
         'start_date': $('#start_date').val(),
         'expiry_date': $('#expiry_date').val(),
         'from_hour': $('#from_hour').val(),
         'to_hour': $('#to_hour').val(),
-        'all_users': $('#all_users').prop("checked")==true?1:0,
-        'all_fields': $('#all_fields').prop("checked")==true?1:0,
+        'all_users': $('#all_users').prop("checked") == true ? 1 : 0,
+        'all_fields': $('#all_fields').prop("checked") == true ? 1 : 0,
+        'all_games': $('#all_games').prop("checked") == true ? 1 : 0,
         'users': $('#players').val(),
         'phones': $('#phones').tagsinput('items'),
-        'game_type_id': $('#game').val(),
+        'games': $('#games').val(),
         'companies': $('#companies').val()
     };
-    console.log(data);
     HoldOn.open({
         theme: "sk-bounce"
     });
@@ -143,8 +161,7 @@ function save_voucher() {
         success: function (response) {
             if (response.status == true) {
                 HoldOn.close();
-//                location.reload();
-                console.log(date);
+                location.reload();
             } else {
                 HoldOn.close();
                 show_error(response.message);
@@ -152,14 +169,17 @@ function save_voucher() {
         }
     });
 }
+
 $.ajax({
     url: site_url + '/games/get_all/format/json',
     type: 'GET',
     success: function (response) {
         if (response.status == true) {
-            $('#games').append('<option value="0" selected>All</option>');
-            for (var i = 0; i < response.data.length; i++)
-                $('#games').append('<option value="' + response.data[i].game_type_id + '">' + response.data[i].name + '</option>');
+            $("#games").select2({
+                placeholder: "Select game",
+                maximumSelectionLength: 1,
+                data: response.data
+            });
         } else
             show_error(response.message);
     }
@@ -196,3 +216,4 @@ $.ajax({
             show_error(response.message);
     }
 });
+

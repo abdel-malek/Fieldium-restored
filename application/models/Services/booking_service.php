@@ -17,7 +17,7 @@ class booking_service extends CI_Model {
     ) {
         if ($voucher) {
             $this->load->model("Services/voucher_service");
-//            $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
+            $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
         }
         $field = $this->field->get($field_id);
         if (!$field)
@@ -92,13 +92,51 @@ class booking_service extends CI_Model {
                 $this->voucher_service->update($vou->voucher_id, array('valid' => 0));
         }
         $booking = $this->get($booking_id, $lang);
-//        if ($manually == false) {
-//            $this->load->model('Services/notification_service');
-//            $message = "You have received a new booking No." . $booking_id;
-//            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
-//            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
-//            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
-//        }
+        if ($manually == false) {
+            $this->load->model('Services/notification_service');
+            $message = "You have received a new booking No." . $booking_id;
+            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
+            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
+        }
+        $this->load->model("Services/offer_service");
+        $offers = $this->offer_service->check_for_offers($player_id);
+        $this->load->model("Services/voucher_service");
+        foreach ($offers as $value) {
+            $offer = $this->offer_service->get($value->offer_id);
+            for ($i = 0; $i < $value->vouchers; $i++) {
+                $info = array(
+                    'type' => $offer->voucher_type,
+                    'voucher' => $this->voucher_service->generate_voucher(),
+                    'value' => $offer->voucher_value,
+                    'user_id' => $user_id,
+                    'start_date' => date('Y-m-d', strtotime("+" . $offer->voucher_start_after . " day")),
+                    'expiry_date' => date('Y-m-d', strtotime("+" . ($offer->voucher_start_after + $offer->valid_days) . " day")),
+                    'from_hour' => $offer->voucher_from_hour,
+                    'to_hour' => $offer->voucher_to_hour,
+                    'description_en' => $offer->description_en,
+                    'description_ar' => $offer->description_ar,
+                    'public_user' => 0,
+                    'public_field' => $offer->public_field,
+                    'offer_id' => $offer->offer_id,
+                    'all_games' => $offer->all_games
+                );
+                $companies = array();
+                if ($offer->public_field == 0) {
+                    foreach ($offer->companies as $company) {
+                        array_push($companies, $company->company_id);
+                    }
+                }
+                $games = array();
+                if ($offer->all_games == 0) {
+                    foreach ($offer->games as $game) {
+                        array_push($games, $game->game_type_id);
+                    }
+                }
+                $this->voucher_service->create($info, array($player_id), array(), $companies, $games);
+                $this->offer_service->generate_voucher($offer, $player_id, $booking_id);
+            }
+        }
         return $booking;
     }
 

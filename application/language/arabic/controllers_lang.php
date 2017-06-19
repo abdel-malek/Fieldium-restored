@@ -14,6 +14,7 @@ $lang['company_id'] = "رقم الشركة";
 $lang['user_id'] = "رقم المستخدم";
 $lang['long_lat_req'] = "الطول والعرض على الخريطة مطلوبان";
 $lang['field_id'] = "رقم الملعب";
+$lang['offer_id'] = "رقم العرض";
 $lang['deleted'] = "تم الحذف بنجاح";
 $lang['declined'] = "تم رفض الحجز";
 $lang['approved'] = "تم قبول الحجز";

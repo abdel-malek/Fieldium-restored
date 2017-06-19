@@ -39,7 +39,7 @@ class vouchers extends REST_Controller {
     }
 
     public function create_post() {
-        $this->user_permissions->support_permission($this->current_user);
+//        $this->user_permissions->support_permission($this->current_user);
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('type', 'Type', 'required|callback_valid_voucher_type');
@@ -53,16 +53,15 @@ class vouchers extends REST_Controller {
             throw new Validation_Exception(validation_errors());
         } else {
             $data = array(
-            'type' => $this->input->post('type'),
-            'voucher' => $this->input->post('voucher'),
-            'value' => $this->input->post('value'),
-            'user_id' => $this->current_user->user_id,
-            'expiry_date' =>  ($this->input->post('expiry_date') != "")?date('Y-m-d', strtotime($this->input->post('expiry_date'))):null,
-            'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
-            'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
-            'description_en' => $this->input->post('description_en'),
-            'description_ar' => $this->input->post('description_ar'),
-            'game_type_id' => $this->input->post('game_type_id') == 0 ? null : $this->input->post('game_type_id')
+                'type' => $this->input->post('type'),
+                'voucher' => $this->input->post('voucher'),
+                'value' => $this->input->post('value'),
+                'user_id' => $this->current_user->player_id,
+                'expiry_date' => ($this->input->post('expiry_date') != "") ? date('Y-m-d', strtotime($this->input->post('expiry_date'))) : null,
+                'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
+                'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
+                'description_en' => $this->input->post('description_en'),
+                'description_ar' => $this->input->post('description_ar')
             );
             if ($this->input->post('start_date') != "" && $this->input->post('start_date') != null)
                 if (strtotime($data['expiry_date']) < $this->input->post('start_date'))
@@ -90,9 +89,18 @@ class vouchers extends REST_Controller {
                 if (!is_array($companies) || count($companies) == 0)
                     $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one field"));
             }
+            $games = array();
+            if ($this->input->post('all_games') == true)
+                $data['all_games'] = 1;
+            else {
+                $data['all_games'] = 0;
+                $games = $this->input->post('games');
+                if (!is_array($games) || count($games) == 0)
+                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one game"));
+            }
             $voucher = $this->voucher_service
                     ->create(
-                    $data, $users, $phones, $companies
+                    $data, $users, $phones, $companies, $games
             );
             $this->response(array(
                 'status' => true,
@@ -211,7 +219,7 @@ class vouchers extends REST_Controller {
 
     public function my_vouchers_get() {
         $this->user_permissions->is_player($this->current_user);
-        $vouchers = $this->voucher_service->get_my_vouchers($this->current_user->player_id);
+        $vouchers = $this->voucher_service->get_my_vouchers($this->current_user->player_id, $this->get('field_id'), $this->get('date'), $this->get('start'), $this->get('duration'), $this->get('game_type'));
         $this->response(array('status' => true, 'data' => $vouchers, 'message' => ""));
     }
 
@@ -281,7 +289,7 @@ class vouchers extends REST_Controller {
         if ($row->type == "discount")
             $row->value = $row->value . " %";
         else
-            $row->value = $row->value . " h";
+            $row->value = round($row->value/60) . " h";
         $player_str = "";
         if ($row->public_field == 1)
             $row->fields = "Public";

@@ -32,7 +32,7 @@ class user_permissions extends CI_Model {
     }
 
     function support_permission($user) {
-        if ($user && $user->role_id == ROLE::SUPPORT)
+        if ($user && isset($user->user_id) && $user->role_id == ROLE::SUPPORT)
             return true;
         else
             throw new Permission_Denied_Exception();

@@ -7,7 +7,7 @@ class game extends CI_Model {
     }
 
     public function get_all($lang="en") {
-        return $this->db->select(ENTITY::GAME_TYPE.", ".$lang."_name as name")
+        return $this->db->select(ENTITY::GAME_TYPE.", ".$lang."_name as name, ".$lang."_name as text, game_type_id as id")
                         ->from('game_type')
                         ->get()->result();
     }
