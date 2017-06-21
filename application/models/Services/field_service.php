@@ -235,7 +235,7 @@ class field_service extends CI_Model {
         return $result;
     }
 
-    public function get_by_company($company_id, $lon, $lat, $lang = "en") {
+    public function get_by_company($company_id, $lon = 0.0, $lat = 0.0, $lang = "en") {
         $fields = $this->field->get_by_company($company_id, $lon, $lat, $lang);
         $result = array();
         foreach ($fields as $field) {
@@ -581,6 +581,24 @@ class field_service extends CI_Model {
         return $result;
     }
 
+    public function get_children($field_id, $root = null) {
+        return $this->field->get_children($field_id, $root);
+    }
+
+    public function get_parents($field_id, $rot = null) {
+        return $this->field->get_parents($field_id, $root);
+    }
+
+    public function add_child($parent, $child){
+       
+        try{
+            $this->get($parent);
+            $this->get($child);
+            $this->field->add_child($parent, $child);
+        } catch (Field_Not_Found_Exception $ex) {
+
+        }
+    }
 }
 
 ?>

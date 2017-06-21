@@ -17,6 +17,8 @@ class offers extends REST_Controller {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('title_en', 'English title', 'required');
         $this->form_validation->set_rules('title_ar', 'Arabic title', 'required');
+        $this->form_validation->set_rules('description_en', 'English Description', 'required');
+        $this->form_validation->set_rules('description_ar', 'Arabic Description', 'required');
         $this->form_validation->set_rules('start_date', 'start_date', 'callback_check_date_format');
         $this->form_validation->set_rules('expiry_date', 'expiry_date', 'callback_check_date_format');
         $this->form_validation->set_rules('set_of_minutes', 'Minutes set', 'required|is_natural_no_zero');

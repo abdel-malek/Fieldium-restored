@@ -11,10 +11,10 @@ class NotificationHelper {
         
     }
 
-    public function send_notification_to_device($registatoin_ids, $message, $data, $os) {
+    public function send_notification_to_device($registatoin_ids, $message, $data, $os, $type =1) {
 
         $message_object = array(
-            "ntf_type" => 1,
+            "ntf_type" => $type,
             "ntf_text" => array("en" => $message),
             "ntf_body" => $data);
 

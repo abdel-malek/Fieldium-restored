@@ -11,6 +11,7 @@ function fill_voucher(voucher) {
     $('#all_users').prop("checked", voucher.public_user == 0 ? false : true);
     $('#all_fields').prop("checked", voucher.public_field == 0 ? false : true);
     $('#all_games').prop("checked", voucher.all_games == 0 ? false : true);
+    $('#valid_once').prop("checked", voucher.one_time == 0 ? false : true);
     $('#players').val("");
     $('#games').val("");
     $('#phones').tagsinput('items');
@@ -138,6 +139,7 @@ function save_voucher() {
         'all_users': $('#all_users').prop("checked") == true ? 1 : 0,
         'all_fields': $('#all_fields').prop("checked") == true ? 1 : 0,
         'all_games': $('#all_games').prop("checked") == true ? 1 : 0,
+        'one_time': $('#valid_once').prop("checked") == true ? 1 : 0,
         'users': $('#players').val(),
         'phones': $('#phones').tagsinput('items'),
         'games': $('#games').val(),

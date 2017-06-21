@@ -141,7 +141,7 @@ class voucher_service extends CI_Model {
                     $message["en"] = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
                     $message["ar"] = "لقد ربحت قسيمة بقيمة " . $data['value'] . "ساعة مجانية.\n رمز القسيمة: " . $data['voucher'];
                 }
-                $this->notification_service->send_notification_4customer($user, $message, array(), "new_voucher");
+                $this->notification_service->send_notification_4customer($user, $message, array(), "new_voucher", 2);
             }
             foreach ($phones as $phone) {
                 $this->voucher->add_player(

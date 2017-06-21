@@ -26,27 +26,11 @@ class booking_service extends CI_Model {
         $fend = strftime('%H:%M:%S', $fendtime);
         if ($fend == "00:00:00" && $field->close_time == "23:59:00")
             $duration--;
-        $bookings = $this->booking->field_bookings_by_timing($field_id, $date, $start, $duration);
         $endtime = strtotime($start) + doubleval($duration) * 60;
         $end = strftime('%H:%M:%S', $endtime);
-        $accepted = true;
-        if ($field->close_time < $field->open_time) {
 
-            $accepted = !(
-                    ($start >= $field->close_time && $start < $field->open_time) ||
-                    ($end > $field->close_time && $end <= $field->open_time)
-                    )
-            ;
-        } else if ($field->close_time > $field->open_time) {
-            $accepted = ($start >= $field->open_time && $start < $field->close_time &&
-                    $end > $field->open_time && $end <= $field->close_time)
-            ;
-        }
+        $this->field_validity($field, $date, $start, $duration, $end);
 
-        if ($bookings || !$accepted
-        ) {
-            throw new Field_Not_Available_Exception();
-        }
         if ($fend == "00:00:00" && $field->close_time == "23:59:00")
             $duration++;
         $subtotal = ($duration * ($field->hour_rate / 60));
@@ -92,13 +76,13 @@ class booking_service extends CI_Model {
                 $this->voucher_service->update($vou->voucher_id, array('valid' => 0));
         }
         $booking = $this->get($booking_id, $lang);
-        if ($manually == false) {
-            $this->load->model('Services/notification_service');
-            $message = "You have received a new booking No." . $booking_id;
-            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
-            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
-            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
-        }
+//        if ($manually == false) {
+//            $this->load->model('Services/notification_service');
+//            $message = "You have received a new booking No." . $booking_id;
+//            $this->notification_service->send_notification_admin($field->company_id, $message, array("booking" => $booking), "booking_created_message");
+//            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
+//            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
+//        }
         $this->load->model("Services/offer_service");
         $offers = $this->offer_service->check_for_offers($player_id);
         $this->load->model("Services/voucher_service");
@@ -138,6 +122,43 @@ class booking_service extends CI_Model {
             }
         }
         return $booking;
+    }
+
+    private function field_validity($field, $date, $start, $duration, $end, $root = null) {
+        //check validity start
+        $this->check_validity($field, $date, $start, $duration, $end);
+        $parents = $this->field->get_parents($field->field_id, $root);
+        foreach ($parents as $parent) {
+            $this->field_validity($parent, $date, $start, $duration, $end, $field->field_id);
+        }
+        $children = $this->field->get_children($field->field_id, $root);
+        foreach ($children as $child) {
+            $this->field_validity($child, $date, $start, $duration, $end, $field->field_id);
+        }
+        //check validity end
+    }
+
+    private function check_validity($field, $date, $start, $duration, $end) {
+        $bookings = $this->booking->field_bookings_by_timing($field->field_id, $date, $start, $duration);
+
+        $accepted = true;
+        if ($field->close_time < $field->open_time) {
+
+            $accepted = !(
+                    ($start >= $field->close_time && $start < $field->open_time) ||
+                    ($end > $field->close_time && $end <= $field->open_time)
+                    )
+            ;
+        } else if ($field->close_time > $field->open_time) {
+            $accepted = ($start >= $field->open_time && $start < $field->close_time &&
+                    $end > $field->open_time && $end <= $field->close_time)
+            ;
+        }
+
+        if ($bookings || !$accepted
+        ) {
+            throw new Field_Not_Available_Exception();
+        }
     }
 
     public function update(

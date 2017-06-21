@@ -39,7 +39,7 @@ class vouchers extends REST_Controller {
     }
 
     public function create_post() {
-//        $this->user_permissions->support_permission($this->current_user);
+        $this->user_permissions->support_permission($this->current_user);
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('type', 'Type', 'required|callback_valid_voucher_type');
@@ -56,7 +56,8 @@ class vouchers extends REST_Controller {
                 'type' => $this->input->post('type'),
                 'voucher' => $this->input->post('voucher'),
                 'value' => $this->input->post('value'),
-                'user_id' => $this->current_user->player_id,
+                'user_id' => $this->current_user->user_id,
+                'one_time' => $this->input->post('valid_once') == true ? 1 : 0,
                 'expiry_date' => ($this->input->post('expiry_date') != "") ? date('Y-m-d', strtotime($this->input->post('expiry_date'))) : null,
                 'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
                 'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
@@ -116,6 +117,8 @@ class vouchers extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('voucher_id', 'Voucher', 'required');
+        $this->form_validation->set_rules('description_en', 'English Description', 'required');
+        $this->form_validation->set_rules('description_ar', 'Arabic Description', 'required');
         $this->form_validation->set_rules('type', 'Type', 'required|callback_valid_voucher_type');
         $this->form_validation->set_rules('voucher', 'voucher code', 'required|is_unique[voucher.voucher]');
         $this->form_validation->set_rules('value', 'value', 'required|is_natural_no_zero');
@@ -131,6 +134,7 @@ class vouchers extends REST_Controller {
                 'voucher' => $this->input->post('voucher'),
                 'value' => $this->input->post('value'),
                 'user_id' => $this->current_user->user_id,
+                'one_time' => $this->input->post('valid_once') == true ? 1 : 0,
                 'expiry_date' => date('Y-m-d', strtotime($this->input->post('expiry_date'))),
                 'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
                 'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
@@ -289,7 +293,7 @@ class vouchers extends REST_Controller {
         if ($row->type == "discount")
             $row->value = $row->value . " %";
         else
-            $row->value = round($row->value/60) . " h";
+            $row->value = round($row->value / 60) . " h";
         $player_str = "";
         if ($row->public_field == 1)
             $row->fields = "Public";

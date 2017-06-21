@@ -277,4 +277,44 @@ class field extends CI_Model {
         }
     }
 
+    public function get_children($field_id, $root = null) {
+        $this->db->select(ENTITY::FIELD . ", "
+                        . "company.en_name as company_name,"
+                        . "company.latitude,"
+                        . "company.longitude,"
+                        . "company.logo,"
+                        . "company.en_address as address"
+                )
+                ->from('field_child')
+                ->join('field', 'field_child.child_id = field.field_id')
+                ->join('company', 'company.company_id = field.company_id')
+                ->where('field_child.parent_id', $field_id);
+        if ($root != null)
+            $this->db->where('field.field_id !=', $root);
+        return $this->db->where('field.deleted', 0)
+                        ->get()->result();
+    }
+
+    public function get_parents($field_id, $root = null) {
+        $this->db->select(ENTITY::FIELD . ", "
+                        . "company.en_name as company_name,"
+                        . "company.latitude,"
+                        . "company.longitude,"
+                        . "company.logo,"
+                        . "company.en_address as address"
+                )
+                ->from('field_child')
+                ->join('field', 'field_child.parent_id = field.field_id')
+                ->join('company', 'company.company_id = field.company_id')
+                ->where('field_child.child_id', $field_id);
+        if ($root != null)
+            $this->db->where('field.field_id !=', $root);
+        return $this->db->where('field.deleted', 0)
+                        ->get()->result();
+    }
+
+    public function add_child($parent, $child) {
+        $this->db->insert('field_child', array('parent_id' => $parent, 'child_id' => $child));
+    }
+
 }

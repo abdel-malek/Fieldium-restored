@@ -32,6 +32,9 @@
                     <div class="col-md-2">
                         <input id="value" type="text" class="form-control" aria-describedby="sizing-addon1">
                     </div>
+                    <label for="valid_once">
+                        <input id="valid_once" type="checkbox"/> Valid once
+                    </label>
                 </div>
                 <hr>
                 <div class="row">

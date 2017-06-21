@@ -268,12 +268,14 @@ class fields extends REST_Controller {
                     ->set_relation('company_id', 'company', 'en_name', array('deleted' => 0))
                     ->set_relation_n_n('games', 'field_game_type', 'game_type', 'field_id', 'game_type_id', 'en_name')
                     ->set_relation_n_n('amenities', 'field_amenity', 'amenity', 'field_id', 'amenity_id', 'en_name')
+//                    ->set_relation_n_n('fields', 'field', 'field', 'parent_field', 'field_id', 'en_name', null, array('field.company_id' => $primary_key, 'field.deleted' => 0))
                     ->display_as('field_id', 'id')
+                    ->display_as('company_id', 'company')
                     ->display_as('en_description', 'Description')
                     ->display_as('en_name', 'Name')
                     ->display_as('max_capacity', 'Capacity')
-                    ->unset_edit_fields('ar_name', 'auto_confirm', 'ar_description', 'deleted', 'company_id', 'featured_place')
-                    ->unset_add_fields('ar_name', 'ar_description', 'auto_confirm', 'deleted', 'featured_place')
+                    ->unset_edit_fields('parent_field', 'ar_name', 'auto_confirm', 'ar_description', 'deleted', 'company_id', 'featured_place')
+                    ->unset_add_fields('parent_field', 'ar_name', 'ar_description', 'auto_confirm', 'deleted', 'featured_place')
                     ->field_type('open_time', 'time')
                     ->field_type('close_time', 'time')
                     ->field_type('hour_rate', 'integer')
@@ -288,13 +290,21 @@ class fields extends REST_Controller {
 //                    ->add_action('active', '', '', 'recieve-icon', array($this, 'active_callback'))
                     ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
                     ->unset_export()
+//                    ->unset_add()
                     ->unset_print();
+            if (!($operation == 'insert_validation' || $operation == 'insert' || $operation == 'add')) {
+                $this->session->unset_userdata('fields');
+            } else {
+                if ($this->session->userdata('fields'))
+                    $crud->callback_after_insert(array ($this, 'add_children_callback'));
+            }
             $output = $crud->render();
 
             $this->load->model("Services/company_service");
             $this->load->view('template.php', array(
                 'view' => 'fields_management',
                 'company' => $this->company_service->get($primary_key),
+                'fields' => $this->field_service->get_by_company($primary_key),
                 'output' => $output->output,
                 'js_files' => $output->js_files,
                 'css_files' => $output->css_files
@@ -307,6 +317,13 @@ class fields extends REST_Controller {
 
     function fields_management_get($primary_key = null, $operation = null) {
         $this->fields_management_post($primary_key, $operation);
+    }
+
+    function add_children_callback($post_array, $primary_key) {
+        $fields = json_decode($this->session->userdata('fields'));
+        
+        foreach ($fields as $field)
+            $this->field_service->add_child($primary_key, $field);
     }
 
     function add_update_callback($post_array) {
@@ -405,6 +422,11 @@ class fields extends REST_Controller {
         } else {
             return FALSE;
         }
+    }
+
+    public function save_in_session_get() {
+        $this->session->set_userdata(array('fields' => $this->get('fields')));
+        $this->response(array('status' => true, 'data' => $this->session->userdata('fields'), 'message' => ""));
     }
 
 }

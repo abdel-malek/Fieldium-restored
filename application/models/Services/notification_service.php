@@ -24,7 +24,7 @@ class notification_service extends CI_Model {
         $notification_helper->send_notification_to_android_device($tokens, $message, $data);
     }
 
-    public function send_notification_4customer($customer_id, $message, $data, $message_key) {
+    public function send_notification_4customer($customer_id, $message, $data, $message_key, $type = 1) {
         $this->load->model('Services/player_service');
         $player = $this->player_service->get($customer_id);
         //$this->send_sms->send_sms($message["ar"], $user->phone, 2);
@@ -37,7 +37,7 @@ class notification_service extends CI_Model {
         $message = $message[$player->lang];
         
         $notification_helper = new NotificationHelper();
-        $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os);
+        $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os, $type);
 //        $this->notification->save_notification(array(
 //            'player_id' => $player->player_id,
 //            'content' => $message,
