@@ -46,8 +46,7 @@ $(document).ready(function () {
     }
 
     // this is used later in the resizing and gesture demos
-    window.dragMoveListener = dragMoveListener;
-
+    window.dragMoveListener = dragMoveListener
 
     interact('.dropzone').dropzone({
 
@@ -101,4 +100,25 @@ function create_aggregate_field() {
 //    console.log(sessionStorage.getItem('fields'));
 //    location.href = site_url + "/fields/fields_management/" + company_id + "/add";
 }
-console.log(sessionStorage.getItem('fields'));
+
+function show_children(id, name) {
+    $('#aggregate_field_name').html(name);
+    $.ajax({
+        url: site_url + '/fields/get_children/format/json?field_id=' + id,
+        type: 'GET',
+        async: false,
+        success: function (response) {
+            if (response.status == true) {
+                $('#field-dropzone').html("");
+                var fields = response.data;
+                for (var i = 0; i < fields.length; i++) {
+                    $('#field-dropzone').append('<div field_id="' + fields[i].field_id
+                            + '" class="field-cube">' + fields[i].name + '</div>'
+                            );
+                    $('#fields_show_modal').modal("show");
+                }
+            } else
+                show_error("Error in loading bookings");
+        }
+    });
+}

@@ -42,8 +42,8 @@ class site extends REST_Controller {
         $this->load->model('Services/offer_service');
         $data = array(
             'areas' => $this->area_service->get_all($this->response->lang),
-            'games' => $this->game_service->get_all($this->response->lang),
-            'offers' => $this->offer_service->get_all()
+            'games' => $this->game_service->get_all($this->response->lang)
+//            'offers' => $this->offer_service->get_all()
         );
         if ($this->current_user) {
             $this->user_permissions->is_player($this->current_user);
@@ -54,6 +54,9 @@ class site extends REST_Controller {
             $data['last_bookings'] = $bookings;
             $data['upcoming_booking'] = $booking;
             $data['vouchers'] = $this->voucher_service->get_my_vouchers($this->current_user->player_id);
+            $data['offers'] = $this->offer_service->get_all_with_hours($this->current_user->player_id);
+        } else {
+            $data['offers'] = $this->offer_service->get_all();
         }
 
         $this->response(array('status' => true, 'data' =>

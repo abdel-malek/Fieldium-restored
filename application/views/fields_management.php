@@ -27,7 +27,7 @@
         border-style: solid;
     }
 
-    .drag-drop {
+    .drag-drop, .field-cube {
         display: inline-block;
         min-width: 40px;
         padding: 2em 0.5em;
@@ -109,18 +109,14 @@
                     <button type="button" class="close" data-dismiss="modal" >&times</button>
                 </div>
                 <div class="modal-body" >
-                    <?php foreach ($fields as $field) { ?>
-                        <div field_id="<?php echo $field->field_id ?>" class="draggable drag-drop"> <?php echo $field->name ?></div>
-                    <?php } ?>
-                    <div id="outer-dropzone" class="dropzone">
+                    <?php // foreach ($fields as $field) { ?>
+                        <!--<div field_id="<?php echo $field->field_id ?>" class="draggable drag-drop"> <?php echo $field->name ?></div>-->
+                    <?php // } ?>
+                    <div id="field-dropzone" class="dropzone">
 
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-md-6 left">
-                        <button class="btn btn-info create-btn" onclick='create_aggregate_field()'>Create</button>
-                    </div>
-
                     <div class="col-md-6 right">
                         <button class="btn btn-warning"class="close" data-dismiss="modal">Close</button>
                     </div>

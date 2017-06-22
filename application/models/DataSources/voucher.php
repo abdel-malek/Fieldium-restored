@@ -12,7 +12,7 @@ class voucher extends CI_Model {
 
     public function get_by_voucher($voucher) {
         return $this->db->select(
-                                "voucher.*, voucher.description_". $this->LANG . ' as description', false
+                                "voucher.*, voucher.description_" . $this->LANG . ' as description', false
                         )
                         ->from('voucher')
                         ->where('voucher', $voucher)
@@ -21,7 +21,7 @@ class voucher extends CI_Model {
 
     public function get($voucher_id) {
         return $this->db->select(
-                                "voucher.*, voucher.description_". $this->LANG . ' as description', false
+                                "voucher.*, voucher.description_" . $this->LANG . ' as description', false
                         )
                         ->from('voucher')
                         ->where('voucher_id', $voucher_id)
@@ -37,7 +37,8 @@ class voucher extends CI_Model {
     }
 
     public function get_voucher_companies($voucher_id) {
-        return $this->db->select('voucher_company.company_id,company.' . $this->LANG . '_name as company_name')
+        return $this->db->select('voucher_company.company_id,company.' . $this->LANG . '_name as company_name,'
+                                . "CONCAT('" . base_url(UPLOADED_IMAGES_PATH) . "','/',company.logo) as logo_url", false)
                         ->from('voucher_company')
                         ->join('company', 'company.company_id = voucher_company.company_id')
                         ->where('voucher_id', $voucher_id)
@@ -45,7 +46,8 @@ class voucher extends CI_Model {
     }
 
     public function get_voucher_games($voucher_id) {
-        return $this->db->select('voucher_game.game_type_id,game_type.' . $this->LANG . '_name as game_name')
+        return $this->db->select('voucher_game.game_type_id,game_type.' . $this->LANG . '_name as game_name, '
+                                . "CONCAT('" . base_url(UPLOADED_IMAGES_PATH) . "','/',game_type.image) as image_url", false)
                         ->from('voucher_game')
                         ->join('game_type', 'game_type.game_type_id = voucher_game.game_type_id')
                         ->where('voucher_id', $voucher_id)
@@ -150,7 +152,7 @@ class voucher extends CI_Model {
     }
 
     public function get_my_vouchers($player_id, $field_id = null, $date = null, $start = null, $duration = 0, $game = null) {
-        $this->db->select("voucher.*, voucher.description_". $this->LANG . ' as description', false)
+        $this->db->select("voucher.*, voucher.description_" . $this->LANG . ' as description', false)
                 ->from('voucher_player')
                 ->join('voucher', 'voucher.voucher_id = voucher_player.voucher_id')
                 ->join('player', 'player.phone = voucher_player.phone', 'left')

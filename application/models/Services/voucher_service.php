@@ -117,46 +117,9 @@ class voucher_service extends CI_Model {
     $data, $users, $phones, $companies, $games
     ) {
         $voucher_id = $this->voucher->add($data);
-        if ($data['public_user'] == 0) {
-            $this->load->model("Services/player_service");
-            $this->load->model('Services/notification_service');
-            foreach ($users as $user) {
-                try {
-                    $res = $this->player_service->get($user);
-                } catch (Player_Not_Found_Exception $e) {
-                    $this->delete($voucher_id);
-                }
-                $this->voucher->add_player(
-                        array(
-                            'player_id' => $user,
-                            'voucher_id' => $voucher_id
-                        )
-                );
 
-                $message = array();
-                if ($data['type'] == 1) {
-                    $message["en"] = "You have received a new voucher with a discount of " . $data['value'] . "%.\nVoucher code: " . $data['voucher'];
-                    $message["ar"] = "لقد ربحت قسيمة بحسم " . $data['value'] . "%.\n رمز القسيمة: " . $data['voucher'];
-                } else if ($data['type'] == 2) {
-                    $message["en"] = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
-                    $message["ar"] = "لقد ربحت قسيمة بقيمة " . $data['value'] . "ساعة مجانية.\n رمز القسيمة: " . $data['voucher'];
-                }
-                $this->notification_service->send_notification_4customer($user, $message, array(), "new_voucher", 2);
-            }
-            foreach ($phones as $phone) {
-                $this->voucher->add_player(
-                        array(
-                            'phone' => $phone,
-                            'voucher_id' => $voucher_id
-                        )
-                );
-                if ($data['type'] == 1)
-                    $msg = "You have received a new voucher with a discount of " . $data['value'] . "%.\nVoucher code: " . $data['voucher'];
-                else
-                    $msg = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
-                $this->send_sms->send_sms($phone, $msg);
-            }
-        }
+        $this->load->model("Services/player_service");
+        $this->load->model('Services/notification_service');
         if ($data['public_field'] == 0) {
             $this->load->model("Services/company_service");
             foreach ($companies as $company) {
@@ -185,6 +148,46 @@ class voucher_service extends CI_Model {
                 );
             }
         }
+        foreach ($phones as $phone) {
+            $this->voucher->add_player(
+                    array(
+                        'phone' => $phone,
+                        'voucher_id' => $voucher_id
+                    )
+            );
+            if ($data['type'] == 1)
+                $msg = "You have received a new voucher with a discount of " . $data['value'] . "%.\nVoucher code: " . $data['voucher'];
+            else
+                $msg = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
+            $this->send_sms->send_sms($phone, $msg);
+        }
+        $voucher = $this->get($voucher_id);
+        if ($data['public_user'] == 0) {
+            foreach ($users as $user) {
+                try {
+                    $res = $this->player_service->get($user);
+                } catch (Player_Not_Found_Exception $e) {
+                    $this->delete($voucher_id);
+                }
+                $this->voucher->add_player(
+                        array(
+                            'player_id' => $user,
+                            'voucher_id' => $voucher_id
+                        )
+                );
+
+                $message = array();
+                if ($data['type'] == 1) {
+                    $message["en"] = "You have received a new voucher with a discount of " . $data['value'] . "%.\nVoucher code: " . $data['voucher'];
+                    $message["ar"] = "لقد ربحت قسيمة بحسم " . $data['value'] . "%.\n رمز القسيمة: " . $data['voucher'];
+                } else if ($data['type'] == 2) {
+                    $message["en"] = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
+                    $message["ar"] = "لقد ربحت قسيمة بقيمة " . $data['value'] . "ساعة مجانية.\n رمز القسيمة: " . $data['voucher'];
+                }
+                $this->notification_service->send_notification_4customer($user, $message, $voucher, "new_voucher", 2);
+            }
+        }
+
         $voucher = $this->get($voucher_id);
         return $voucher;
     }

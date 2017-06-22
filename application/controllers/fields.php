@@ -244,6 +244,12 @@ class fields extends REST_Controller {
         $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
     }
 
+    public function get_children_get() {
+
+        $fields = $this->field_service->get_children($this->get('field_id'));
+        $this->response(array('status' => true, 'data' => $fields, 'message' => ""));
+    }
+
     private $COMPANY_ID;
 
     function fields_management_post($primary_key = null, $operation = null) {
@@ -263,7 +269,7 @@ class fields extends REST_Controller {
                     ->set_subject('field')
                     ->where('field.company_id', $primary_key)
                     ->where('field.deleted', 0)
-                    ->columns('field_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'amenities', 'featured_place')
+                    ->columns('field_id', 'en_name', 'children', 'phone', 'open_time', 'close_time', 'games', 'amenities', 'featured_place')
                     ->order_by('field_id')
                     ->set_relation('company_id', 'company', 'en_name', array('deleted' => 0))
                     ->set_relation_n_n('games', 'field_game_type', 'game_type', 'field_id', 'game_type_id', 'en_name')
@@ -287,6 +293,7 @@ class fields extends REST_Controller {
                     ->callback_before_update(array($this, 'add_update_callback'))
                     ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'hour_rate')
                     ->callback_delete(array($this, 'delete_field'))
+                    ->callback_column('children', array($this, '_callback_children_render'))
 //                    ->add_action('active', '', '', 'recieve-icon', array($this, 'active_callback'))
                     ->add_action('Gallery', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
                     ->unset_export()
@@ -296,7 +303,7 @@ class fields extends REST_Controller {
                 $this->session->unset_userdata('fields');
             } else {
                 if ($this->session->userdata('fields'))
-                    $crud->callback_after_insert(array ($this, 'add_children_callback'));
+                    $crud->callback_after_insert(array($this, 'add_children_callback'));
             }
             $output = $crud->render();
 
@@ -319,9 +326,17 @@ class fields extends REST_Controller {
         $this->fields_management_post($primary_key, $operation);
     }
 
+    public function _callback_children_render($value, $row) {
+        $children = $this->field_service->get_children($row->field_id);
+        if (count($children) == 0)
+            return "";
+        else
+            return "<button class='btn btn-default' onclick='show_children(" . $row->field_id . ",\"" . $row->en_name . "\")'>Yes</button>";
+    }
+
     function add_children_callback($post_array, $primary_key) {
         $fields = json_decode($this->session->userdata('fields'));
-        
+
         foreach ($fields as $field)
             $this->field_service->add_child($primary_key, $field);
     }

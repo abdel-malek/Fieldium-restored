@@ -279,6 +279,7 @@ class field extends CI_Model {
 
     public function get_children($field_id, $root = null) {
         $this->db->select(ENTITY::FIELD . ", "
+                . "field.en_name as name,"
                         . "company.en_name as company_name,"
                         . "company.latitude,"
                         . "company.longitude,"

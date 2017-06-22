@@ -57,7 +57,7 @@ class vouchers extends REST_Controller {
                 'voucher' => $this->input->post('voucher'),
                 'value' => $this->input->post('value'),
                 'user_id' => $this->current_user->user_id,
-                'one_time' => $this->input->post('valid_once') == true ? 1 : 0,
+                'one_time' => $this->input->post('one_time') == true ? 1 : 0,
                 'expiry_date' => ($this->input->post('expiry_date') != "") ? date('Y-m-d', strtotime($this->input->post('expiry_date'))) : null,
                 'from_hour' => $this->input->post('from_hour') ? date('H:i:s', strtotime($this->input->post('from_hour'))) : null,
                 'to_hour' => $this->input->post('to_hour') ? date('H:i:s', strtotime($this->input->post('to_hour'))) : null,
