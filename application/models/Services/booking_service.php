@@ -17,7 +17,9 @@ class booking_service extends CI_Model {
     ) {
         if ($voucher) {
             $this->load->model("Services/voucher_service");
-            $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
+            $check_voucher = $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
+            if($check_voucher["valid"]==0)
+                throw new Parent_Exception("It is not a valid voucher");
         }
         $field = $this->field->get($field_id);
         if (!$field)

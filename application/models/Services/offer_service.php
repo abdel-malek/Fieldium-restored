@@ -70,7 +70,16 @@ class offer_service extends CI_Model {
         $this->offer->delete($offer->offer_id);
     }
 
-    public function get_all() {
+    public function get_all_with_hours($player_id) {
+        $offers = $this->offer->get_all_with_hours($player_id);
+        foreach ($offers as $offer) {
+            $offer->companies = $this->offer->get_offer_companies($offer->offer_id);
+            $offer->games = $this->offer->get_offer_games($offer->offer_id);
+        }
+        return $offers;
+    }
+    
+     public function get_all() {
         $offers = $this->offer->get_all();
         foreach ($offers as $offer) {
             $offer->companies = $this->offer->get_offer_companies($offer->offer_id);

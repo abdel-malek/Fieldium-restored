@@ -21,8 +21,7 @@ class vouchers extends REST_Controller {
             );
             $this->response(array(
                 'status' => true,
-                'data' => $voucher,
-                'message' => $this->lang->line('valid_voucher')
+                'data' => $voucher
                     )
             );
         }

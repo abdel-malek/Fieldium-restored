@@ -98,7 +98,12 @@ class voucher_service extends CI_Model {
                 );
         }
         $res->message = $this->lang->line('valid_voucher');
-        return $res;
+        return array(
+            'valid' => 1,
+            'message' => $this->lang->line('It is not a valid voucher'),
+            'data' => $res
+        );
+        
     }
 
     function generate_activation_code() {

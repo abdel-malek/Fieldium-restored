@@ -12,7 +12,7 @@ class offer extends CI_Model {
 
     public function get($offer_id) {
         return $this->db->select(
-                                "offer.*, offer.description_". $this->LANG . ' as description'
+                                "offer.*, offer.description_" . $this->LANG . ' as description'
                         )
                         ->from('offer')
                         ->where('offer_id', $offer_id)
@@ -21,15 +21,57 @@ class offer extends CI_Model {
 
     public function get_all() {
         return $this->db->select(
-                                "offer.*, offer.description_". $this->LANG . ' as description'
+                                "offer.*, '0' as booked_hours, offer.description_" . $this->LANG . ' as description', false
                         )
                         ->from('offer')
-                        ->where('offer.expiry_date <= ', date('Y-m-d'))
+                        ->where('offer.valid', 1)
+                        ->where('date(offer.expiry_date) >=', date('Y-m-d'))
+                        ->get()->result();
+    }
+
+    public function get_all_with_hours($player_id) {
+        return $this->db->select('offer.*, offer.description_' . $this->LANG . ' as description, IFNULL(((select sum(duration) from booking '
+                                . 'where booking.player_id = ' . $player_id . ' and '
+                                . 'booking.state_id = ' . BOOKING_STATE::APPROVED . " and "
+                                . "date(booking.date) > date(offer.start_date) and "
+                                . 'date(booking.date) <= date(offer.expiry_date) and '
+                                . '(offer.public_field = 1 OR booking.field_id IN ('
+                                . 'select field.field_id from offer_company '
+                                . 'join field on field.company_id = offer_company.company_id '
+                                . 'where offer_company.offer_id = offer.offer_id )) '
+                                . ') - ('
+                                . 'select count(*) from offer_usage '
+                                . 'where offer_usage.offer_id = offer.offer_id and '
+                                . 'offer_usage.player_id = ' . $player_id
+                                . ')*offer.set_of_minutes),0) as booked_hours', false)
+                        ->from('offer')
+                        ->join('offer_usage', 'offer_usage.offer_id = offer.offer_id and offer_usage.player_id = ' . $player_id, 'left')
+                        ->where('offer.valid', 1)
+                        ->where('date(offer.expiry_date) >=', date('Y-m-d'))
+//                        ->where('((select sum(duration) from booking '
+//                                . 'where booking.player_id = ' . $player_id . ' and '
+//                                . 'booking.state_id = ' . BOOKING_STATE::APPROVED . " and "
+//                                . "date(booking.creation_date) > date(offer.start_date) and "
+//                                . 'date(booking.creation_date) <= date(offer.expiry_date) and '
+//                                . '(offer.public_field = 1 OR booking.field_id IN ('
+//                                . 'select field.field_id from offer_company '
+//                                . 'join field on field.company_id = offer_company.company_id '
+//                                . 'where offer_company.offer_id = offer.offer_id )) and '
+//                                . '(offer.all_games = 1 OR booking.game_type_id IN ('
+//                                . 'select offer_game.game_type_id from offer_game '
+//                                . 'where offer_game.offer_id = offer.offer_id ))'
+//                                . ') - ('
+//                                . 'select count(*) from offer_usage '
+//                                . 'where offer_usage.offer_id = offer.offer_id and '
+//                                . 'offer_usage.player_id = ' . $player_id
+//                                . ')*offer.set_of_minutes)/offer.set_of_minutes >= 1')
+                        ->group_by('offer.offer_id')
                         ->get()->result();
     }
 
     public function get_offer_companies($offer_id) {
-        return $this->db->select('offer_company.company_id,company.' . $this->LANG . '_name as company_name')
+        return $this->db->select('offer_company.company_id,company.' . $this->LANG . '_name as company_name,'
+                                . "CONCAT('" . base_url(UPLOADED_IMAGES_PATH) . "','/',company.logo) as logo_url", false)
                         ->from('offer_company')
                         ->join('company', 'company.company_id = offer_company.company_id')
                         ->where('offer_id', $offer_id)
@@ -37,7 +79,8 @@ class offer extends CI_Model {
     }
 
     public function get_offer_games($offer_id) {
-        return $this->db->select('offer_game.game_type_id,game_type.' . $this->LANG . '_name as game_name')
+        return $this->db->select('offer_game.game_type_id,game_type.' . $this->LANG . '_name as game_name, '
+                                . "CONCAT('" . base_url(UPLOADED_IMAGES_PATH) . "','/',game_type.image) as image_url", false)
                         ->from('offer_game')
                         ->join('game_type', 'game_type.game_type_id = offer_game.game_type_id')
                         ->where('offer_id', $offer_id)
@@ -104,7 +147,7 @@ class offer extends CI_Model {
     }
 
     public function check_for_offers($player_id) {
-        return $this->db->select('offer.*, offer.description_'. $this->LANG . ' as description, max(offer_usage.creation_date) as last_offer,((select sum(duration) from booking '
+        return $this->db->select('offer.*, offer.description_' . $this->LANG . ' as description, max(offer_usage.creation_date) as last_offer,((select sum(duration) from booking '
                                 . 'where booking.player_id = ' . $player_id . ' and '
                                 . 'booking.state_id = ' . BOOKING_STATE::APPROVED . " and "
                                 . "date(booking.creation_date) > date(offer.start_date) and "
