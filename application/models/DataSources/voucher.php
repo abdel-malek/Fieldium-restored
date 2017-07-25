@@ -154,9 +154,9 @@ class voucher extends CI_Model {
     public function get_my_vouchers($player_id, $field_id = null, $date = null, $start = null, $duration = 0, $game = null) {
         $this->db->select("voucher.*, voucher.description_" . $this->LANG . ' as description', false)
                 ->from('voucher_player')
-                ->join('voucher', 'voucher.voucher_id = voucher_player.voucher_id')
-                ->join('player', 'player.phone = voucher_player.phone', 'left')
-                ->where('(voucher_player.player_id = ' . $player_id . ' OR player.player_id = ' . $player_id . ")")
+                ->join('voucher', 'voucher.voucher_id = voucher_player.voucher_id', 'right')
+                ->join('player', 'player.phone = voucher_player.phone ', 'left')
+                ->where('(voucher.public_user = 1 OR voucher_player.player_id = ' . $player_id . ' OR player.player_id = ' . $player_id . " )")
                 ->where('voucher.valid', 1)
                 ->where('voucher.expiry_date >=', date('Y-m-d'));
 
@@ -164,7 +164,7 @@ class voucher extends CI_Model {
             $this->db->where('voucher.expiry_date >=', $date);
         }
 
-        if ($field_id != null)
+        if ($field_id != null && $field_id!='')
             $this->db->where('(voucher.public_field = 1 OR \'' . $field_id . '\' IN ('
                     . 'select field.field_id from voucher_company '
                     . 'join field on field.company_id = voucher_company.company_id '
@@ -182,6 +182,20 @@ class voucher extends CI_Model {
                     . 'where voucher_game.voucher_id = voucher.voucher_id )) ');
         }
 
+        return $this->db->group_by('voucher.voucher_id')
+                        ->get()->result();
+    }
+
+    function get_public_vouchers($country = null) {
+        $this->db->select("voucher.*, voucher.description_" . $this->LANG . ' as description', false)
+                ->from('voucher')
+                ->where('voucher.public_user', 1)
+                ->where('voucher.valid', 1)
+                ->where('voucher.expiry_date >=', date('Y-m-d'));
+
+        if ($country != null) {
+            $this->db->where('voucher.country_id', $country);
+        }
         return $this->db->group_by('voucher.voucher_id')
                         ->get()->result();
     }

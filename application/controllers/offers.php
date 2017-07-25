@@ -24,6 +24,7 @@ class offers extends REST_Controller {
         $this->form_validation->set_rules('set_of_minutes', 'Minutes set', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('voucher_type', 'Voucher Type', 'required|callback_valid_voucher_type');
         $this->form_validation->set_rules('voucher_value', 'voucher value', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('country_id', 'country', 'required');
         $this->form_validation->set_rules('voucher_start_after', 'start after', 'required');
         $this->form_validation->set_rules('valid_days', 'Valid days', 'required');
         $this->form_validation->set_rules('voucher_from_hour', 'voucher from hour', 'callback_validate_time');
@@ -34,9 +35,10 @@ class offers extends REST_Controller {
             $data = array(
                 'voucher_type' => $this->input->post('voucher_type'),
                 'voucher_value' => $this->input->post('voucher_value'),
+                'country_id' => $this->input->post('country_id'),
                 'title_en' => $this->input->post('title_en'),
                 'title_ar' => $this->input->post('title_ar'),
-                'set_of_minutes' => $this->input->post('minutes'),
+                'set_of_minutes' => $this->input->post('set_of_minutes'),
                 'expiry_date' => ($this->input->post('expiry_date') != "") ? date('Y-m-d', strtotime($this->input->post('expiry_date'))) : null,
                 'voucher_from_hour' => $this->input->post('voucher_from_hour') ? date('H:i:s', strtotime($this->input->post('voucher_from_hour'))) : null,
                 'voucher_to_hour' => $this->input->post('voucher_to_hour') ? date('H:i:s', strtotime($this->input->post('voucher_to_hour'))) : null,
@@ -57,7 +59,7 @@ class offers extends REST_Controller {
                 $data['public_field'] = 0;
                 $companies = $this->input->post('companies');
                 if (!is_array($companies) || count($companies) == 0)
-                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one field"));
+                    $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Select at least one field")));
             }
 
             $games = array();
@@ -67,7 +69,7 @@ class offers extends REST_Controller {
                 $data['all_games'] = 0;
                 $games = $this->input->post('games');
                 if (!is_array($games) || count($games) == 0)
-                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one game"));
+                    $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Select at least one game")));
             }
 
             $offer = $this->offer_service

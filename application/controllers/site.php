@@ -54,9 +54,9 @@ class site extends REST_Controller {
             $data['last_bookings'] = $bookings;
             $data['upcoming_booking'] = $booking;
             $data['vouchers'] = $this->voucher_service->get_my_vouchers($this->current_user->player_id);
-            $data['offers'] = $this->offer_service->get_all_with_hours($this->current_user->player_id);
+            $data['offers'] = $this->offer_service->get_all_with_hours($this->current_user->player_id,$this->user_country);
         } else {
-            $data['offers'] = $this->offer_service->get_all();
+            $data['offers'] = $this->offer_service->get_all($this->user_country);
         }
 
         $this->response(array('status' => true, 'data' =>

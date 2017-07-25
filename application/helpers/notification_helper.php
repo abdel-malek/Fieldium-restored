@@ -15,7 +15,7 @@ class NotificationHelper {
 
         $message_object = array(
             "ntf_type" => $type,
-            "ntf_text" => array("en" => $message),
+            "ntf_text" =>  $message,
             "ntf_body" => $data);
 
         $url = 'https://fcm.googleapis.com/fcm/send';

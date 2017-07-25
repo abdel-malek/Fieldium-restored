@@ -10,18 +10,15 @@ class notification_service extends CI_Model {
         $this->load->library('send_sms');
     }
 
-    public function send_notification_4_all_users($message, $data = null) {
-        $this->load->model('Services/user_service');
-        $users = $this->user_service->get_customers();
-        $tokens = array();
-        $notification_helper = new NotificationHelper();
-        foreach ($users as $user) {
-            if ($user->device_id) {
-                $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os);
-            }
+    public function send_notification_4_all_users($message, $data, $message_key, $type = 1,$country=null) {
+        $this->load->model('Services/player_service');
+        $players = $this->player_service->get_app_users($country);
+//        var_dump($players);
+        foreach ($players as $player) {
+            $msg = $message[$player->lang];
+            $notification_helper = new NotificationHelper();
+            $notification_helper->send_notification_to_device(array($player->token), $msg, $data, $player->os, $type);
         }
-
-        $notification_helper->send_notification_to_android_device($tokens, $message, $data);
     }
 
     public function send_notification_4customer($customer_id, $message, $data, $message_key, $type = 1) {
@@ -35,7 +32,7 @@ class notification_service extends CI_Model {
 //        $this->email->message($message["ar"]."<br>".$message["en"]);
 //        $this->email->send();
         $message = $message[$player->lang];
-        
+
         $notification_helper = new NotificationHelper();
         $notification_helper->send_notification_to_device(array($player->token), $message, $data, $player->os, $type);
 //        $this->notification->save_notification(array(
@@ -57,7 +54,7 @@ class notification_service extends CI_Model {
             }
         }
     }
-    
+
     public function send_notification_support($message, $data, $message_key) {
         $this->load->model('Services/user_service');
         $users = $this->user_service->get_support_users();

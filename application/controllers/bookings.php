@@ -111,7 +111,7 @@ class bookings extends REST_Controller {
         $this->form_validation->set_rules('duration', 'Duration', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('game_type', 'game type', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('player_name', 'Player name', 'required');
-        $this->form_validation->set_rules('player_phone', 'Player phone', 'required');
+        $this->form_validation->set_rules('player_phone', 'Player phone', 'required|numeric');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
@@ -251,12 +251,12 @@ class bookings extends REST_Controller {
                 $this->response(array('status' => false, 'data' => null, 'message' => "The reason is required."));
 
             $booking = $this->booking_service->cancel($this->get('booking_id'), $msg);
-            $this->response(array('status' => true, 'data' => $booking, 'message' => "The booking has been canceled"));
+            $this->response(array('status' => true, 'data' => $booking, 'message' => $this->lang->line('cancelled')));
         }
     }
 
     public function get_cancellation_reasons_get() {
-        $messages = get_cancellation_reasons();
+        $messages = get_cancellation_reasons($this->response->lang);
         $result = array();
         foreach ($messages as $key => $value) {
             $result[] = array('id' => $key, 'message' => $value);
@@ -277,7 +277,7 @@ class bookings extends REST_Controller {
                 $this->response(array('status' => true, 'data' => null, 'message' => $this->lang->line('declined')));
             else {
                 
-            } $this->response(array('status' => false, 'data' => null, 'message' => "already declined"));
+            } $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("already declined")));
         }
     }
 

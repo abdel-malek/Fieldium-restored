@@ -9,9 +9,16 @@ class BOOKING_STATE {
 
 }
 
-function get_cancellation_reasons() {
-    return array(
-        1 => 'Your booking has been canceled because the field is undergoing maintenance.',
-        2 => 'Booking canceled upon your request. Hope to see you again.'
-    );
+function get_cancellation_reasons($lang = "en") {
+    if ($lang == "en")
+        return array(
+            1 => 'Your booking has been canceled because the field is undergoing maintenance.',
+            2 => 'Booking canceled upon your request. Hope to see you again.'
+        );
+    else {
+        return array(
+            1 => 'نعتذر عدم تأكيد الحجز بسبب كون الملعب في فترة صيانة.',
+            2 => 'تم رفض طلبك.'
+        );
+    }
 }

@@ -21,19 +21,37 @@
                 <span class="bar"></span>
             </a>
             <div style="
-                 width:90%; 
-                 margin-left:5%;
-                 
+                 /*                 width:90%; 
+                                  margin-left:5%;*/
+
                  "> 
-                <br><br>
+                <br>
                 <h1 style="text-align: left">
                     Areas Management:
+                    <select id="country" class="form-control" 
+                            value="<?php echo $country ?>" 
+                            style="
+                            width: 80px !important;
+                            display: inline;
+                            ">
+                        <option value="<?php echo UAE ?>" 
+                        <?php echo $country == UAE ? ' selected ' : '' ?>
+                                >UAE</option>
+                        <option 
+                        <?php echo $country == SYRIA ? ' selected ' : '' ?>
+                            value="<?php echo SYRIA ?>">SYRIA</option>
+                    </select>
                 </h1>
                 <div style="clear: both"></div>
-                <br><br>
+
                 <?php echo $output; ?>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $('#country').change(function () {
+            location.href = '<?php echo site_url() ?>/areas/areas_management/' + $(this).val();
+        });
+    </script>
 </body>
 

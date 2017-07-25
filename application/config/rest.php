@@ -195,6 +195,7 @@ $config['auth_override_class_method']['fields']['get_by_company'] = 'none';
 $config['auth_override_class_method']['fields']['get_by_company_with_timing'] = 'none';
 $config['auth_override_class_method']['fields']['get_featured_places'] = 'none';
 $config['auth_override_class_method']['fields']['check_availability'] = 'none';
+$config['auth_override_class_method']['fields']['send_sms'] = 'none';
 
 //Players
 $config['auth_override_class_method']['players']['register'] = 'none';
@@ -220,6 +221,10 @@ $config['auth_override_class_method']['amenities']['get_all'] = 'none';
 $config['auth_override_class_method']['areas']['get_all'] = 'none';
 
 $config['auth_override_class_method']['site']['about'] = 'none';
+
+//Countries
+$config['auth_override_class_method']['countries']['get'] = 'none';
+$config['auth_override_class_method']['countries']['get_all'] = 'none';
 
 // ---Uncomment list line for the wildard unit test
 // $config['auth_override_class_method']['wildcard_test_cases']['*'] = 'basic';

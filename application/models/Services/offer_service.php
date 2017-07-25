@@ -17,6 +17,8 @@ class offer_service extends CI_Model {
     $data, $companies, $games
     ) {
         $offer_id = $this->offer->add($data);
+        $this->load->model("Services/country_service");
+        $this->country_service->get($data['country_id']);
         if ($data['public_field'] == 0) {
             $this->load->model("Services/company_service");
             foreach ($companies as $company) {
@@ -70,17 +72,17 @@ class offer_service extends CI_Model {
         $this->offer->delete($offer->offer_id);
     }
 
-    public function get_all_with_hours($player_id) {
-        $offers = $this->offer->get_all_with_hours($player_id);
+    public function get_all_with_hours($player_id, $country = null) {
+        $offers = $this->offer->get_all_with_hours($player_id, $country = null);
         foreach ($offers as $offer) {
             $offer->companies = $this->offer->get_offer_companies($offer->offer_id);
             $offer->games = $this->offer->get_offer_games($offer->offer_id);
         }
         return $offers;
     }
-    
-     public function get_all() {
-        $offers = $this->offer->get_all();
+
+    public function get_all($country=null) {
+        $offers = $this->offer->get_all($country);
         foreach ($offers as $offer) {
             $offer->companies = $this->offer->get_offer_companies($offer->offer_id);
             $offer->games = $this->offer->get_offer_games($offer->offer_id);

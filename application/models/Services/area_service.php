@@ -14,6 +14,10 @@ class area_service extends CI_Model {
         $areas = $this->area->get_all($lang);
         return $areas;
     }
+    public function get_by_country($lang="en", $country) {
+        $areas = $this->area->get_by_country($lang, $country);
+        return $areas;
+    }
 
 }
 

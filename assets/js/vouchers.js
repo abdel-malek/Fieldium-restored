@@ -129,7 +129,7 @@ function save_voucher() {
     var data = {
         'voucher': $('#voucher').val(),
         'type': $('#type').val(),
-        'value': $('#value').val() * 60,
+        'value': $('#type').val() != 1 ? $('#value').val() * 60 : $('#value').val(),
         'description_en': $('#description_en').val(),
         'description_ar': $('#description_ar').val(),
         'start_date': $('#start_date').val(),
@@ -143,7 +143,8 @@ function save_voucher() {
         'users': $('#players').val(),
         'phones': $('#phones').tagsinput('items'),
         'games': $('#games').val(),
-        'companies': $('#companies').val()
+        'companies': $('#companies').val(),
+        "country_id": $('#Country').val()
     };
     HoldOn.open({
         theme: "sk-bounce"
@@ -186,36 +187,49 @@ $.ajax({
             show_error(response.message);
     }
 });
-
-$.ajax({
-    url: site_url + '/players/get_all/format/json',
-    type: 'GET',
-    success: function (response) {
-        if (response.status == true) {
-            var players = [];
-
-            $("#players").select2({
-                placeholder: "Select players",
-                data: response.data
-            });
-
-        } else
-            show_error(response.message);
-    }
+$('#Country').change(function () {
+    $("#players").select2('destroy');
+    $("#companies").select2('destroy');
+    $("#companies").html("");
+    $("#players").html("");
+    $('#all_fields').prop("checked", false);
+    $('#all_users').prop("checked", false);
+    load_info();
 });
 
-$.ajax({
-    url: site_url + '/companies/get_all/format/json',
-    type: 'GET',
-    success: function (response) {
-        if (response.status == true) {
-            $("#companies").select2({
-                placeholder: "Select Company",
-                data: response.data
-            });
+function load_info() {
+    $.ajax({
+        url: site_url + '/players/get_all/format/json?country=' + $('#Country').val(),
+        type: 'GET',
+        success: function (response) {
+            if (response.status == true) {
+                var players = [];
 
-        } else
-            show_error(response.message);
-    }
-});
+                $("#players").select2({
+                    placeholder: "Select players",
+                    data: response.data
+                });
+
+            } else
+                show_error(response.message);
+        }
+    });
+
+    $.ajax({
+        url: site_url + '/companies/get_all/format/json?country=' + $('#Country').val(),
+        type: 'GET',
+        success: function (response) {
+            if (response.status == true) {
+                $("#companies").select2({
+                    placeholder: "Select Company",
+                    data: response.data
+                });
+
+            } else
+                show_error(response.message);
+        }
+    });
+}
+load_info();
+
 

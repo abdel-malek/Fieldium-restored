@@ -2,8 +2,12 @@
 
 class search extends CI_Model {
 
+    private $country;
+
     public function __construct() {
         $this->load->database();
+        $CI = & get_instance();
+        $this->country = $CI->user_country;
         $this->load->model("Services/player_service");
     }
 
@@ -45,6 +49,7 @@ class search extends CI_Model {
                 ->from('company ')
                 ->join('field', 'company.company_id = field.company_id', 'left')
                 ->join('area', 'company.area_id = area.area_id', 'left')
+                ->where('area.country_id', $this->country)
                 ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left')
                 ->where('company.deleted', 0)
                 ->where('field.deleted', 0);
@@ -141,6 +146,7 @@ class search extends CI_Model {
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
                 ->join('area', 'company.area_id = area.area_id', 'left')
+                ->where('area.country_id', $this->country)
                 ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
         $res = $this->db->where($where, '', false)
                         ->order_by('field.company_id')

@@ -24,7 +24,7 @@ class player extends CI_Model {
     }
 
     public function get($id, $lang = "en") {
-        return $this->db->select(ENTITY::PLAYER.", player.token")
+        return $this->db->select(ENTITY::PLAYER . ", player.token")
                         ->from('player')
                         ->where('player_id', $id)
                         ->get()->row();
@@ -65,9 +65,21 @@ class player extends CI_Model {
                         ->get()->row();
     }
 
-    public function get_all(){
-        return $this->db->select('*, CONCAT(player.name, " ", player.phone) as text, player.player_id as id', false)
-                ->from('player')
-                ->get()->result();
+    public function get_all($country = null) {
+        $this->db->select('*, CONCAT(player.name, " ", player.phone) as text, player.player_id as id', false)
+                ->from('player');
+        if ($country != null)
+            $this->db->where('player.country_id', $country);
+        return $this->db->get()->result();
     }
+
+    public function get_app_users($country = null) {
+        $this->db->select('*, CONCAT(player.name, " ", player.phone) as text, player.player_id as id', false)
+                ->from('player')
+                ->where('active', 1);
+        if ($country != null)
+            $this->db->where('player.country_id', $country);
+        return $this->db->get()->result();
+    }
+
 }

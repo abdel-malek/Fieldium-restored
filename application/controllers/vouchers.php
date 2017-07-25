@@ -43,9 +43,10 @@ class vouchers extends REST_Controller {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('type', 'Type', 'required|callback_valid_voucher_type');
         $this->form_validation->set_rules('voucher', 'voucher code', 'required|is_unique[voucher.voucher]');
+        $this->form_validation->set_rules('country_id', 'country', 'required');
         $this->form_validation->set_rules('value', 'value', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('start_date', 'start_date', 'callback_check_date_format');
-        $this->form_validation->set_rules('expiry_date', 'expiry_date', 'callback_check_date_format');
+        $this->form_validation->set_rules('expiry_date', 'expiry_date', 'required|callback_check_date_format');
         $this->form_validation->set_rules('from_hour', 'from_hour', 'callback_validate_time');
         $this->form_validation->set_rules('to_hour', 'to_hour', 'callback_validate_time');
         if (!$this->form_validation->run()) {
@@ -54,6 +55,7 @@ class vouchers extends REST_Controller {
             $data = array(
                 'type' => $this->input->post('type'),
                 'voucher' => $this->input->post('voucher'),
+                'country_id' => $this->input->post('country_id'),
                 'value' => $this->input->post('value'),
                 'user_id' => $this->current_user->user_id,
                 'one_time' => $this->input->post('one_time') == true ? 1 : 0,
@@ -68,18 +70,19 @@ class vouchers extends REST_Controller {
                     $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('voucher') . " " . $this->lang->line('required')));
                 else
                     $data['start_date'] = $this->input->post('start_date');
+            $phones = array();
+            if ($this->input->post('phones'))
+                $phones = $this->input->post('phones');
             $users = array();
             if ($this->input->post('all_users') == true)
                 $data['public_user'] = 1;
             else {
                 $data['public_user'] = 0;
                 $users = $this->input->post('users');
-                if (!is_array($users) || count($users) == 0)
+                if ((!is_array($users) || count($users) == 0) && count($phones) == 0)
                     $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one user"));
             }
-            $phones = array();
-            if ($this->input->post('phones'))
-                $phones = $this->input->post('phones');
+
             $companies = array();
             if ($this->input->post('all_fields') == true)
                 $data['public_field'] = 1;
@@ -87,8 +90,10 @@ class vouchers extends REST_Controller {
                 $data['public_field'] = 0;
                 $companies = $this->input->post('companies');
                 if (!is_array($companies) || count($companies) == 0)
-                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one field"));
+                    $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Select at least one field")));
             }
+            if ($data['type'] == 1 && $data['value']>100)
+                    $this->response(array('status' => false, 'data' => null, 'message' => "The voucher value can't be greator than 100%"));
             $games = array();
             if ($this->input->post('all_games') == true)
                 $data['all_games'] = 1;
@@ -96,7 +101,7 @@ class vouchers extends REST_Controller {
                 $data['all_games'] = 0;
                 $games = $this->input->post('games');
                 if (!is_array($games) || count($games) == 0)
-                    $this->response(array('status' => false, 'data' => null, 'message' => "Select at least one game"));
+                    $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Select at least one game")));
             }
             $voucher = $this->voucher_service
                     ->create(

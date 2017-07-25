@@ -103,7 +103,6 @@ class voucher_service extends CI_Model {
             'message' => $this->lang->line('It is not a valid voucher'),
             'data' => $res
         );
-        
     }
 
     function generate_activation_code() {
@@ -124,7 +123,9 @@ class voucher_service extends CI_Model {
         $voucher_id = $this->voucher->add($data);
 
         $this->load->model("Services/player_service");
+        $this->load->model("Services/country_service");
         $this->load->model('Services/notification_service');
+        $this->country_service->get($data['country_id']);
         if ($data['public_field'] == 0) {
             $this->load->model("Services/company_service");
             foreach ($companies as $company) {
@@ -153,6 +154,15 @@ class voucher_service extends CI_Model {
                 );
             }
         }
+        $voucher = $this->get($voucher_id);
+        $message = array();
+        if ($data['type'] == 1) {
+            $message["en"] = "You have received a new voucher with a discount of " . $data['value'] . "%.\nVoucher code: " . $data['voucher'];
+            $message["ar"] = "لقد ربحت قسيمة بحسم " . $data['value'] . "%.\n رمز القسيمة: " . $data['voucher'];
+        } else if ($data['type'] == 2) {
+            $message["en"] = "You have received a new voucher with " . ($data['value'] / 60) . " of free hours.\nVoucher code: " . $data['voucher'];
+            $message["ar"] = "لقد ربحت قسيمة بقيمة " . $data['value'] . "ساعة مجانية.\n رمز القسيمة: " . $data['voucher'];
+        }
         foreach ($phones as $phone) {
             $this->voucher->add_player(
                     array(
@@ -165,9 +175,17 @@ class voucher_service extends CI_Model {
             else
                 $msg = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
             $this->send_sms->send_sms($phone, $msg);
+            try {
+                $player = $this->player_service->get_by_phone($phone);
+                if ($player)
+                    $this->notification_service->send_notification_4customer($player->player_id, $message, $voucher, "new_voucher", 2);
+            } catch (Player_Not_Found_Exception $e) {
+                
+            }
         }
         $voucher = $this->get($voucher_id);
-        if ($data['public_user'] == 0) {
+
+        if ($data['public_user'] == 0 && is_array($users)) {
             foreach ($users as $user) {
                 try {
                     $res = $this->player_service->get($user);
@@ -180,17 +198,10 @@ class voucher_service extends CI_Model {
                             'voucher_id' => $voucher_id
                         )
                 );
-
-                $message = array();
-                if ($data['type'] == 1) {
-                    $message["en"] = "You have received a new voucher with a discount of " . $data['value'] . "%.\nVoucher code: " . $data['voucher'];
-                    $message["ar"] = "لقد ربحت قسيمة بحسم " . $data['value'] . "%.\n رمز القسيمة: " . $data['voucher'];
-                } else if ($data['type'] == 2) {
-                    $message["en"] = "You have received a new voucher with " . $data['value'] . " of free hours.\nVoucher code: " . $data['voucher'];
-                    $message["ar"] = "لقد ربحت قسيمة بقيمة " . $data['value'] . "ساعة مجانية.\n رمز القسيمة: " . $data['voucher'];
-                }
                 $this->notification_service->send_notification_4customer($user, $message, $voucher, "new_voucher", 2);
             }
+        } else if ($data['public_user'] == 1) {
+            $this->notification_service->send_notification_4_all_users($message, $voucher, "new_voucher", 2, $data['country_id']);
         }
 
         $voucher = $this->get($voucher_id);

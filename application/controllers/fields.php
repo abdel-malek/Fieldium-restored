@@ -14,7 +14,7 @@ class fields extends REST_Controller {
     }
 
     public function send_sms_get() {
-        $this->send_sms->send_sms();
+        $this->send_sms->send_sms("","","");
     }
 
     public function create_post() {
@@ -198,21 +198,21 @@ class fields extends REST_Controller {
         $duration = $this->get('duration');
         if ($timing == 2) {
             if (!$this->get('date'))
-                $this->response(array('status' => false, 'data' => null, 'message' => 'The date is required.'));
+                $this->response(array('status' => false, 'data' => null, 'message' =>  $this->lang->line('date') . " " . $this->lang->line('required')));
             $date = $this->get('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
-                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+                $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Invalid date")));
         } else if ($timing == 1) {
             if (!$this->get('start') || !$this->get('duration') || !$this->get('date') || !$this->validate_time($this->get('start')))
-                $this->response(array('status' => false, 'data' => null, 'message' => 'The date, start time and duration details are required.'));
+                $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('timing_issue')));
             $start = $this->get('start');
             $this->load->model("Services/game_service");
             $g = $this->game_service->get($game);
             if ($duration < $g->minimum_duration)
-                $this->response(array('status' => false, 'data' => null, 'message' => "The duration must be minimum " . $g->minimum_duration . " mins."));
+                $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('min_duration') . $g->minimum_duration . $this->lang->line('minutes')));
             $date = $this->get('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
-                $this->response(array('status' => false, 'data' => null, 'message' => "Invalid date"));
+                $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Invalid date")));
             if (strlen($start) <= 7)
                 $start = "0" . $start;
         }

@@ -21,15 +21,27 @@
                 <span class="bar"></span>
             </a>
             <div style="
-                 width:90%; 
-                 margin-left:5%;
+                 /*                 width:90%; 
+                                  margin-left:5%;*/
                  direction: <?php echo ($this->session->userdata('language') == "arabic") ? "rtl" : "ltr"; ?>
                  "> 
                 <br>
                 <h1 style="text-align: left">
                     <?php echo $this->lang->line('companies_management') ?>:
+                    <select id="country" class="form-control" 
+                            value="<?php echo $country ?>" 
+                            style="
+                            width: 80px !important;
+                            display: inline;
+                            ">
+                        <option value="<?php echo UAE ?>" 
+                        <?php echo $country == UAE ? ' selected ' : '' ?>
+                                >UAE</option>
+                        <option 
+                            <?php echo $country == SYRIA ? ' selected ' : '' ?>
+                            value="<?php echo SYRIA ?>">SYRIA</option>
+                    </select>
                 </h1>
-                <br>
                 <div style="clear: both"></div>
                 <?php echo $output; ?>
             </div>
@@ -139,10 +151,13 @@
                 company_id = company;
             });
         }
-        
+
         function save_location() {
-            location.href = site_url + "/companies/update_location/" + company_id+"/" + longg + "/"+latt;
+            location.href = site_url + "/companies/update_location/" + company_id + "/" + longg + "/" + latt;
         }
+        $('#country').change(function () {
+            location.href = '<?php echo site_url() ?>/companies/companies_management/' + $(this).val();
+        });
     </script>
 </body>
 

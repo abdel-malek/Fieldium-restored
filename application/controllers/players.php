@@ -14,18 +14,20 @@ class players extends REST_Controller {
     public function register_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('phone', 'lang:phone', 'required');
+        $this->form_validation->set_rules('phone', 'lang:phone', 'required|numeric');
         $this->form_validation->set_rules('name', 'lang:name', 'required');
         $this->form_validation->set_rules('os', 'os', 'required');
         $this->form_validation->set_rules('lang', 'lang:lang', 'callback_valid_lang');
+        $this->form_validation->set_rules('country', 'lang:country', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
         } else {
             $phone = $this->input->post('phone');
             $os = $this->input->post('os');
             $name = $this->input->post('name');
+            $country = $this->input->post('country');
             $lang = $this->input->post('lang') != "" ? strtolower($this->input->post('lang')) : $this->response->lang;
-            $user = $this->player_service->register($phone, $os, $name, $lang);
+            $user = $this->player_service->register($phone, $os, $name, $lang, $country);
             $this->response(array('status' => true, 'data' => $user, "message" => $this->lang->line('created')));
         }
     }
@@ -33,7 +35,7 @@ class players extends REST_Controller {
     public function verify_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('phone', 'Phone', 'required');
+        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
         $this->form_validation->set_rules('verification_code', 'Verification code', 'required');
 
         if (!$this->form_validation->run()) {
@@ -49,7 +51,7 @@ class players extends REST_Controller {
     public function request_verification_code_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('phone', 'Phone', 'required');
+        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
         $this->form_validation->set_rules('server_id', 'Server id', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception((validation_errors()) ? validation_errors() : "Validation Exception");
@@ -72,7 +74,7 @@ class players extends REST_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'lang:name', 'required');
-        $this->form_validation->set_rules('email', 'lang:email', 'valid_email');
+        $this->form_validation->set_rules('email', 'lang:email', '');
         $this->form_validation->set_rules('lang', 'lang:lang', 'callback_valid_lang');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception(validation_errors());
@@ -112,8 +114,10 @@ class players extends REST_Controller {
             $crud->set_theme('datatables')
                     ->set_table('player')
                     ->set_subject('player')
-                    ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'prefered_games', 'active')
+                    ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'lang', 'country_id', 'prefered_games', 'active')
                     ->display_as('player_id', 'Player')
+                    ->display_as('country_id', 'Country')
+                    ->set_relation('country_id', 'country', 'en_name')
                     ->set_relation_n_n('prefered_games', 'prefered_game', 'game_type', 'player_id', 'game_type_id', 'en_name')
                     ->callback_column('active', array($this, '_callback_active_render'))
                     ->callback_before_insert(array($this, 'encrypt_password_callback'))
@@ -196,7 +200,7 @@ class players extends REST_Controller {
 
     public function get_all_get() {
         $this->user_permissions->support_permission($this->current_user);
-        $players = $this->player_service->get_all();
+        $players = $this->player_service->get_all($this->get('country') ? $this->get('country') : null);
         $this->response(array('status' => true, 'data' => $players, 'message' => $this->lang->line('message_sent')));
     }
 

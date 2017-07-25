@@ -56,6 +56,8 @@ abstract class REST_Controller extends CI_Controller {
      */
     protected $response = NULL;
     public $language = "en";
+    public $user_country = UAE;
+
     /**
      * Stores DB, keys, key level, etc
      *
@@ -283,7 +285,13 @@ abstract class REST_Controller extends CI_Controller {
         } elseif ($this->config->item('rest_ip_whitelist_enabled')) {
             $this->_check_whitelist_auth();
         }
-
+        $header = $this->input->request_headers();
+        if (isset($header['Country'])) {
+            $this->user_country = $header['Country'];
+        }
+        if ($this->current_user && $this->current_user->role_id != ROLE::SUPPORT) {
+            $this->user_country = $this->current_user->country_id;
+        }
         $this->response->lang = $this->_detect_lang();
         $this->load->language(array('controllers', 'views', 'form_validation'), ($this->response->lang == "en") ? "english" : "arabic");
         $this->language = $this->response->lang;

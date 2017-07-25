@@ -2,8 +2,12 @@
 
 class field extends CI_Model {
 
+    private $country;
+
     public function __construct() {
         $this->load->database();
+        $CI = & get_instance();
+        $this->country = $CI->user_country;
     }
 
     public function get_all($lang = "en") {
@@ -18,6 +22,8 @@ class field extends CI_Model {
                         )
                         ->from('field')
                         ->join('company', 'company.company_id = field.company_id')
+                        ->join('area', 'company.area_id = area.area_id')
+                        ->where('area.country_id', $this->country)
                         ->where('deleted', 0)
                         ->get()->result();
     }
@@ -34,6 +40,8 @@ class field extends CI_Model {
                         )
                         ->from('field')
                         ->join('company', 'company.company_id = field.company_id')
+                        ->join('area', 'company.area_id = area.area_id')
+                        ->where('area.country_id', $this->country)
                         ->where('field.deleted', 0)
                         ->where('featured_place', 1)
                         ->get()->result();
@@ -51,12 +59,15 @@ class field extends CI_Model {
                         )
                         ->from('field')
                         ->join('company', 'company.company_id = field.company_id')
+                        ->join('area', 'company.area_id = area.area_id')
+                        ->where('area.country_id', $this->country)
                         ->where('field_id', $field_id)
                         ->where('field.deleted', false)
                         ->get()->row();
     }
 
     public function get_by_company($company_id, $lon, $lat, $lang = "en") {
+//        var_dump($this->country);
         $this->db->select(ENTITY::FIELD . ", "
                         . "field." . $lang . "_name as name, 
                 field." . $lang . "_description as description, 
@@ -77,6 +88,8 @@ class field extends CI_Model {
                 )  as available_time", false)
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
+                ->join('area', 'company.area_id = area.area_id')
+                ->where('area.country_id', $this->country)
                 ->where('field.deleted', 0)
                 ->where('field.company_id', $company_id);
         if ($lat == 0 || $lon == 0)
@@ -151,6 +164,8 @@ class field extends CI_Model {
                         , false)
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
+                ->join('area', 'company.area_id = area.area_id')
+                ->where('area.country_id', $this->country)
                 ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
         $this->db->where($where, '', false);
         if ($lat == 0 || $lon == 0)
@@ -242,6 +257,8 @@ class field extends CI_Model {
                         , false)
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
+                ->join('area', 'company.area_id = area.area_id')
+                ->where('area.country_id', $this->country)
                 ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
         $this->db->where('field.deleted', 0);
         $this->db->where('field.company_id', $company_id);
@@ -279,7 +296,7 @@ class field extends CI_Model {
 
     public function get_children($field_id, $root = null) {
         $this->db->select(ENTITY::FIELD . ", "
-                . "field.en_name as name,"
+                        . "field.en_name as name,"
                         . "company.en_name as company_name,"
                         . "company.latitude,"
                         . "company.longitude,"
@@ -289,6 +306,8 @@ class field extends CI_Model {
                 ->from('field_child')
                 ->join('field', 'field_child.child_id = field.field_id')
                 ->join('company', 'company.company_id = field.company_id')
+                ->join('area', 'company.area_id = area.area_id')
+                ->where('area.country_id', $this->country)
                 ->where('field_child.parent_id', $field_id);
         if ($root != null)
             $this->db->where('field.field_id !=', $root);
@@ -307,6 +326,8 @@ class field extends CI_Model {
                 ->from('field_child')
                 ->join('field', 'field_child.parent_id = field.field_id')
                 ->join('company', 'company.company_id = field.company_id')
+                ->join('area', 'company.area_id = area.area_id')
+                ->where('area.country_id', $this->country)
                 ->where('field_child.child_id', $field_id);
         if ($root != null)
             $this->db->where('field.field_id !=', $root);

@@ -35,6 +35,8 @@ define('UPLOADED_IMAGES_PATH', '/assets/uploaded_images/');
 define('FIELLDIUM_CONTACTUS_ACCOUNT', 'amalabdulraouf@gmail.com');
 define('UPLOADED_IMAGES_PATH_URL', 'assets/uploaded_images/');
 defined('UNIT') OR define('UNIT', 'AED');
+defined('UAE') OR define('UAE', 1);
+defined('SYRIA') OR define('SYRIA', 2);
 
 /*
   |--------------------------------------------------------------------------

@@ -104,7 +104,7 @@ function save_offer() {
         'description_ar': $('#description_ar').val(),
         'set_of_minutes': $('#set_of_minutes').val() * 60,
         'voucher_type': $('#voucher_type').val(),
-        'voucher_value': $('#voucher_value').val() * 60,
+        'voucher_value': $('#voucher_type').val() != 1 ? $('#voucher_value').val() * 60 : $('#voucher_value').val(),
         'voucher_start_after': $('#voucher_start_after').val(),
         'valid_days': $('#valid_days').val(),
         'start_date': $('#start_date').val(),
@@ -159,7 +159,7 @@ $.ajax({
 });
 
 $.ajax({
-    url: site_url + '/companies/get_all/format/json',
+    url: site_url + '/companies/get_all/format/json?country=' + $('#Country').val(),
     type: 'GET',
     success: function (response) {
         if (response.status == true) {
@@ -173,3 +173,23 @@ $.ajax({
     }
 });
 
+$('#Country').change(function () {
+    $("#companies").select2('destroy');
+    $("#companies").html("");
+    $('#all_fields').prop("checked", false);
+
+    $.ajax({
+        url: site_url + '/companies/get_all/format/json?country=' + $('#Country').val(),
+        type: 'GET',
+        success: function (response) {
+            if (response.status == true) {
+                $("#companies").select2({
+                    placeholder: "Select Company",
+                    data: response.data
+                });
+
+            } else
+                show_error(response.message);
+        }
+    });
+});

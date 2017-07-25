@@ -21,16 +21,16 @@
                 <span class="bar"></span>
             </a>
             <div style="
-                 width:90%; 
-                 margin-left:5%;
+/*                 width:90%; 
+                 margin-left:5%;*/
 
                  "> 
-                <br><br>
+                <br>
                 <h1 style="text-align: left">
                     Players Management:
                 </h1>
                 <div style="clear: both"></div>
-                <br><br>
+                <!--<br><br>-->
                 <?php echo $output; ?>
             </div>
         </div>

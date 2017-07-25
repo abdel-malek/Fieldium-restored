@@ -2,15 +2,19 @@
 
 class company extends CI_Model {
 
+    private $country;
+
     public function __construct() {
         $this->load->database();
+        $CI = & get_instance();
+        $this->country = $CI->user_country;
     }
 
-    public function get_all($lon, $lat, $lang = "en") {
+    public function get_all($lon, $lat, $lang = "en", $country = null) {
 
         $this->db->select(ENTITY::COMPANY . ", "
-                        . $lang . "_name as name, "
-                        . $lang . "_name as text, "
+                        . "company." . $lang . "_name as name, "
+                        . "company." . $lang . "_name as text, "
                         . "company.company_id as id, "
                         . $lang . "_description as description, "
                         . $lang . "_address as address, "
@@ -19,7 +23,12 @@ class company extends CI_Model {
                         . "where company.company_id = field.company_id AND field.deleted = 0"
                         . ") as fields_number", false)
                 ->from('company ')
-                ->where('company.deleted', 0);
+                ->join('area', 'company.area_id = area.area_id');
+
+        if ($country == null)
+            $country = $this->country;
+        $this->db->where('area.country_id', $country);
+        $this->db->where('company.deleted', 0);
         if ($lat == 0 || $lon == 0)
             $this->db->order_by("fields_number desc");
         else
@@ -27,15 +36,20 @@ class company extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function get($company_id, $lang = "en") {
+    public function get($company_id, $lang = "en", $country = null) {
+        if ($country == null)
+            $country = $this->country;
+//        var_dump($country);
         return $this->db->select(ENTITY::COMPANY . ", "
-                                . $lang . "_name as name, "
+                                . "company." . $lang . "_name as name, "
                                 . $lang . "_description as description, "
                                 . $lang . "_address as address, "
                                 . "(SELECT count(field_id) FROM field "
                                 . "where company.company_id = field.company_id AND field.deleted = 0"
                                 . ") as fields_number")
                         ->from('company')
+                        ->join('area', 'company.area_id = area.area_id')
+//                        ->where('area.country_id', $country)
                         ->where('company.company_id', $company_id)
                         ->where('company.deleted', false)
                         ->get()->row();

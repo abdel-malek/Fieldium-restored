@@ -32,8 +32,8 @@ class company_service extends CI_Model {
         return $company;
     }
 
-    public function get($company_id, $lang = "en") {
-        $company = $this->company->get($company_id, $lang);
+    public function get($company_id, $lang = "en", $country = null) {
+        $company = $this->company->get($company_id, $lang, $country);
         if (!$company)
             throw new Company_Not_Found_Exception($lang);
         if ($company->image != null)
@@ -43,8 +43,8 @@ class company_service extends CI_Model {
         return $company;
     }
 
-    public function get_all($lon = 0.0, $lat = 0.0, $lang = "en") {
-        $companies = $this->company->get_all($lon, $lat, $lang);
+    public function get_all($lon = 0.0, $lat = 0.0, $lang = "en", $country = null) {
+        $companies = $this->company->get_all($lon, $lat, $lang, $country );
         foreach ($companies as $company) {
             if ($company->image != null)
                 $company->image_url = base_url() . UPLOADED_IMAGES_PATH_URL . $company->image;
@@ -76,8 +76,6 @@ class company_service extends CI_Model {
         return $company;
     }
 
-    
-    
     public function delete($company_id) {
         $this->get($company_id, "en");
 
@@ -98,8 +96,8 @@ class company_service extends CI_Model {
                 )
         );
     }
-    
-    public function start_and_end_time($company_id){
+
+    public function start_and_end_time($company_id) {
         return $this->company->start_and_end_time($company_id);
     }
 

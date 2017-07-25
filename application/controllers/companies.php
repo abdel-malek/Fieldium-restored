@@ -125,7 +125,11 @@ class companies extends REST_Controller {
     public function get_all_get() {
         $lon = (!$this->get('longitude')) ? 0.0 : $this->get('longitude');
         $lat = (!$this->get('latitude')) ? 0.0 : $this->get('latitude');
-        $companies = $this->company_service->get_all($lon, $lat, $this->response->lang);
+        $country=null;
+        if($this->get('country'))
+            $country = $this->get('country');
+        
+        $companies = $this->company_service->get_all($lon, $lat, $this->response->lang,$country);
         $this->response(array('status' => true, 'data' => $companies, 'message' => ""));
     }
 
@@ -150,7 +154,9 @@ class companies extends REST_Controller {
         }
     }
 
-    public function companies_management_post($operation = null) {
+    protected $country_select = UAE;
+
+    public function companies_management_post($country = UAE, $operation = null) {
         if ($operation == "edit" || $operation == "update" || $operation == "update_validation" || $operation == "upload_file") {
             try {
                 $this->user_permissions->is_company($this->current_user);
@@ -160,27 +166,40 @@ class companies extends REST_Controller {
         } else {
             $this->user_permissions->support_permission($this->current_user);
         }
+        $this->country_select = $country;
+        $this->load->model("Services/area_service");
+        $areas = $this->area_service->get_by_country("en", $country);
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
 
-            $crud->set_theme('datatables')
-                    ->where("company.deleted", 0);
-            $crud->set_table('company')
+            $crud->set_theme('datatables');
+            $crud->set_table('company');
+            if (count($areas) > 0) {
+                $crud->where('(company.deleted = 0 and company.area_id =' . $areas[0]->area_id . ")");
+                foreach ($areas as $area) {
+                    $crud->or_where('(company.deleted = 0 and company.area_id =' . $area->area_id . ")");
+                }
+            }
+
+            $crud->where("company.deleted", 0)
                     ->set_subject('Company')
                     ->columns('company_id', 'en_name', 'phone', 'en_address', 'area_id', 'logo', 'image', 'location')
                     ->order_by('company_id')
                     ->display_as('company_id', 'id')
+//                    ->display_as('country_id', 'Country')
                     ->display_as('en_name', 'Name')
                     ->display_as('en_address', 'Address')
                     ->display_as('en_description', 'Description')
                     ->display_as('area_id', 'Area')
+//                    ->field_type('area_id', 'dropdown', $areas_array)
+                    ->set_relation('area_id', 'area', 'en_name', array('country_id' => $country))
                     ->field_type('phone', 'integer')
-                    ->set_lang_string('list_delete', '')
-                    ->set_lang_string('list_edit', '')
+//                    ->set_lang_string('list_delete', '')
+//                    ->set_lang_string('list_edit', '')
                     ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
                     ->unset_add_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
-                    ->set_relation('area_id', 'area', 'en_name')
+//                    ->set_relation('area_id', 'area', 'en_name')
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->set_field_upload('logo', 'assets/uploaded_images/')
                     ->required_fields('en_name', 'phone', 'en_address', 'area_id', 'location')
@@ -196,7 +215,8 @@ class companies extends REST_Controller {
                 'view' => 'companies_management',
                 'output' => $output->output,
                 'js_files' => $output->js_files,
-                'css_files' => $output->css_files
+                'css_files' => $output->css_files,
+                'country' => $country
                     )
             );
         } catch (Exception $e) {
@@ -204,8 +224,8 @@ class companies extends REST_Controller {
         }
     }
 
-    public function companies_management_get($operation = null) {
-        $this->companies_management_post($operation);
+    public function companies_management_get($country = UAE, $operation = null) {
+        $this->companies_management_post($country, $operation);
     }
 
     public function delete_company($primary_key) {
@@ -219,7 +239,7 @@ class companies extends REST_Controller {
     }
 
     public function _callback_location_render($value, $row) {
-        $company = $this->company_service->get($row->company_id);
+        $company = $this->company_service->get($row->company_id, "en", $this->country_select);
         $row->company_id = $company->company_id;
         $row->location = "<a class='fieldium-color' onclick='pan($company->longitude, $company->latitude, $company->company_id);$(\"#map_modal\").modal(\"show\");'>"
                 . "<img width='25px' height='25px' src='" . base_url() . "assets/images/location.png' />  map"

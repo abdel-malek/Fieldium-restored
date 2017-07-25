@@ -21,11 +21,11 @@
                 <span class="bar"></span>
             </a>
             <div style="
-                 width:90%; 
-                 margin-left:5%;
+/*                 width:90%; 
+                 margin-left:5%;*/
                  
                  "> 
-                <br><br>
+                <br>
                 <h1 style="text-align: left">
                     Users Management:
                 </h1>

@@ -18,7 +18,7 @@ class booking_service extends CI_Model {
         if ($voucher) {
             $this->load->model("Services/voucher_service");
             $check_voucher = $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
-            if($check_voucher["valid"]==0)
+            if ($check_voucher["valid"] == 0)
                 throw new Parent_Exception("It is not a valid voucher");
         }
         $field = $this->field->get($field_id);
@@ -85,17 +85,25 @@ class booking_service extends CI_Model {
 //            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
 //            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
 //        }
+//        if ($manually == true || $field->auto_confirm == 1) {
+        $this->check_for_offers($player_id);
+//        }
+        return $booking;
+    }
+
+    function check_for_offers($player_id) {
         $this->load->model("Services/offer_service");
         $offers = $this->offer_service->check_for_offers($player_id);
         $this->load->model("Services/voucher_service");
         foreach ($offers as $value) {
             $offer = $this->offer_service->get($value->offer_id);
-            for ($i = 0; $i < $value->vouchers; $i++) {
+            for ($i = 1; $i < $value->vouchers; $i++) {
                 $info = array(
                     'type' => $offer->voucher_type,
                     'voucher' => $this->voucher_service->generate_voucher(),
                     'value' => $offer->voucher_value,
                     'user_id' => $user_id,
+                    'country_id' => $offer->country_id,
                     'start_date' => date('Y-m-d', strtotime("+" . $offer->voucher_start_after . " day")),
                     'expiry_date' => date('Y-m-d', strtotime("+" . ($offer->voucher_start_after + $offer->valid_days) . " day")),
                     'from_hour' => $offer->voucher_from_hour,
@@ -123,7 +131,6 @@ class booking_service extends CI_Model {
                 $this->offer_service->generate_voucher($offer, $player_id, $booking_id);
             }
         }
-        return $booking;
     }
 
     private function field_validity($field, $date, $start, $duration, $end, $root = null) {
@@ -273,6 +280,13 @@ class booking_service extends CI_Model {
 
     public function decline($booking_id) {
         $booking = $this->get($booking_id);
+        if ($booking->voucher != null) {
+            $this->load->model('Services/voucher_service');
+            $voucher = $this->voucher_service->get($booking->voucher);
+            if ($voucher->one_time == 1)
+                $this->voucher_service->update($voucher->voucher_id, array('valid' => 1));
+        }
+
         if ($booking->state_id == BOOKING_STATE::DECLINED)
             return false;
         $this->booking->update($booking_id, array('state_id' => BOOKING_STATE::DECLINED));
@@ -318,6 +332,7 @@ class booking_service extends CI_Model {
                 . "Enjoy the Game,%0A"
                 . "Fieldium";
         $this->send_sms->send_sms($booking->player_phone, $msg);
+        $this->check_for_offers($booking->player_id);
         return $booking;
     }
 

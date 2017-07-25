@@ -2,17 +2,22 @@
 
 class Send_sms extends CI_Controller {
 
+    private $country;
+
     public function __construct() {
-        // $this->load->database();
-        //  $CI =& get_instance();
-        //  $CI->load->model('DataSources/messages');
+        $CI = & get_instance();
+        $this->country = $CI->user_country;
     }
 
     public function send_sms($moblie, $message, $lang = "en") {
-        $_url = 'http://www.smartsmsgateway.com/api/api_http.php?username=tradinos&password=trd256&senderid=SMS%20Alert&to=971' . $moblie . '&text=' . $message . '&type=text';
-        $_url = preg_replace("/ /", "%20", $_url);
-        $result = file_get_contents($_url);
-        return $result;
+        if ($this->country == UAE) {
+            $_url = 'http://www.smartsmsgateway.com/api/api_http.php?username=tradinos&password=trd256&senderid=SMS%20Alert&to=971' . $moblie . '&text=' . $message . '&type=text';
+            $_url = preg_replace("/ /", "%20", $_url);
+            $result = file_get_contents($_url);
+            return $result;
+        } else {
+            
+        }
     }
 
     private function ToUnicode($Text) {

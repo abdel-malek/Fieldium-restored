@@ -13,8 +13,9 @@ class player_service extends CI_Model {
         $this->load->library('send_sms');
     }
 
-    public function register($phone, $os, $name, $lang) {
-
+    public function register($phone, $os, $name, $lang, $country) {
+        $this->load->model('Services/country_service');
+        $this->country_service->get($country);
         $player = $this->player->get_by_phone($phone);
         if ($player) {
             $player_id = $player->player_id;
@@ -31,7 +32,8 @@ class player_service extends CI_Model {
                 'server_id' => md5($server_id),
                 'verification_code' => $code,
                 'active' => 0,
-                'lang' => $lang
+                'lang' => $lang,
+                'country_id' => $country
             ));
             $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         } else {
@@ -47,7 +49,8 @@ class player_service extends CI_Model {
                 'name' => $name,
                 'server_id' => md5($server_id),
                 'verification_code' => $code,
-                'lang' => $lang
+                'lang' => $lang,
+                'country_id' => $country
             ));
             $this->send_sms->send_sms($phone, $this->lang->line('verification_sms') . $code);
         }
@@ -96,6 +99,16 @@ class player_service extends CI_Model {
         if (!$res)
             throw new Player_Not_Found_Exception($lang);
         $res->prefered_games = $this->game->get_player_games($id, $lang);
+        if ($res->profile_picture != "" && $res->profile_picture != null)
+            $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
+        return $res;
+    }
+
+    public function get_by_phone($phone, $lang = "en") {
+        $res = $this->player->get_by_phone($phone);
+        if (!$res)
+            throw new Player_Not_Found_Exception($lang);
+        $res->prefered_games = $this->game->get_player_games($res->player_id, $lang);
         if ($res->profile_picture != "" && $res->profile_picture != null)
             $res->profile_picture_url = base_url() . UPLOADED_IMAGES_PATH_URL . $res->profile_picture;
         return $res;
@@ -218,8 +231,12 @@ class player_service extends CI_Model {
         $this->player->update($player_id, array('profile_picture' => $image_name));
     }
 
-    function get_all() {
-        return $this->player->get_all();
+    function get_all($country = null) {
+        return $this->player->get_all($country);
+    }
+
+    function get_app_users($country = null) {
+        return $this->player->get_app_users($country);
     }
 
 }

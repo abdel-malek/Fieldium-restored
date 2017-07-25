@@ -60,8 +60,8 @@
             </a>
 
             <div style="
-                 width:90%; 
-                 margin-left:5%;
+/*                 width:90%; 
+                 margin-left:5%;*/
 
                  "> 
 

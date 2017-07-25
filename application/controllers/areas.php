@@ -16,7 +16,7 @@ class areas extends REST_Controller {
         $this->response(array('status' => true, 'data' => $areas, 'message' => ""));
     }
 
-    function areas_management_post($primary_key = null) {
+    function areas_management_post($country = UAE, $primary_key = null) {
         $this->user_permissions->support_permission($this->current_user);
         $this->load->library('grocery_CRUD');
         try {
@@ -24,10 +24,13 @@ class areas extends REST_Controller {
 
             $crud->set_theme('datatables')
                     ->set_table('area')
+                    ->where('area.country_id', $country)
                     ->set_subject('area')
-                    ->columns('area_id', 'en_name')
+                    ->columns('area_id', 'country_id', 'en_name')
                     ->display_as('area_id', 'id')
+                    ->display_as('country_id', 'Country')
                     ->display_as('en_name', 'name')
+                    ->set_relation('country_id', 'country', 'en_name')
                     ->unset_edit_fields('ar_name')
                     ->unset_add_fields('ar_name')
                     ->required_fields('en_name')
@@ -39,7 +42,8 @@ class areas extends REST_Controller {
                 'view' => 'areas_management',
                 'output' => $output->output,
                 'js_files' => $output->js_files,
-                'css_files' => $output->css_files
+                'css_files' => $output->css_files,
+                'country' => $country
                     )
             );
         } catch (Exception $e) {
@@ -47,7 +51,8 @@ class areas extends REST_Controller {
         }
     }
 
-    function areas_management_get($primary_key = null) {
-        $this->areas_management_post($primary_key);
+    function areas_management_get($country = UAE, $primary_key = null) {
+        $this->areas_management_post($country , $primary_key);
     }
+
 }
