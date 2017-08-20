@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android-Week-View-develop/library/Android-Week-View.iml" filepath="$PROJECT_DIR$/Android-Week-View-develop/library/Android-Week-View.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Fieldium.iml" filepath="$PROJECT_DIR$/Fieldium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tradinos_core/tradinos_core.iml" filepath="$PROJECT_DIR$/tradinos_core/tradinos_core.iml" />
+    </modules>
+  </component>
+</project>

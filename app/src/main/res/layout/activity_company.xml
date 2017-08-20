@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#07bdd0"
+        android:id="@+id/linearLayout2">
+        <ImageButton
+            android:id="@+id/imagebutton_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/arrow_back"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_button"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="Save"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:textColor="#07bccf"
+            android:text="Save"
+            android:background="@drawable/round_shape" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:paddingBottom="20dp"
+            android:orientation="horizontal"
+            android:id="@+id/images_LinearLayout">
+
+
+            <com.bluebrand.fieldiumadmin.View.Utils.ImageChooser
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/cover_imageView"
+                android:gravity="center" />
+
+        </RelativeLayout>
+
+        <com.bluebrand.fieldiumadmin.View.Utils.ImageChooser
+            android:layout_width="140dp"
+            android:layout_height="160dp"
+            android:id="@+id/logo_Rounded"
+            app:defaultImage="@mipmap/add_photo"
+            android:src="@android:drawable/ic_menu_camera"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="300dp"
+        android:layout_marginRight="300dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel"
+                android:layout_marginBottom="15dp">
+                <EditText
+                    android:id="@+id/comp_name_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Company Name"
+                    android:imeOptions="actionUnspecified"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/comp_address_editText"
+                    android:nextFocusForward="@+id/comp_address_editText"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/TextLabel"
+                    android:layout_toLeftOf="@+id/Map"
+                    android:layout_toStartOf="@+id/Map">
+                    <EditText
+                        android:id="@+id/comp_address_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Address"
+                        android:imeOptions="actionUnspecified"
+                        android:maxLines="1"
+                        android:paddingTop="10dp"
+                        android:nextFocusDown="@+id/comp_phone_editText"
+                        android:nextFocusForward="@+id/comp_phone_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Map"
+                    android:src="@mipmap/location"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/areas_spinner"
+                android:layout_marginBottom="15dp" />
+
+            <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel"
+                android:layout_marginBottom="15dp">
+            <EditText
+                android:id="@+id/comp_phone_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone"
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:paddingTop="10dp"
+                android:nextFocusDown="@+id/comp_desc_editText"
+                android:nextFocusForward="@+id/comp_desc_editText"
+                android:singleLine="true"
+                android:inputType="phone" />
+        </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel"
+               >
+                <EditText
+                    android:id="@+id/comp_desc_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description"
+                    android:imeOptions="actionUnspecified"
+                    android:paddingTop="10dp"
+                    android:nextFocusDown="@+id/field_area_y_editText"
+                    android:nextFocusForward="@+id/field_area_y_editText"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

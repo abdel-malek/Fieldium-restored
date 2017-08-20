@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="1">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mesg_checkBox"
+        android:button="@drawable/checkbox_small_selector"
+        android:layout_gravity="center|start"
+        android:background="@null"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:checked="false"
+        android:layout_alignTop="@+id/mesg_textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layoutDirection="rtl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Large Text ssssssdasdasdsdsa dssf  dfsdfsdf \ndsfsdf"
+        android:id="@+id/mesg_textView"
+        android:textSize="20dp"
+        android:layout_toRightOf="@+id/mesg_checkBox"
+        android:layout_toEndOf="@+id/mesg_checkBox"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>

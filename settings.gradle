@@ -1,0 +1,2 @@
+include ':app', ':tradinos_core', ':Android-Week-View'
+project(':Android-Week-View').projectDir = new File('Android-Week-View-develop/library')

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/nav_booking"
+            android:icon="@mipmap/bookings"
+            android:title="Booking" />
+        <item
+            android:id="@+id/nav_field_profile"
+            android:icon="@mipmap/field_profile"
+            android:title="Company Profile" />
+        <item
+            android:id="@+id/nav_my_fields"
+            android:icon="@mipmap/field"
+            android:title="My Fields" />
+        <item
+            android:id="@+id/nav_report"
+            android:icon="@mipmap/reports"
+            android:title="Reports" >
+            <menu android:id="@+id/you_menu">
+                <group>
+                    <item
+                        android:id="@+id/nav_fields_report"
+                        android:icon="@mipmap/reports"
+                        android:title="Fields Report" />
+                    <item
+                        android:id="@+id/nav_dec_reservations_report"
+                        android:icon="@mipmap/reports"
+                        android:title="Declined Reservations Report" />
+                    <item
+                        android:id="@+id/nav_reservations_report"
+                        android:icon="@mipmap/reports"
+                        android:title="Summery Report" />
+                </group>
+            </menu >
+        </item>
+    </group>
+<group>
+    <item
+        android:id="@+id/nav_pass"
+        android:icon="@drawable/lock"
+        android:title="Change password" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@mipmap/logout"
+        android:title="Logout" />
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@mipmap/about"
+        android:title="About" />
+</group>
+
+</menu>
