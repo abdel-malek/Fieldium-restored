@@ -178,7 +178,9 @@ $config['auth_library_function'] = 'check_user';
   | Acceptable values are; 'none', 'digest' and 'basic'.
   |
  */
-
+$config['auth_override_class_method']['payment']['index'] = 'none';
+$config['auth_override_class_method']['payment']['checkout'] = 'none';
+$config['auth_override_class_method']['payment']['generate_token'] = 'none';
 $config['auth_override_class_method']['site']['index'] = 'none';
 $config['auth_override_class_method']['site']['home'] = 'none';
 $config['auth_override_class_method']['site']['send_message'] = 'none';

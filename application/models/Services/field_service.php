@@ -17,7 +17,7 @@ class field_service extends CI_Model {
     }
 
     public function create(
-    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $lang
+    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $lang, $fields = null
     ) {
 
         $field_id = $this->field->add(array(
@@ -77,7 +77,11 @@ class field_service extends CI_Model {
                 ));
             }
         }
-
+        if ($fields && $fields != "" && $fields != null) {
+            $fields = json_decode($fields);
+            foreach ($fields as $field)
+                $this->field_service->add_child($field_id, $field);
+        }
         $field = $this->get($field_id, $lang);
         return $field;
     }
@@ -268,6 +272,7 @@ class field_service extends CI_Model {
             $field->games = $results;
             if ($field->logo != null)
                 $field->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $field->logo;
+            $field->children = $this->field->get_children($field->field_id);
             $result[] = $field;
         }
         return $result;
@@ -282,7 +287,6 @@ class field_service extends CI_Model {
         $result = array();
         foreach ($fields as $field) {
             $available = true;
-//            var_dump($game);
             if ($timing == 2 && count($this->check_availability($field->field_id, $date, $game)) == 0) {
                 $available = false;
             }
@@ -342,7 +346,8 @@ class field_service extends CI_Model {
 
     public function check_availability($field_id, $date, $game_type) {
         $field = $this->get($field_id);
-        $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
+        $bookings = array();
+        $bookings = $this->booking_service->field_bookings_by_date($field_id, $date,"en",$bookings);
         $result = array();
         if ($field->open_time < $field->close_time) {
             $time = $field->open_time;
@@ -512,7 +517,8 @@ class field_service extends CI_Model {
 
     public function busy_range($field_id, $date) {
         $field = $this->get($field_id);
-        $bookings = $this->booking_service->field_bookings_by_date($field_id, $date);
+        $bookings = array();
+        $bookings = $this->booking_service->field_bookings_by_date($field_id, $date,"en",$bookings);
         $time = $field->open_time;
         $end = $field->close_time;
         $result = array();
@@ -589,16 +595,17 @@ class field_service extends CI_Model {
         return $this->field->get_parents($field_id, $root);
     }
 
-    public function add_child($parent, $child){
-       
-        try{
+    public function add_child($parent, $child) {
+
+        try {
             $this->get($parent);
             $this->get($child);
             $this->field->add_child($parent, $child);
         } catch (Field_Not_Found_Exception $ex) {
-
+            
         }
     }
+
 }
 
 ?>

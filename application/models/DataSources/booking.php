@@ -13,11 +13,14 @@ class booking extends CI_Model {
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, player.name as player_name,"
                                 . " player.phone as player_phone, company." . $lang . "_address as address,"
-                                . " company." . $lang . "_name as company_name, company.logo"
+                                . " company." . $lang . "_name as company_name, company.logo,country.*"
                         )
                         ->from('booking')
                         ->join('field', 'field.field_id = booking.field_id')
                         ->join('company', 'company.company_id = field.company_id')
+                        ->join('area', 'company.area_id = area.area_id')
+                        ->join('country', 'country.country_id = area.country_id')
+//                        ->join('curreny', 'country.curreny_id = curreny.curreny_id')
                         ->join('voucher', 'voucher.voucher = booking.voucher', 'left')
                         ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
                         ->join('player', 'player.player_id = booking.player_id', 'left')
@@ -168,7 +171,7 @@ class booking extends CI_Model {
                         ->get()->result();
     }
 
-    public function field_bookings_by_date($field_id, $date, $lang = "en") {
+    public function bookings_by_date_qry($field_id, $date, $lang = "en") {
         return $this->db->select("booking.*,"
                                 . "game_type.en_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
@@ -184,6 +187,40 @@ class booking extends CI_Model {
                         ->order_by('booking.start ASC')
                         ->get()->result();
     }
+
+    public function field_bookings_by_date($field_id, $date, $lang = "en", &$bookings, $root = null) {
+        $b = $this->bookings_by_date_qry($field_id, $date, $lang = "en");
+        $bookings = array_merge($bookings,$b);
+		//var_dump($b);
+        $parents = $this->field->get_parents($field_id, $root);
+        foreach ($parents as $parent) {
+            $this->field_bookings_by_date($parent->field_id, $date, $lang, $bookings, $field_id);
+            //$bookings = array_merge($bookings, $b);
+        }
+        $children = $this->field->get_children($field_id, $root);
+        foreach ($children as $child) {
+            $this->field_bookings_by_date($child->field_id, $date, $lang, $bookings, $field_id);
+            //$bookings = array_merge($bookings, $b);
+        }
+        return $bookings;
+    }
+    
+//    public function field_bookings_by_date($field_id, $date, $lang = "en") {
+//        return $this->db->select("booking.*,"
+//                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+//                                . "booking.total, " . ENTITY::FIELD . ","
+//                                . " field.$lang" . "_name as field_name")
+//                        ->from('booking')
+//                        ->join('field', 'field.field_id = booking.field_id')
+//                        ->join('player', 'player.player_id = booking.player_id')
+//                        ->join('game_type', 'game_type.game_type_id = booking.game_type_id')
+//                        ->where('booking.field_id', $field_id)
+//                        ->where('booking.state_id', BOOKING_STATE::APPROVED)
+//                        ->where('booking.date', $date)
+//                        ->where('booking.deleted', 0)
+//                        ->order_by('booking.start ASC')
+//                        ->get()->result();
+//    }
 
     public function field_bookings_by_timing($field_id, $date, $start, $duration, $booking_id = null) {
         $where = "";

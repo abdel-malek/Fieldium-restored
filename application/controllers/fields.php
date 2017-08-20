@@ -14,7 +14,7 @@ class fields extends REST_Controller {
     }
 
     public function send_sms_get() {
-        $this->send_sms->send_sms("","","");
+        $this->send_sms->send_sms("", "", "");
     }
 
     public function create_post() {
@@ -61,7 +61,7 @@ class fields extends REST_Controller {
             }
             $field = $this->field_service
                     ->create(
-                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $this->response->lang
+                    $company_id, $name, $ar_name, $phone, $hour_rate, $open_time, $cloes_time, $area_x, $area_y, $max_capacity, $description, $ar_description, $images, $amenities, $games_types, $auto_confirm, $this->response->lang, $this->input->post('children')
             );
             $this->response(array('status' => true, 'data' => $field, 'message' => $this->lang->line('created')));
         }
@@ -198,7 +198,7 @@ class fields extends REST_Controller {
         $duration = $this->get('duration');
         if ($timing == 2) {
             if (!$this->get('date'))
-                $this->response(array('status' => false, 'data' => null, 'message' =>  $this->lang->line('date') . " " . $this->lang->line('required')));
+                $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line('date') . " " . $this->lang->line('required')));
             $date = $this->get('date');
             if (strtotime($date) < strtotime(date('Y-m-d')))
                 $this->response(array('status' => false, 'data' => null, 'message' => $this->lang->line("Invalid date")));
@@ -345,6 +345,12 @@ class fields extends REST_Controller {
         if ($post_array['open_time'] == $post_array['close_time']) {
             $post_array['open_time'] = "00:00:00";
             $post_array['close_time'] = "23:59:00";
+        }
+        if ($post_array['area_x'] == "") {
+            $post_array['area_x'] = 0;
+        }
+        if ($post_array['area_y'] == "") {
+            $post_array['area_y'] = 0;
         }
         return $post_array;
     }

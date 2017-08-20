@@ -89,7 +89,7 @@ class field extends CI_Model {
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
                 ->join('area', 'company.area_id = area.area_id')
-                ->where('area.country_id', $this->country)
+//                ->where('area.country_id', $this->country)
                 ->where('field.deleted', 0)
                 ->where('field.company_id', $company_id);
         if ($lat == 0 || $lon == 0)
@@ -165,7 +165,7 @@ class field extends CI_Model {
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
                 ->join('area', 'company.area_id = area.area_id')
-                ->where('area.country_id', $this->country)
+//                ->where('area.country_id', $this->country)
                 ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
         $this->db->where($where, '', false);
         if ($lat == 0 || $lon == 0)
@@ -258,7 +258,7 @@ class field extends CI_Model {
                 ->from('field')
                 ->join('company', 'company.company_id = field.company_id')
                 ->join('area', 'company.area_id = area.area_id')
-                ->where('area.country_id', $this->country)
+//                ->where('area.country_id', $this->country)
                 ->join('field_game_type', 'field_game_type.field_id = field.field_id', 'left');
         $this->db->where('field.deleted', 0);
         $this->db->where('field.company_id', $company_id);

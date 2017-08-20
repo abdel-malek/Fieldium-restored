@@ -210,7 +210,7 @@ class player_service extends CI_Model {
 
     function generate_activation_code() {
 
-        $digites = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $digites = '0123456789';
         $randomString = $digites[rand(0, strlen($digites) - 1)]
                 . $digites[rand(0, strlen($digites) - 1)]
                 . $digites[rand(0, strlen($digites) - 1)]

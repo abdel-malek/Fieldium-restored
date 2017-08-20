@@ -98,11 +98,8 @@ class voucher_service extends CI_Model {
                 );
         }
         $res->message = $this->lang->line('valid_voucher');
-        return array(
-            'valid' => 1,
-            'message' => $this->lang->line('It is not a valid voucher'),
-            'data' => $res
-        );
+        $res->valid = 1;
+        return $res;
     }
 
     function generate_activation_code() {
@@ -120,12 +117,14 @@ class voucher_service extends CI_Model {
     public function create(
     $data, $users, $phones, $companies, $games
     ) {
+        $this->phones_list($phones);
+        $this->load->model("Services/country_service");
+        $this->country_service->get($data['country_id']);
         $voucher_id = $this->voucher->add($data);
 
         $this->load->model("Services/player_service");
-        $this->load->model("Services/country_service");
         $this->load->model('Services/notification_service');
-        $this->country_service->get($data['country_id']);
+
         if ($data['public_field'] == 0) {
             $this->load->model("Services/company_service");
             foreach ($companies as $company) {
@@ -206,6 +205,18 @@ class voucher_service extends CI_Model {
 
         $voucher = $this->get($voucher_id);
         return $voucher;
+    }
+
+    function phones_list($data) {
+//        $data = json_decode($json, true);
+        if (!is_array($data))
+            throw new parent_exception('phones_format');
+        for ($i = 0; $i < count($data); $i++) {
+//            var_dump(is_numeric($data[$i]) );
+            if (!(is_numeric($data[$i]) && strlen($data[$i]) == 9))
+                throw new parent_exception("Valid phone");
+        }
+        return $data;
     }
 
     public function get($voucher_id) {

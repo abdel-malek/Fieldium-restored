@@ -37,7 +37,13 @@ class offer extends CI_Model {
                         . 'booking.state_id = ' . BOOKING_STATE::APPROVED . " and "
                         . "date(booking.date) >= date(offer.start_date) and "
                         . 'date(booking.date) <= date(offer.expiry_date) and '
-                        . '(offer.public_field = 1 OR booking.field_id IN ('
+                        . '((offer.public_field = 1 and '
+                        . 'booking.field_id IN ('
+                        . 'select field_id from field '
+                        . 'join company on company.company_id = field.company_id '
+                        . 'join area on company.area_id = area.area_id where area.country_id = offer.country_id'
+                        . ')'
+                        . ') OR booking.field_id IN ('
                         . 'select field.field_id from offer_company '
                         . 'join field on field.company_id = offer_company.company_id '
                         . 'where offer_company.offer_id = offer.offer_id )) '
@@ -48,7 +54,9 @@ class offer extends CI_Model {
                         . ')*offer.set_of_minutes),0) as booked_hours', false)
                 ->from('offer')
                 ->join('offer_usage', 'offer_usage.offer_id = offer.offer_id and offer_usage.player_id = ' . $player_id, 'left')
+//                ->join('player', '1 and player.player_id = '.$player_id, 'left')
                 ->where('offer.valid', 1)
+//                ->where('(player.country_id is null or offer.country_id = player.country_id)')
                 ->where('date(offer.expiry_date) >=', date('Y-m-d'));
 //                        ->where('((select sum(duration) from booking '
 //                                . 'where booking.player_id = ' . $player_id . ' and '
@@ -67,8 +75,8 @@ class offer extends CI_Model {
 //                                . 'where offer_usage.offer_id = offer.offer_id and '
 //                                . 'offer_usage.player_id = ' . $player_id
 //                                . ')*offer.set_of_minutes)/offer.set_of_minutes >= 1')
-        if ($country != null)
-            $this->db->where('offer.country_id', $country);
+//        if ($country != null)
+//            $this->db->where('offer.country_id = player.country_id');
         return $this->db->group_by('offer.offer_id')
                         ->get()->result();
     }
@@ -168,14 +176,22 @@ class offer extends CI_Model {
                                 . ')*offer.set_of_minutes)/offer.set_of_minutes as vouchers', false)
                         ->from('offer')
                         ->join('offer_usage', 'offer_usage.offer_id = offer.offer_id and offer_usage.player_id = ' . $player_id, 'left')
+                        ->join('player', 'player.player_id = offer_usage.player_id ', 'left')
                         ->where('offer.valid', 1)
+                        ->where('offer.country_id = player.country_id')
                         ->where('date(offer.expiry_date) >=', date('Y-m-d'))
                         ->where('((select sum(duration) from booking '
                                 . 'where booking.player_id = ' . $player_id . ' and '
                                 . 'booking.state_id = ' . BOOKING_STATE::APPROVED . " and "
                                 . "date(booking.creation_date) >= date(offer.start_date) and "
                                 . 'date(booking.creation_date) <= date(offer.expiry_date) and '
-                                . '(offer.public_field = 1 OR booking.field_id IN ('
+                                . '((offer.public_field = 1 and '
+                                . 'booking.field_id IN ('
+                                . 'select field_id from field '
+                                . 'join company on company.company_id = field.company_id '
+                                . 'join area on company.area_id = area.area_id where area.country_id = offer.country_id'
+                                . ')'
+                                . ') OR booking.field_id IN ('
                                 . 'select field.field_id from offer_company '
                                 . 'join field on field.company_id = offer_company.company_id '
                                 . 'where offer_company.offer_id = offer.offer_id )) and '

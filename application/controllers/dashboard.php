@@ -11,7 +11,7 @@ class dashboard extends REST_Controller {
 
     public function index_get() {
         if ($this->current_user)
-            redirect('companies/companies_management');
+            redirect('companies/companies_management/'.UAE);
         else
             $this->load->view('index');
     }

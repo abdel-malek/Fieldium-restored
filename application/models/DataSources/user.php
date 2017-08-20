@@ -2,7 +2,11 @@
 
 class user extends CI_Model {
 
+       private $LANG;
+
     public function __construct() {
+        $CI = & get_instance();
+        $this->LANG = $CI->language;
         $this->load->database();
     }
 
@@ -32,8 +36,9 @@ class user extends CI_Model {
     }
 
     public function login($username, $password) {
-        return $this->db->select("*")
+        return $this->db->select("*, ".$this->LANG."_name as country_name,concat('".base_url() . UPLOADED_IMAGES_PATH_URL."',image) as image_url",false)
                         ->from('user')
+                        ->join('country', 'country.country_id = user.country_id', 'left')
                         ->where('username', $username)
                         ->where('password', $password)
                         ->where('active', 1)

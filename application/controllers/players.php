@@ -14,7 +14,7 @@ class players extends REST_Controller {
     public function register_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('phone', 'lang:phone', 'required|numeric');
+        $this->form_validation->set_rules('phone', 'lang:phone', 'required|numeric|exact_length[9]');
         $this->form_validation->set_rules('name', 'lang:name', 'required');
         $this->form_validation->set_rules('os', 'os', 'required');
         $this->form_validation->set_rules('lang', 'lang:lang', 'callback_valid_lang');
@@ -35,7 +35,7 @@ class players extends REST_Controller {
     public function verify_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
+        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric|exact_length[9]');
         $this->form_validation->set_rules('verification_code', 'Verification code', 'required');
 
         if (!$this->form_validation->run()) {
@@ -51,7 +51,7 @@ class players extends REST_Controller {
     public function request_verification_code_post() {
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
+        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric|exact_length[9]');
         $this->form_validation->set_rules('server_id', 'Server id', 'required');
         if (!$this->form_validation->run()) {
             throw new Validation_Exception((validation_errors()) ? validation_errors() : "Validation Exception");

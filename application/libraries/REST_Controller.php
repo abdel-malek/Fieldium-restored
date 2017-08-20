@@ -288,8 +288,8 @@ abstract class REST_Controller extends CI_Controller {
         $header = $this->input->request_headers();
         if (isset($header['Country'])) {
             $this->user_country = $header['Country'];
-        }
-        if ($this->current_user && $this->current_user->role_id != ROLE::SUPPORT) {
+        } else 
+        if ($this->current_user && isset($this->current_user->role_id) && $this->current_user->role_id != ROLE::SUPPORT) {
             $this->user_country = $this->current_user->country_id;
         }
         $this->response->lang = $this->_detect_lang();

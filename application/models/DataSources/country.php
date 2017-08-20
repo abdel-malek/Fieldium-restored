@@ -7,7 +7,7 @@ class country extends CI_Model {
     }
 
     public function get_all($lang="en") {
-        return $this->db->select("*, ".$lang."_name as name")
+        return $this->db->select("*, ".$lang."_name as name,concat('".base_url() . UPLOADED_IMAGES_PATH_URL."',image) as image_url")
                         ->from('country')
                         ->get()->result();
     }

@@ -1,3 +1,4 @@
+
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -307,6 +308,13 @@ class bookings extends REST_Controller {
     public function my_bookings_get() {
         $this->user_permissions->is_player($this->current_user);
         $bookings = $this->booking_service->get_my_bookings($this->current_user->player_id, $this->response->lang);
+        $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
+    }
+
+    public function by_date_get() {
+//        $this->user_permissions->is_player($this->current_user);
+        $bookings = array();
+        $bookings = $this->booking_service->field_bookings_by_date($this->get('field_id'), $this->get('date'), $this->response->lang, $bookings, null);
         $this->response(array('status' => true, 'data' => $bookings, 'message' => ""));
     }
 

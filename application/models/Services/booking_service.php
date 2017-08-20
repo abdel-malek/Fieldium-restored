@@ -18,7 +18,7 @@ class booking_service extends CI_Model {
         if ($voucher) {
             $this->load->model("Services/voucher_service");
             $check_voucher = $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
-            if ($check_voucher["valid"] == 0)
+            if ($check_voucher->valid == 0)
                 throw new Parent_Exception("It is not a valid voucher");
         }
         $field = $this->field->get($field_id);
@@ -280,7 +280,7 @@ class booking_service extends CI_Model {
 
     public function decline($booking_id) {
         $booking = $this->get($booking_id);
-        if ($booking->voucher != null) {
+        if ($booking->voucher != null && $booking->voucher != 0 && $booking->voucher != "") {
             $this->load->model('Services/voucher_service');
             $voucher = $this->voucher_service->get($booking->voucher);
             if ($voucher->one_time == 1)
@@ -374,8 +374,8 @@ class booking_service extends CI_Model {
         return $this->booking->field_bookings($field_id, $lang);
     }
 
-    public function field_bookings_by_date($field_id, $date, $lang = "en") {
-        return $this->booking->field_bookings_by_date($field_id, $date, $lang);
+    public function field_bookings_by_date($field_id, $date, $lang = "en", $bookings, $root = null) {
+        return $this->booking->field_bookings_by_date($field_id, $date, $lang, $bookings, $root);
     }
 
     public function upcoming_booking($player, $lang) {
@@ -393,7 +393,7 @@ class booking_service extends CI_Model {
             if (isset($booking->logo) && $booking->logo != "")
                 $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
         }
-        return $bookings;
+//        return $bookings;
     }
 
     public function last_bookings($palyer_id, $lang) {
