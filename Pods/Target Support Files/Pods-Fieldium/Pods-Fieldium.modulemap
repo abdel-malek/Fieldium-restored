@@ -1,6 +1,0 @@
-framework module Pods_Fieldium {
-  umbrella header "Pods-Fieldium-umbrella.h"
-
-  export *
-  module * { export * }
-}
