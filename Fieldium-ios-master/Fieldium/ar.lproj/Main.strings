@@ -1,0 +1,276 @@
+
+/* Class = "UITextField"; placeholder = "Your Name"; ObjectID = "0Jt-pM-roT"; */
+"0Jt-pM-roT.placeholder" = "Your Name";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "1P4-Py-4LH"; */
+"1P4-Py-4LH.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "Phone number"; ObjectID = "3If-2u-FS8"; */
+"3If-2u-FS8.text" = "Phone number";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "3ze-lg-XHg"; */
+"3ze-lg-XHg.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "Address"; ObjectID = "52O-qK-3nB"; */
+"52O-qK-3nB.placeholder" = "Address";
+
+/* Class = "UILabel"; text = "Start"; ObjectID = "5Cd-Qs-p2X"; */
+"5Cd-Qs-p2X.text" = "Start";
+
+/* Class = "UILabel"; text = "until 02:00am"; ObjectID = "6Ni-Eb-OEk"; */
+"6Ni-Eb-OEk.text" = "until 02:00am";
+
+/* Class = "UILabel"; text = "100 AED"; ObjectID = "729-x5-ZK6"; */
+//"729-x5-ZK6.text" = "100 AED";
+
+/* Class = "UILabel"; text = "Game"; ObjectID = "7T2-Gg-9V6"; */
+"7T2-Gg-9V6.text" = "Game";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "7X0-EX-EAv"; */
+"7X0-EX-EAv.normalTitle" = "Cancel";
+
+/* Class = "UIButton"; normalTitle = "12 AM"; ObjectID = "8cw-gk-DtP"; */
+"8cw-gk-DtP.normalTitle" = "12 AM";
+
+/* Class = "UILabel"; text = "Enter your code"; ObjectID = "8fX-iY-TCb"; */
+"8fX-iY-TCb.text" = "Enter your code";
+
+/* Class = "UILabel"; text = "Reviews"; ObjectID = "9Nd-KI-GvR"; */
+"9Nd-KI-GvR.text" = "Reviews";
+
+/* Class = "UILabel"; text = "address"; ObjectID = "9QI-rT-CeI"; */
+"9QI-rT-CeI.text" = "address";
+
+/* Class = "UILabel"; text = "Duration"; ObjectID = "9gQ-26-dh9"; */
+"9gQ-26-dh9.text" = "Duration";
+
+/* Class = "UILabel"; text = "Timing"; ObjectID = "A9A-kv-FfL"; */
+"A9A-kv-FfL.text" = "Timing";
+
+/* Class = "UILabel"; text = "Start"; ObjectID = "Aax-qZ-jkJ"; */
+"Aax-qZ-jkJ.text" = "Start";
+
+/* Class = "UIButton"; normalTitle = "12:00am"; ObjectID = "Abf-Yg-saS"; */
+"Abf-Yg-saS.normalTitle" = "12:00am";
+
+/* Class = "UILabel"; text = "Timing"; ObjectID = "BIC-iA-DQk"; */
+"BIC-iA-DQk.text" = "Timing";
+
+/* Class = "UILabel"; text = "Field area"; ObjectID = "BdT-Ln-b1q"; */
+"BdT-Ln-b1q.text" = "Field area";
+
+/* Class = "UILabel"; text = "Date"; ObjectID = "ByK-N2-gdI"; */
+"ByK-N2-gdI.text" = "Date";
+
+/* Class = "UIButton"; normalTitle = "Verify"; ObjectID = "Cbe-oi-dAN"; */
+"Cbe-oi-dAN.normalTitle" = "Verify";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "DwW-BZ-X0l"; */
+"DwW-BZ-X0l.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Any Time"; ObjectID = "EXx-Zl-f91"; */
+"EXx-Zl-f91.normalTitle" = "Any Time";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "EbD-Lm-rED"; */
+"EbD-Lm-rED.placeholder" = "Email";
+
+/* Class = "UIButton"; normalTitle = "SKIP FOR NOW"; ObjectID = "EtG-w5-h8A"; */
+"EtG-w5-h8A.normalTitle" = "SKIP FOR NOW";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "Fpc-Ez-Odc"; */
+"Fpc-Ez-Odc.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "Didn’t receive a code?"; ObjectID = "GwU-kp-bb4"; */
+"GwU-kp-bb4.text" = "Didn’t receive a code?";
+
+/* Class = "UIButton"; normalTitle = "Wen. 18\\8\\2016"; ObjectID = "Hth-he-8dO"; */
+"Hth-he-8dO.normalTitle" = "Wen. 18\\8\\2016";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "INi-ho-YoI"; */
+"INi-ho-YoI.normalTitle" = "Next";
+
+/* Class = "UILabel"; text = "Hour Rate"; ObjectID = "J4f-la-hGH"; */
+"J4f-la-hGH.text" = "Hour Rate";
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "JPO-xN-PRO"; */
+//"JPO-xN-PRO.normalTitle" = "OK";
+
+/* Class = "UIButton"; normalTitle = "Home"; ObjectID = "JWP-3D-QlD"; */
+"JWP-3D-QlD.normalTitle" = "Home";
+
+/* Class = "UIButton"; normalTitle = "Search"; ObjectID = "JuL-4c-a4X"; */
+"JuL-4c-a4X.normalTitle" = "Search";
+
+/* Class = "UIButton"; normalTitle = "My Bookings"; ObjectID = "K2K-Dc-f8U"; */
+"K2K-Dc-f8U.normalTitle" = "My Bookings";
+
+/* Class = "UILabel"; text = "Timing"; ObjectID = "LPb-gb-kLh"; */
+"LPb-gb-kLh.text" = "Timing";
+
+/* Class = "UITableViewSection"; headerTitle = "Section-1"; ObjectID = "La1-Np-2rj"; */
+"La1-Np-2rj.headerTitle" = "Section-1";
+
+/* Class = "UIButton"; normalTitle = "GET A NEW ONE"; ObjectID = "Lt5-rE-shf"; */
+"Lt5-rE-shf.normalTitle" = "GET A NEW ONE";
+
+/* Class = "UIButton"; normalTitle = "Duration"; ObjectID = "Lut-81-8ye"; */
+"Lut-81-8ye.normalTitle" = "Duration";
+
+/* Class = "UIButton"; normalTitle = "Book"; ObjectID = "MYs-1c-yJC"; */
+"MYs-1c-yJC.normalTitle" = "Book";
+
+/* Class = "UIButton"; normalTitle = "Nearby Places"; ObjectID = "Nyf-hl-I5v"; */
+"Nyf-hl-I5v.normalTitle" = "Nearby Places";
+
+/* Class = "UIButton"; normalTitle = "Notifications"; ObjectID = "OEc-gk-U9J"; */
+"OEc-gk-U9J.normalTitle" = "Notifications";
+
+/* Class = "UITextField"; placeholder = "Name"; ObjectID = "OXJ-Fy-Ghh"; */
+"OXJ-Fy-Ghh.placeholder" = "Name";
+
+/* Class = "UILabel"; text = "View on map"; ObjectID = "Ppu-SG-qkN"; */
+"Ppu-SG-qkN.text" = "View on map";
+
+/* Class = "UILabel"; text = "+971 4 381 9999"; ObjectID = "Q9h-AK-Bt3"; */
+"Q9h-AK-Bt3.text" = "+971 4 381 9999";
+
+/* Class = "UILabel"; text = "Games"; ObjectID = "QDs-3D-fYe"; */
+"QDs-3D-fYe.text" = "Games";
+
+/* Class = "UITextField"; placeholder = "UAE (+971)"; ObjectID = "QVH-KI-Zvd"; */
+"QVH-KI-Zvd.placeholder" = "UAE (+971)";
+
+/* Class = "UILabel"; text = "Select Date"; ObjectID = "QeO-rV-jLb"; */
+"QeO-rV-jLb.text" = "Pick date";
+
+/* Class = "UILabel"; text = "Area"; ObjectID = "Ri7-Gx-8uv"; */
+"Ri7-Gx-8uv.text" = "Area";
+
+/* Class = "UILabel"; text = "100 AED"; ObjectID = "SZo-Xj-slC"; */
+//"SZo-Xj-slC.text" = "100 AED";
+
+/* Class = "UITextField"; placeholder = "Your note..."; ObjectID = "TNe-7u-uMl"; */
+"TNe-7u-uMl.placeholder" = "Your note...";
+
+/* Class = "UIButton"; normalTitle = "2:00 Hrs"; ObjectID = "TRI-sl-ERM"; */
+"TRI-sl-ERM.normalTitle" = "2:00 Hrs";
+
+/* Class = "UILabel"; text = "Player Name"; ObjectID = "VLl-mo-UdR"; */
+"VLl-mo-UdR.text" = "Player Name";
+
+/* Class = "UILabel"; text = "You’ll get notified\nwhen approved\nwithin 30 mins"; ObjectID = "WNh-Zt-Gfm"; */
+"WNh-Zt-Gfm.text" = "You’ll get notified\nwhen approved\nwithin 30 mins";
+
+/* Class = "UILabel"; text = "Max. capacity"; ObjectID = "X2m-KL-qWg"; */
+"X2m-KL-qWg.text" = "Max. capacity";
+
+/* Class = "UILabel"; text = "Start"; ObjectID = "YKY-Nt-X7p"; */
+"YKY-Nt-X7p.text" = "Start";
+
+/* Class = "UILabel"; text = "Sign up"; ObjectID = "ZW2-Wt-et8"; */
+"ZW2-Wt-et8.text" = "Sign up";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "ZWq-5N-MFD"; */
+"ZWq-5N-MFD.text" = "Label";
+
+/* Class = "UILabel"; text = "or"; ObjectID = "aag-BD-bzM"; */
+"aag-BD-bzM.text" = "or";
+
+/* Class = "UIButton"; normalTitle = "12 AM"; ObjectID = "alH-4h-XcK"; */
+"alH-4h-XcK.normalTitle" = "12 AM";
+
+/* Class = "UILabel"; text = "until 02:00am"; ObjectID = "bBh-mC-9Fp"; */
+"bBh-mC-9Fp.text" = "until 02:00am";
+
+/* Class = "UILabel"; text = "Total"; ObjectID = "c43-yH-6Gw"; */
+"c43-yH-6Gw.text" = "Total";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "c8Q-hv-DaQ"; */
+"c8Q-hv-DaQ.text" = "Label";
+
+/* Class = "UILabel"; text = "1,253,274 user"; ObjectID = "cwU-fk-QKY"; */
+"cwU-fk-QKY.text" = "1,253,274 user";
+
+/* Class = "UIButton"; normalTitle = "location"; ObjectID = "d3r-5d-tmv"; */
+"d3r-5d-tmv.normalTitle" = "location";
+
+/* Class = "UILabel"; text = "Amenities"; ObjectID = "dxq-Qx-DPL"; */
+"dxq-Qx-DPL.text" = "Amenities";
+
+/* Class = "UILabel"; text = "4:00pm - 4:00am"; ObjectID = "e6P-k9-bcR"; */
+"e6P-k9-bcR.text" = "4:00pm - 4:00am";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "eyr-RK-lLE"; */
+"eyr-RK-lLE.text" = "Label";
+
+/* Class = "UILabel"; text = "5"; ObjectID = "fNN-Bh-wOs"; */
+"fNN-Bh-wOs.text" = "5";
+
+/* Class = "UILabel"; text = "Enter the verification code sent to"; ObjectID = "fp9-4E-EJM"; */
+"fp9-4E-EJM.text" = "Enter the verification code sent to";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "gcc-nU-kWr"; */
+"gcc-nU-kWr.normalTitle" = "Login";
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "gcm-3D-OVI"; */
+//"gcm-3D-OVI.normalTitle" = "OK";
+
+/* Class = "UILabel"; text = "10 C St - Dubai - United Arab Emirates"; ObjectID = "ghP-uu-xh0"; */
+"ghP-uu-xh0.text" = "10 C St - Dubai - United Arab Emirates";
+
+/* Class = "UITextField"; placeholder = "Enter Your Number"; ObjectID = "h00-fM-Tbj"; */
+"h00-fM-Tbj.placeholder" = "Enter Your Number";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "h9H-kH-VP3"; */
+"h9H-kH-VP3.text" = "Label";
+
+/* Class = "UILabel"; text = "max. number of players"; ObjectID = "id0-60-Rq5"; */
+"id0-60-Rq5.text" = "max. number of players";
+
+/* Class = "UILabel"; text = "150m2"; ObjectID = "ir8-9E-q9r"; */
+"ir8-9E-q9r.text" = "150m2";
+
+/* Class = "UILabel"; text = "Engine Health and Fitness"; ObjectID = "jJO-nQ-uQm"; */
+"jJO-nQ-uQm.text" = "Engine Health and Fitness";
+
+/* Class = "UIButton"; normalTitle = "Duration"; ObjectID = "jol-sp-P8n"; */
+"jol-sp-P8n.normalTitle" = "Duration";
+
+/* Class = "UIButton"; normalTitle = "SKIP FOR NOW"; ObjectID = "kAM-gS-7T9"; */
+"kAM-gS-7T9.normalTitle" = "SKIP FOR NOW";
+
+/* Class = "UIButton"; normalTitle = "2:00 Hrs"; ObjectID = "maZ-Ff-4t3"; */
+"maZ-Ff-4t3.normalTitle" = "2:00 Hrs";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "mu3-AB-6YV"; */
+"mu3-AB-6YV.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "My Profile"; ObjectID = "oji-06-4ek"; */
+"oji-06-4ek.normalTitle" = "My Profile";
+
+/* Class = "UILabel"; text = "Open Hours"; ObjectID = "phD-PU-qPf"; */
+"phD-PU-qPf.text" = "Open Hours";
+
+/* Class = "UIButton"; normalTitle = "Search Field name"; ObjectID = "qE5-YI-SWF"; */
+"qE5-YI-SWF.normalTitle" = "Search Field name";
+
+/* Class = "UILabel"; text = "desecription"; ObjectID = "qxj-cM-xsz"; */
+"qxj-cM-xsz.text" = "desecription";
+
+/* Class = "UILabel"; text = "name"; ObjectID = "rM6-e8-3V7"; */
+"rM6-e8-3V7.text" = "name";
+
+/* Class = "UILabel"; text = "State"; ObjectID = "vt6-yG-YE3"; */
+"vt6-yG-YE3.text" = "State";
+
+/* Class = "UILabel"; text = "per hour"; ObjectID = "w8J-KL-XQl"; */
+"w8J-KL-XQl.text" = "per hour";
+
+/* Class = "UIButton"; normalTitle = "1 Hour"; ObjectID = "xok-UY-xga"; */
+"xok-UY-xga.normalTitle" = "1 Hour";
+
+/* Class = "UIButton"; normalTitle = "DATE"; ObjectID = "z63-g0-PQv"; */
+"z63-g0-PQv.normalTitle" = "DATE";
+
+/* Class = "UILabel"; text = "Player Name"; ObjectID = "zYG-SN-Ika"; */
+"zYG-SN-Ika.text" = "Player Name";

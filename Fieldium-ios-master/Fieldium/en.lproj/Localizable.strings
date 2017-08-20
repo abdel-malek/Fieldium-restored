@@ -1,0 +1,169 @@
+/* 
+  Localizable.strings
+  Fieldium
+
+  Created by Yahya Tabba on 5/31/17.
+  Copyright © 2017 Tradinos UG. All rights reserved.
+*/
+
+"Settings" = "Settings";
+"My Bookings" = "My Bookings";
+"My Notifications" = "My Notifications";
+"My Profile" = "My Profile";
+"My Vouchers" = "My Vouchers";
+"Offers" = "Offers";
+"Home" = "Home";
+"About" = "About";
+"Contact Us" = "Contact Us";
+"Login" = "Login";
+"Register" = "Register";
+"Sign up" = "Sign up";
+"Upcoming booking" = "Upcoming booking";
+"Previous Bookings" = "Previous Bookings";
+"Upcoming Bookings" = "Upcoming Bookings";
+"Register now" = "Register now";
+"Booking" = "Booking";
+"Search Results" = "Search Results";
+"not lazy" = "You don\'t have upcoming booking!!\nDon't be lazy book now :)";
+"not booking yet" = "You don\'t have booking yet!!\nRegister Now :)";
+
+"Search by name or address" = "Search by name or address";
+
+"No Fields!" = "No Fields!";
+"No Results!" = "No Results!!";
+"No Bookings!" = "No Bookings!";
+"No Companies!" = "No Companies!";
+"No Notifications!" = "No Notifications!";
+"No Vouchers!" = "No Vouchers!";
+"per hour" = "per hour";
+"Cost per hour" = "Cost per hour";
+"Total" = "Total";
+"Players" = "Players";
+
+"Name" = "Your Name";
+"Email" = "Your Email";
+"Address" = "Your Address";
+"Phone number" = "Phone number";
+
+"Verify" = "Verify";
+"Alert!" = "Alert!";
+"delete" = "delete";
+"skip" = "Skip";
+"Ok" = "Ok";
+"Cancel" = "Cancel";
+"Save" = "Save";
+"Send" = "Send";
+"Checkout" = "Checkout";
+"Confirmation" = "Confirmation";
+"Choose an Image" = "Choose From Library";
+"Take a picture" = "Take a picture";
+"Delete Photo" = "Delete Photo";
+"Start" = "Start";
+"Duration" = "Duration";
+"Timing" = "Timing";
+"Fields" = "Fields";
+"Starts from" = "Starts from";
+"Check availability" = "Check availability";
+"Find your best fields" = "Find your best fields";
+"Deactive" = "Deactive this user";
+"Nearby Places" = "Nearby Places";
+
+"You’ll get notified" = "You’ll get notified\nwhen approved\nwithin 30 mins";
+"This email address is invalid" = "This email address is invalid";
+"This field is required" = "This field is required";
+"Enter verification code" = "Enter verification code";
+"Enter the verification code sent to" = "Enter the verification code sent to";
+"enable location" = "Please enable location services\ngo to Settings, Fieldium, Location";
+"Invalid Code" = "Please enter a valid verification code";
+"not receive code" = "Didn’t receive a code?";
+"GET A NEW ONE" = "GET A NEW ONE";
+"Select Game" = "Select Game";
+"Select Games" = "Select Games";
+"Please select another date" = "Please select another date";
+"deactive this user" = "Are you sure to deactive this user";
+"The size of image is too large" = "The size of image is too large";
+"invalid date" = "invalid date";
+"Invalid phone number" = "Invalid phone number";
+"Please enter message" = "Please enter message";
+"You can't book before now" = "You can't book before now";
+
+"Any Time" = "Any time";
+"Any Date" = "Any date";
+"Pick time" = "Pick time";
+"Pick date" = "Pick date";
+"Approved" = "Approved";
+"Canceled" = "Canceled";
+"Pending" = "Pending";
+"Declined" = "Declined";
+"Continue" = "Continue";
+"Next" = "Next";
+"Notes" = "Notes";
+"Games" = "Games";
+"Book" = "Book";
+"Amenities" = "Amenities";
+"Max capacity" = "Max capacity";
+"Open hours" = "Open hours";
+"Hour rate" = "Hour rate";
+"Available Times" = "Available Times";
+"Player Count" = "max. number of players";
+"Player" = "Player";
+
+"Discount" = "Discount";
+"Subtotal" = "Subtotal";
+"Voucher" = "Voucher";
+"Net Total" = "Net Total";
+"Use Voucher" = "Use Voucher";
+"free hours" = "free hours";
+"free hour" = "free hour";
+"Value" = "Value";
+"Start Date" = "Start Date";
+"Expiry Date" = "Expiry Date";
+"From Hour" = "From Date";
+"To Hour" = "To Date";
+"Description" = "Description";
+"Comapies" = "Comapies";
+"Voucher Code" = "Code";
+"Days left" = "Days left";
+"Companies" = "Companies";
+
+
+"days" = "days";
+"day" = "day";
+"sec" = "sec";
+"min" = "min";
+"State" = "State";
+"Hours" = "Hours";
+"Hour" = "Hour";
+"Game" = "Game";
+"City" = "City";
+"Date" = "Date";
+"Time" = "Time";
+"Message" = "Message";
+"Find now" = "Find now";
+"Closed" = "Closed";
+"Busy" = "Busy";
+"Minimum duration is" = "Minimum duration iss";
+"Your booking is on:" = "Your booking is on:";
+"Out of available range" = "Out of available range";
+"Available range is from:" = "Available range\nfrom:";
+"From:" = "From:";
+"to:" = "to:";
+"Minimum duration of" = "Minimum duration of";
+"Cancel reason:" = "Cancel reason:";
+"Ref" = "Ref";
+"or" = "or";
+
+"Change Number" = "Change Number";
+"changeLang" = "You need to restart the app to apply the new language";
+"Country" = "Country";
+"Change Country" = "Change Country";
+"Choose country" = "Choose your country";
+"Language" = "Language";
+"Select Languages" = "Select Languages";
+"Arabic" = "العربية";
+"English" = "English";
+
+"Apply" = "Apply";
+"Enter your voucher code" = "Type a voucher";
+
+"GO" = "GO";

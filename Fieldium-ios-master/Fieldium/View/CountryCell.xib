@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SourceSansPro-Regular.ttf">
+            <string>SourceSansPro-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="89" id="KGk-i7-Jjw" customClass="CountryCell" customModule="Fieldium" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="326" height="89"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="326" height="88.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="c1.png" translatesAutoresizingMaskIntoConstraints="NO" id="GYl-L2-Nw9">
+                        <rect key="frame" x="14" y="8" width="73" height="73"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="GYl-L2-Nw9" secondAttribute="height" id="eny-Pc-2Nj"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dubai" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C8m-7C-zVC">
+                        <rect key="frame" x="95" y="33.5" width="47" height="24"/>
+                        <fontDescription key="fontDescription" name="SourceSansPro-Regular" family="Source Sans Pro" pointSize="19"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+97" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7lX-ia-i8M">
+                        <rect key="frame" x="162" y="35" width="30.5" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="7lX-ia-i8M" firstAttribute="leading" secondItem="C8m-7C-zVC" secondAttribute="trailing" constant="20" id="1MZ-Ib-zvA"/>
+                    <constraint firstItem="C8m-7C-zVC" firstAttribute="leading" secondItem="GYl-L2-Nw9" secondAttribute="trailing" constant="8" id="3Wq-ex-C4E"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="GYl-L2-Nw9" secondAttribute="bottom" id="HkD-YF-om8"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="7lX-ia-i8M" secondAttribute="trailing" constant="8" id="VBs-a3-nkI"/>
+                    <constraint firstItem="C8m-7C-zVC" firstAttribute="centerY" secondItem="GYl-L2-Nw9" secondAttribute="centerY" id="WGN-Ud-Prq"/>
+                    <constraint firstAttribute="topMargin" secondItem="GYl-L2-Nw9" secondAttribute="top" id="Xf4-fk-iJY"/>
+                    <constraint firstItem="GYl-L2-Nw9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="6" id="rGT-Ih-V1c"/>
+                    <constraint firstItem="7lX-ia-i8M" firstAttribute="centerY" secondItem="C8m-7C-zVC" secondAttribute="centerY" id="soz-DQ-k0H"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="img" destination="GYl-L2-Nw9" id="Rrf-gO-ont"/>
+                <outlet property="nameLbl" destination="C8m-7C-zVC" id="sEn-94-8Wk"/>
+                <outlet property="numberLbl" destination="7lX-ia-i8M" id="YIK-zH-hJ6"/>
+                <outlet property="optionLabel" destination="C8m-7C-zVC" id="736-iD-LKR"/>
+            </connections>
+            <point key="canvasLocation" x="40" y="46.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="c1.png" width="128" height="128"/>
+    </resources>
+</document>
