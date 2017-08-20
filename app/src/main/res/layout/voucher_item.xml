@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ramotion.foldingcell.FoldingCell xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/folding_cell"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:animationDuration="250">
+
+    <FrameLayout
+        android:id="@+id/cell_content_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/voucher_item_boarder"
+        android:minHeight="300dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView_game_content"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="start"
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.3"
+                    android:src="@mipmap/logo" />
+
+                <LinearLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:background="@color/white_bg" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.7"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/voucher_days_left_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white_text"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/voucher_code_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white_text"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="5dp"
+                android:background="@color/white_bg" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/VoucherDetailTitle"
+                        android:text="@string/value" />
+
+                    <TextView
+                        android:id="@+id/voucher_value_content"
+                        style="@style/VoucherDetailValue" />
+                </TableRow>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="2dp"
+                    android:background="@color/white_bg" />
+
+                <TableRow
+                    android:id="@+id/fromTimeRow"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/VoucherDetailTitle"
+                        android:text="@string/from_hour" />
+
+                    <TextView
+                        android:id="@+id/voucher_timeFrom_content"
+                        style="@style/VoucherDetailValue" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/toTimeRow"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/VoucherDetailTitle"
+                        android:text="@string/to_hour" />
+
+                    <TextView
+                        android:id="@+id/voucher_timeTo_content"
+                        style="@style/VoucherDetailValue" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/VoucherDetailTitle"
+                        android:text="@string/start_date" />
+
+                    <TextView
+                        android:id="@+id/voucher_startDate_content"
+                        style="@style/VoucherDetailValue" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/VoucherDetailTitle"
+                        android:text="@string/expiry_date" />
+
+                    <TextView
+                        android:id="@+id/voucher_expiryDate_content"
+                        style="@style/VoucherDetailValue" />
+                </TableRow>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/white_bg" />
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/VoucherDetailTitle"
+                        android:text="@string/description" />
+
+                    <TextView
+                        android:id="@+id/voucher_desc_content"
+                        style="@style/VoucherDetailValue" />
+                </TableRow>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/white_bg" />
+
+                <TableRow android:id="@+id/companies_row"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:text="@string/companies"
+                        android:textColor="@color/white_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5">
+
+                        <LinearLayout
+                            android:id="@+id/voucher_companies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="start"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cell_title_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="visible">
+
+        <!--<include layout="@layout/voucher_list_item_title" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/voucher_item_boarder"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+                android:id="@+id/voucher_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:textColor="@color/white_text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/voucher_days_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:textColor="@color/white_text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/voucher_type"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/circular_textview"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/imageView_game"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:src="@mipmap/logo" />
+
+        </LinearLayout>
+    </FrameLayout>
+</com.ramotion.foldingcell.FoldingCell>

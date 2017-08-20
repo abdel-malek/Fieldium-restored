@@ -1,0 +1,2 @@
+include ':app', ':TradinosCore', ':circleindicator'/*,':WheelPicker'*/
+project(':TradinosCore').projectDir = new File('tradinosplatform')

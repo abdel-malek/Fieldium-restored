@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/form_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".view.Booking.HomeActivity"
+            tools:showIn="@layout/activity_home">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/home_screen_boarder"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bottom_border_textview"
+                    android:padding="5dp"
+                    android:text="@string/find_best_fields" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:padding="10dp"
+                            android:text="@string/game" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="0.7">
+
+                            <com.bluebrand.fieldium.view.other.CustomSpinner
+                                android:id="@+id/spinner_game"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <ProgressBar
+                                android:id="@+id/progressLoading_game"
+                                style="?android:attr/progressBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignEnd="@+id/spinner_game"
+                                android:layout_alignTop="@+id/spinner_game"
+                                android:paddingEnd="10dip"
+                                android:paddingTop="14dip" />
+                        </RelativeLayout>
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:padding="10dp"
+                            android:text="@string/city" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="0.7">
+
+                            <Spinner
+                                android:id="@+id/spinner_city"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <ProgressBar
+                                android:id="@+id/progressLoading_city"
+                                style="?android:attr/progressBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignEnd="@+id/spinner_city"
+                                android:layout_alignTop="@+id/spinner_city"
+                                android:paddingEnd="10dip"
+                                android:paddingTop="14dip" />
+                        </RelativeLayout>
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:padding="10dp"
+                            android:text="@string/date" />
+
+                        <com.bluebrand.fieldium.view.other.CustomSpinner
+                            android:id="@+id/date_spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7" />
+
+                    </TableRow>
+
+                    <TableRow android:id="@+id/time_spinner_panel">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:padding="10dp"
+                            android:text="@string/time" />
+
+                        <com.bluebrand.fieldium.view.other.CustomSpinner
+                            android:id="@+id/time_spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7" />
+
+                    </TableRow>
+                </TableLayout>
+
+                <Button
+                    android:id="@+id/button_submit"
+                    style="@style/CustomButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:minWidth="300dp"
+                    android:text="@string/find_now"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="200dp">
+
+                <LinearLayout
+                    android:id="@+id/upcomingBooking_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/home_screen_boarder"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bottom_border_textview"
+                        android:padding="5dp"
+                        android:text="@string/upcoming_booking" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/upcomingBooking_imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:layout_margin="5dp"
+                            android:scaleType="centerCrop" />
+
+                        <LinearLayout
+                            android:id="@+id/upcomingBooking_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@color/transparent_black"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/upcomingBooking_fieldName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:textAppearance="@android:style/TextAppearance.Large"
+                                android:textColor="@color/white_text" />
+
+                            <LinearLayout
+                                android:layout_width="200dp"
+                                android:layout_height="1dp"
+                                android:layout_margin="5dp"
+                                android:background="@color/white_bg" />
+
+                            <TextView
+                                android:id="@+id/upcomingBooking_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                android:textColor="@color/white_text" />
+
+                            <LinearLayout
+                                android:layout_width="200dp"
+                                android:layout_height="1dp"
+                                android:layout_margin="5dp"
+                                android:background="@color/white_bg" />
+
+
+                            <TextView
+                                android:id="@+id/upcomingBooking_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                android:textColor="@color/white_text" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView_noUpcomingBooking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="test"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:textColor="@color/white_text"
+                    android:visibility="gone" />
+            </FrameLayout>
+            <!-- <com.bluebrand.fieldium.view.other.CustomProgressBar
+                 android:id="@+id/offers_progressBar"
+                 android:layout_width="match_parent"
+                 android:layout_height="30dp"
+                 android:layout_marginTop="30dp"
+                 app:progress="20"
+                 app:max="100"
+                 app:progressRadius="8dp"
+                 app:progressDesc="test"/>-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="150dp">
+
+                <LinearLayout
+                    android:id="@+id/lastBookings_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/home_screen_boarder"
+                    android:minHeight="150dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bottom_border_textview"
+                        android:padding="5dp"
+                        android:text="@string/previous_bookings" />
+
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/lastBookings_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"></LinearLayout>
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/register_button_no_booking"
+                    style="@style/CustomButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:minWidth="300dp"
+                    android:text="@string/register_now"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/nearest_vouchers_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/home_screen_boarder"
+                android:minHeight="150dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bottom_border_textview"
+                    android:padding="5dp"
+                    android:text="@string/nearest_vouchers" />
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fadeScrollbars="false"
+                    >
+
+                    <LinearLayout
+                        android:id="@+id/nearest_vouchers_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"></LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/offers_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/home_screen_boarder"
+                android:minHeight="150dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bottom_border_textview"
+                    android:padding="5dp"
+                    android:text="@string/special_offers" />
+
+                <!--<HorizontalScrollView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content">-->
+              <!--  <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">-->
+
+                    <LinearLayout
+                        android:id="@+id/offers_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingEnd="3dp"
+                        android:paddingStart="3dp"
+                        android:paddingTop="5dp"
+                        android:layout_gravity="center"></LinearLayout>
+
+            <!--        <LinearLayout
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/color_primary"
+                        android:orientation="horizontal"
+                     android:layout_gravity="center"/>
+                </FrameLayout>-->
+                <!--</HorizontalScrollView>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_primary" />
+
+                <TextView
+                    android:id="@+id/offers_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@mipmap/about_grey"
+                    android:layout_gravity="center"
+                    android:gravity="center" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

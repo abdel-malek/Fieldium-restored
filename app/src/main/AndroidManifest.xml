@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bluebrand.fieldium"> <!-- To auto-complete the email text field in the login form with the player's emails -->
+    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_PROFILE" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="23" />
+
+    <!-- <permission android:name="com.tradinos.bluebrand.permission.C2D_MESSAGE" -->
+    <!-- android:protectionLevel="signature" /> -->
+    <!-- <uses-permission android:name="com.tradinos.bluebrand.permission.C2D_MESSAGE" /> -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    -->
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- android:supportsRtl="true" -->
+    <application
+        android:name=".FieldiumApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/logosmallmdpi"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA_ARZiJnN_1CLACJeWTA6NSq5YJ5ckf6g" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/field_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/color_primary" />
+
+        <activity
+            android:name=".view.Fields.MapActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.Player.RegisterActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.other.ContactUsActivity"
+            android:label="@string/title_activity_contact_us"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.other.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.other.FirstScreenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.PublicNotificationActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TradinosDialog" />
+        <activity
+            android:name=".view.other.AboutActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.company.NearbyCompaniesActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.BookingListActivity"
+            android:label="@string/title_bookings_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Fields.FieldsListActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.company.CompaniesListActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.BookingDetailActivity"
+            android:parentActivityName=".view.Booking.BookingListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bluebrand.fieldium.view.Booking.BookingListActivity" />
+        </activity>
+        <activity
+            android:name=".view.Player.ProfileActivity"
+            android:label="@string/title_profile"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <!-- android:windowSoftInputMode="adjustResize" -->
+
+        <activity
+            android:name=".view.Player.VerficationActivity"
+            android:label="@string/title_verification"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- android:windowSoftInputMode="adjustResize" -->
+        <activity
+            android:name=".view.Fields.FieldDetailsActivity"
+            android:label="@string/title_activity_field_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.BookingActivity"
+            android:label="@string/title_activity_book"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.TimingActivity"
+            android:label="@string/title_activity_timing"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TradinosDialog" />
+        <activity
+            android:name=".view.Booking.NewTimingActivity"
+            android:label="@string/title_activity_timing"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- Theme.TradinosDialog -->
+        <activity
+            android:name="com.bluebrand.fieldium.view.other.LanguagesActivity"
+            android:label="@string/language"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TradinosDialog" />
+        <activity
+            android:name="com.bluebrand.fieldium.view.other.CountriesActivity"
+            android:label="@string/country_title"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TradinosDialog" />
+        <activity
+            android:name=".view.Booking.TimingActivityHomeScreen"
+            android:label="@string/title_activity_timing"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TradinosDialog" />
+        <activity
+            android:name=".view.Booking.TimingActivityHomeScreentest"
+            android:label="@string/title_activity_timing"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TradinosDialog" />
+        <activity
+            android:name=".view.Booking.HomeActivity"
+            android:label="@string/title_activity_search"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!--
+            <intent-filter>
+            <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name=".view.Booking.CheckAvailabilityActivity"
+            android:label="@string/title_activity_check_availability"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.NewCheckAvailabilityActivity"
+            android:label="@string/title_activity_check_availability"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.CheckAvailabilityActivitytest"
+            android:label="@string/title_activity_check_availability"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!--
+                <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bluebrand.fieldium.view.Fields.FieldDetailsActivity" />
+            -->
+        </activity>
+        <activity
+            android:name=".view.Booking.NotificationActivity"
+            android:label="@string/title_activity_notification"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.Booking.MyVouchersActivity"
+            android:label="@string/my_vouchers"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- [START firebase_service] -->
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END firebase_service] -->
+        <!-- [START firebase_iid_service] -->
+        <service android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".view.other.SettingsActivity"
+            android:label="@string/title_activity_setttings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

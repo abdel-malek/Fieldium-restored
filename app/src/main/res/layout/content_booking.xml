@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="0.5">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".view.Booking.BookingActivity"
+        tools:showIn="@layout/activity_booking">
+
+        <!--  <LinearLayout
+              android:id="@+id/form_container"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">-->
+
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:maxHeight="100dp"
+            android:maxWidth="100dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/company_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/field_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/company_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TableRow
+                android:id="@+id/status_panel"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/status"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/booking_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:textColor="@color/dark_gray" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/game"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/booking_game"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray"
+
+                    android:textDirection="locale" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/date"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/booking_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+
+                    android:textColor="@color/dark_gray" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/start"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/booking_startTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/duration"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/booking_duration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+
+                    android:textColor="@color/dark_gray" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/cost_per_hour_panel"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/cos_per_hour"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/cost_per_hour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray"
+                    android:textDirection="locale" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/voucher_value_panel"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/voucher"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/voucher_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray"
+                    android:textDirection="locale" />
+            </TableRow>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/booking_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/notes" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- <android.support.design.widget.TextInputEditText
+                 android:id="@+id/booking_note"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="10dp"
+                 android:hint="Your note.."></android.support.design.widget.TextInputEditText>
+ -->
+
+
+            <LinearLayout
+                android:id="@+id/voucher_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/status_bar_gray"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/voucher_panel_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:text="@string/use_voucher"
+                    android:textColor="@color/color_primary" />
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fadeScrollbars="false"
+                    >
+
+                    <LinearLayout
+                        android:id="@+id/my_vouchers_panel"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+            <TableRow
+                android:id="@+id/subtotal_panel"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/subTotal"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/subtotal_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray"
+                    android:textDirection="locale" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/discount_value_panel"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/discount"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:id="@+id/discount_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textDirection="locale" />
+            </TableRow>
+
+            <TableRow
+                android:layout_gravity="bottom"
+                android:layout_marginTop="40dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:text="@string/total"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/booking_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textColor="@color/dark_gray"
+                    android:textDirection="locale"
+                    android:textStyle="bold" />
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/cancel_reason_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancellation reason:"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="@color/dark_gray"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cancel_reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="msg msg msg"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="@color/dark_gray" />
+        </LinearLayout>
+   
+    </LinearLayout>
+    <!--</LinearLayout>-->
+</ScrollView>

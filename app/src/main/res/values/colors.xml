@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_primary">#09BED2</color>
+    <color name="colorAccent">#F26539</color>
+    <color name="colorAccent_transparent">#9AF26539</color>
+    <color name="color_primary_dark">#07B3C6</color>
+    <color name="dark_gray">#464A4B</color>
+    <color name="status_bar_gray">#F7F7F7</color>
+    <color name="transparent_white">#aaFFFFFF</color>
+    <color name="transparent_black">#73000000</color>
+    <color name="white_text">#FFFFFF</color>
+    <color name="divider">#424242</color>
+    <color name="white_bg">#FFFFFF</color>
+    <color name="gray">#333333</color>
+    <color name="color_background">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="dialog_background">#99999999</color>
+    <color name="bright_gray">#9FA7AB</color>
+    <color name="default_background">#ededed</color>
+
+
+</resources>

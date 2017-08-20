@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@mipmap/home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@mipmap/my_profile"
+            android:title="@string/my_profile" />
+
+        <item
+            android:id="@+id/nav_bookings"
+            android:icon="@mipmap/my_bookings"
+            android:title="@string/my_bookings" />
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@mipmap/my_notification"
+            android:title="@string/my_notifications"
+            />
+        <item
+            android:id="@+id/nav_vouchers"
+            android:icon="@mipmap/voucher"
+            android:title="@string/my_vouchers"
+            />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:title="@string/action_settings"
+            android:icon="@mipmap/settings"/>
+        <item
+            android:id="@+id/nav_about"
+            android:title="@string/about"
+            android:icon="@mipmap/info"/>
+        <item
+            android:id="@+id/side_menu_my_contact_us"
+            android:icon="@mipmap/email"
+            android:title="@string/side_menu_my_contact_us" />
+
+        <item
+            android:id="@+id/nav_login"
+            android:visible="false"
+            android:title="@string/action_sign_in"
+            android:icon="@mipmap/login"/>
+
+
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/log_out"
+            android:visible="false"/>
+    </group>
+
+
+</menu>

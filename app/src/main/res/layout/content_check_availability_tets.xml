@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent_panel"
+    android:orientation="vertical"
+    android:background="@color/white_bg"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bluebrand.fieldium.view.Booking.CheckAvailabilityActivity"
+    tools:showIn="@layout/activity_check_availabilitytest">
+
+    <Button
+        android:id="@+id/button_selectDate"
+        style="@style/CustomButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/white_arrow"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="@color/white_text"
+        android:textStyle="bold" />
+    <!--android:background="@color/white_bg"-->
+    <!--android:textColor="@color/gray"-->
+    <!--android:drawableStart="@drawable/more_triangle"-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout android:id="@+id/form_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.alamkanak.weekview.WeekView
+                android:id="@+id/weekView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:eventTextColor="@android:color/white"
+                app:textSize="12sp"
+                app:hourHeight="60dp"
+                app:headerColumnPadding="0dp"
+                app:headerRowPadding="0dp"
+                app:columnGap="8dp"
+                app:noOfVisibleDays="1"
+                app:xScrollingSpeed="0.0"
+
+                app:headerRowBackgroundColor="@color/white_bg"
+                app:dayBackgroundColor="#05000000"
+                app:todayBackgroundColor="#1848adff"
+                app:headerColumnBackground="#ffffffff"
+                app:todayHeaderTextColor="@color/white_bg" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/proccess_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,131 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="datepicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Medium.White</item>
+        <item name="android:background">@color/white_bg</item>
+
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Medium.White</item>
+        <item name="android:background">@color/white_bg</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Medium.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/white_text</item>
+    </style>
+    <!--   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />-->
+
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/gray</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <!--item name="colorButtonNormal">@color/yourButtonColor</item-->
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="Theme.TradinosDialog" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/dialog_background</item>
+    </style>
+
+    <style name="VoucherDetailTitle" parent="android:Widget.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">7dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:gravity">start</item>
+        <item name="android:layout_weight">0.5</item>
+    </style>
+
+
+    <style name="VoucherDetailValue" parent="android:Widget.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">7dp</item>
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:gravity">end</item>
+        <!--<item name="android:textStyle">bold</item>-->
+    </style>
+
+    <style name="TextViewHourRate" parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/CustomButtonStyletextAppearance</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:background">@color/transparent_black</item>
+        <item name="android:minWidth">100dp</item>
+    </style>
+
+    <style name="CustomButtonStyletextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/white_text</item>
+    </style>
+
+    <style name="TextAppearence.TextInputLayout.Light.Hint" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:textColorHint">@color/white_text</item>
+    </style>
+
+
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:textColorHint">@color/white_text</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+
+
+    </style>
+
+    <style name="DialogSlideAnim" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+        <!-- <item name="android:windowNoTitle">true</item>
+     &lt;!&ndash;   <item name="android:colorAccent">@color/color_primary</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/color_primary_dark</item>&ndash;&gt;
+      &lt;!&ndash;  <item name="android:windowTitleStyle">@style/test</item>&ndash;&gt;
+        &lt;!&ndash;<item name="android:windowIsFloating">true</item>&ndash;&gt;
+        &lt;!&ndash;  <item name="android:windowBackground">@null</item>&ndash;&gt;
+       &lt;!&ndash; &ndash;&gt;<item name="android:windowFrame">@null</item>-->
+    </style>
+
+</resources>

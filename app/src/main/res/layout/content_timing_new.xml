@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?><!--<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_weight="0.5"
+    xmlns:android="http://schemas.android.com/apk/res/android" >-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="0.5"
+    android:background="@color/white_bg"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:weightSum="7"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bluebrand.fieldium.view.Booking.NewTimingActivity"
+    tools:showIn="@layout/activity_timing_new">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+        <!--android:background="@drawable/custom_boarder"-->
+        <TextView
+            android:id="@+id/time_range_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="4"
+        android:background="@drawable/custom_boarder"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/startTime_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:padding="10dp"
+                android:text="@string/start"
+                android:textColor="@color/dark_gray" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal">
+
+                <com.aigestudio.wheelpicker.WheelPicker xmlns:aigestudio="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/main_wheel_hour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="5dp"
+                    aigestudio:wheel_atmospheric="true"
+                    aigestudio:wheel_curved="true"
+                    aigestudio:wheel_cyclic="true"
+                    aigestudio:wheel_item_align="right"
+                    aigestudio:wheel_item_text_color="@color/bright_gray"
+                    aigestudio:wheel_item_text_size="18sp"
+                    aigestudio:wheel_selected_item_text_color="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text=":"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                <com.aigestudio.wheelpicker.WheelPicker xmlns:aigestudio="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/main_wheel_minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="5dp"
+                    aigestudio:wheel_atmospheric="true"
+                    aigestudio:wheel_curved="true"
+                    aigestudio:wheel_cyclic="true"
+                    aigestudio:wheel_item_align="right"
+                    aigestudio:wheel_item_text_color="@color/bright_gray"
+                    aigestudio:wheel_item_text_size="18sp"
+                    aigestudio:wheel_selected_item_text_color="@color/dark_gray" />
+
+                <com.aigestudio.wheelpicker.WheelPicker xmlns:aigestudio="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/main_wheel_ampm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="5dp"
+                    aigestudio:wheel_atmospheric="true"
+                    aigestudio:wheel_curved="true"
+                    aigestudio:wheel_cyclic="true"
+                    aigestudio:wheel_item_align="right"
+                    aigestudio:wheel_item_text_color="@color/bright_gray"
+                    aigestudio:wheel_item_text_size="18sp"
+                    aigestudio:wheel_selected_item_text_color="@color/dark_gray" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/duration_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:padding="10dp"
+                android:text="@string/duration"
+                android:textColor="@color/dark_gray" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal">
+
+                <com.aigestudio.wheelpicker.WheelPicker
+                    android:id="@+id/main_wheel_durationHour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:padding="5dp"
+                    app:wheel_atmospheric="true"
+                    app:wheel_curved="true"
+                    app:wheel_cyclic="true"
+                    app:wheel_item_align="right"
+                    app:wheel_item_text_color="@color/bright_gray"
+                    app:wheel_item_text_size="18sp"
+                    app:wheel_selected_item_text_color="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="h"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                <com.aigestudio.wheelpicker.WheelPicker
+                    android:id="@+id/main_wheel_durationMinute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="5dp"
+                    app:wheel_atmospheric="true"
+                    app:wheel_curved="true"
+                    app:wheel_cyclic="true"
+                    app:wheel_item_align="right"
+                    app:wheel_item_text_color="@color/bright_gray"
+                    app:wheel_item_text_size="18sp"
+                    app:wheel_selected_item_text_color="@color/dark_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="min"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+        <!--android:background="@drawable/custom_boarder"-->
+        <TextView
+            android:id="@+id/your_booking_range_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@color/dark_gray" />
+    </LinearLayout>
+</LinearLayout><!--
+</ScrollView>-->
