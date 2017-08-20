@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Fieldium Admin Dashboard</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Strings related to warnings -->
+    <string name="wait">Please wait..</string>
+    <string name="connection_problem">There seems a problem with your internet connection, please check your network and refresh.</string>
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">Username is invalid</string>
+    <string name="error_invalid_password">Password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="title_activity_my_fields">MyFieldsActivity</string>
+    <string name="google_maps_key">AIzaSyA_ARZiJnN_1CLACJeWTA6NSq5YJ5ckf6g</string>
+
+    <string name="date_format">yyyy-MM-dd</string>
+
+</resources>

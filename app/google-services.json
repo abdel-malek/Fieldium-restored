@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "833423715368",
+    "firebase_url": "https://fieldium-5412c.firebaseio.com",
+    "project_id": "fieldium-5412c",
+    "storage_bucket": "fieldium-5412c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833423715368:android:c38b634b67066d50",
+        "android_client_info": {
+          "package_name": "com.bluebrand.fieldium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833423715368-cmra2qi6ekph6f69iivgvqa8gj5oi946.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwxDYDJnzTN-JkuB-CfUyCZpJnCQeNW-w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833423715368:android:d1d55392eae8d161",
+        "android_client_info": {
+          "package_name": "com.bluebrand.fieldiumadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833423715368-cmra2qi6ekph6f69iivgvqa8gj5oi946.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwxDYDJnzTN-JkuB-CfUyCZpJnCQeNW-w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/nav_pending_reservations"
+            android:icon="@mipmap/bookings"
+            android:title="Pending reservations" />
+        <item
+            android:id="@+id/nav_approved_reservations"
+            android:icon="@mipmap/bookings"
+            android:title="Approved reservations" />
+    </group>
+<group>
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@mipmap/logout"
+        android:title="Logout" />
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@mipmap/about"
+        android:title="About" />
+</group>
+
+</menu>
