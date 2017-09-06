@@ -716,7 +716,7 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
                 .setAction(getResources().getString(R.string.refresh), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (/*myDialog != null &&*/ myDialog.isShowing()) {
+                        if (myDialog != null && myDialog.isShowing()) {
                             myDialog.findViewById(R.id.proccess_indicator).setVisibility(View.GONE);
                             myDialog.findViewById(R.id.form_container).setVisibility(View.VISIBLE);
                         } else
