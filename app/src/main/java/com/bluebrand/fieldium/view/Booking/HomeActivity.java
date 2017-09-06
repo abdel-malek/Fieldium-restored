@@ -67,8 +67,6 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,12 +98,6 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
         fieldiumApplication = ((FieldiumApplication) getApplication());
         customStyle();
         getData();
-
-   /*     mProgressBar = (CustomProgressBar) findViewById(R.id.offers_progressBar);
-        mProgressBar.setProgressDesc("test");
-        mProgressBar.setMaxProgress(6);
-        mProgressBar.setProgressColor(Color.parseColor("#F6CB82"));
-        mProgressBar.setCurProgress(3);*/
 
     }
 
@@ -203,30 +195,7 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
                     viewOffers(result.getOfferes());
                 }
             });
-            /*   BookingController.getInstance(getmController()).getAreas(new SuccessCallback<List<City>>() {
-                @Override
-                public void OnSuccess(List<City> cities) {
-                    progressBar_city.setVisibility(View.GONE);
-                    ArrayAdapter<City> areasAdapter = new AreaAdapter(getmContext(), R.layout.spinner_item, cities);
-                    spinner_city.setAdapter(areasAdapter);
-                    City mCity = UserUtils.getInstance(getmContext()).getCity();
-                    if (mCity != null)
-                        for (int l = 0; l < cities.size(); l++) {
-                            if (cities.get(l).equals(mCity)) {
-                                spinner_city.setSelection(l);
-                                break;
-                            }
-                        }
-                }
-            });
-            BookingController.getInstance(getmController()).getgames(new SuccessCallback<List<Game>>() {
-                @Override
-                public void OnSuccess(List<Game> result) {
-                    progressBar_soccer.setVisibility(View.GONE);
-                    ArrayAdapter<Game> gameAdapter = new GamesAdapter(getmContext(), R.layout.spinner_item, result);
-                    spinner_game.setAdapter(gameAdapter);
-                }
-            });*/
+
         }
     }
 
@@ -419,25 +388,6 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
 
             booking = fieldiumApplication.getBooking();
             sendTokenToServer(token);
-            /*   if (UserUtils.getInstance(getmContext()).IsLogged()) {
-//                token = UserUtils.getInstance(getmContext()).Get().getToken();
-                if (!token.equals("123") && !token.equals(sentUserToken)) {
-                    sendTokenToServer(token);
-//
-                } else {
-                    token = UserUtils.getInstance(getmContext()).Get().getToken();
-                    search();
-                }
-            } else {
-//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                if (!token.equals("123") && !token.equals(sentToken)) {
-                    sendTokenToServer(token);
-//
-                } else {
-                    token = sharedPreferences.getString("token", "123");
-                    search();
-                }
-            }*/
 
         } catch (InvalidInputException e) {
             Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -595,11 +545,7 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
             navigationView.getMenu().findItem(R.id.nav_notifications).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_vouchers).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_profile).setVisible(true);
-         /*   SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getmContext());
-            String profileImage = sharedPreferences.getString("file_path", "");
-            if (!profileImage.equals("")) {
-                Picasso.with(getmContext()).load(Uri.parse(profileImage)).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
-            }*/
+
 //            try {
             Player player = UserUtils.getInstance(this).Get();
 
@@ -607,7 +553,13 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
             if (!player.getProfileImage().getName().equals("deleted") && !player.getProfileImage().getName().equals("") && !player.getProfileImage().getName().equals("null")) {
 
                 File f = new File(getFilesDir(), "image.jpg");
-                Picasso.with(getmContext()).load(f).memoryPolicy(MemoryPolicy.NO_STORE).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
+                try {
+                    Picasso.with(getmContext()).load(f).memoryPolicy(MemoryPolicy.NO_STORE)
+                            .error(R.drawable.profile_blue)
+                            .placeholder(R.drawable.profile_blue).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
+                } catch (Exception e) {
+                    ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageResource(R.drawable.profile_blue);
+                }
             } else {
                 ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageResource(R.drawable.profile_blue);
             }
@@ -720,8 +672,9 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
     }
 
     public void sendTokenToServer(final String mToken) {
+        showProgress(true);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString("user_token_sent_to_server", "").apply();
+//        sharedPreferences.edit().putString("user_token_sent_to_server", "").apply();
 
         final String sentUserToken = sharedPreferences.getString("user_token_sent_to_server", "");
         final String sentToken = sharedPreferences.getString("unregistered_user_token_sent_to_server", "");
@@ -769,7 +722,7 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
     }
 
     public void search() {
-        showProgress(true);
+
 //        if (booking.getDate() != null) {
         fieldiumApplication.setGame_id(gameId);
 
@@ -968,7 +921,7 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
                 textView.setPadding(10, 10, 10, 10);
                 textView.setGravity(Gravity.CENTER);
                 textView.setText(daysLeft(vouchers.get(i).getExpiry_date()) + " " + getResources().getString(R.string.days_left)
-                +"\n"+vouchers.get(i).getCode());
+                        + "\n" + vouchers.get(i).getCode());
                 LinearLayout linearLayout = new LinearLayout(this);
 
                 LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1012,7 +965,7 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
             int bookedHoursCount = offer.getBooked_hours() / 60;
             offers_layout.setWeightSum(hoursCount + 2);
 
-            for (int i = 0; i < hoursCount; i++) {
+            for (int i = 1; i <= hoursCount; i++) {
                 TextView imageView = new TextView(this);
 //                TextView textView = new TextView(this);
                 imageView.setTextColor(getResources().getColor(R.color.black));
@@ -1025,7 +978,7 @@ public class HomeActivity extends MasterFormActivity implements NavigationView.O
                     imageView.setBackground(getResources().getDrawable(R.drawable.booked_hours_textview_boarder));
                 else
                     imageView.setBackground(getResources().getDrawable(R.drawable.offer_textview_boarder));
-                imageView.setText(i + 1 + "");
+                imageView.setText(i /*+ 1*/ + "");
                 LinearLayout line = new LinearLayout(this);
 
                 LinearLayout.LayoutParams lineLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);

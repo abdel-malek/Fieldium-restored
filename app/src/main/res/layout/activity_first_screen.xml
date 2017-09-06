@@ -79,6 +79,7 @@
                     android:divider="@color/white_bg"
                     android:dividerHeight="1dp"
                     android:fadeScrollbars="false"
+                    android:scrollbarSize="2dp"
                     android:background="@color/transparent_black">
 
                 </ListView>

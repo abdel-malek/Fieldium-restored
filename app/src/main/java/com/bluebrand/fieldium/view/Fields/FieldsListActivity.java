@@ -240,7 +240,12 @@ public class FieldsListActivity
             Player player = UserUtils.getInstance(this).Get();
             if (!player.getProfileImage().getName().equals("deleted") && !player.getProfileImage().getName().equals("") && !player.getProfileImage().getName().equals("null")) {
                 File f = new File(getFilesDir(), "image.jpg");
-                Picasso.with(getmContext()).load(f).memoryPolicy(MemoryPolicy.NO_STORE).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
+              try{  Picasso.with(getmContext()).load(f).memoryPolicy(MemoryPolicy.NO_STORE)
+                      .error(R.drawable.profile_blue)
+                      .placeholder(R.drawable.profile_blue).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
+            } catch (Exception e) {
+                ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageResource(R.drawable.profile_blue);
+            }
             } else {
                 ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageResource(R.drawable.profile_blue);
             }

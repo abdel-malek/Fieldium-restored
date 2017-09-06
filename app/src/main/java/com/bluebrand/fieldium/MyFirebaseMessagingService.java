@@ -116,7 +116,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent = new Intent(this, MyVouchersActivity.class);
                 intent.putExtra("voucher_id", voucherId);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
             } else {
                 intent = new Intent(this, SplashActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

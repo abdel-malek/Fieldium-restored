@@ -103,7 +103,7 @@ public class BookingController extends ParentController {
     }
 
     public void checkVoucher(String voucher, int field_id, String date, String duration, String start,int gameType, SuccessCallback<Voucher> successCallback) {
-        String url = new URLBuilder(APIModel.vouchers, "check_validity").getURL();
+        String url = new URLBuilder(APIModel.vouchers, "check_validity").getURL()/*"http://fieldium2.tradinos.com/index.php/vouchers/check_validity/format/json?voucher=test&field_id=59&date=2017-08-16&duration=60&start=08:30 PM&game_type=1"*/;
         TradinosRequest request = new TradinosRequest(getmContext(), url, RequestMethod.Get, new VoucherParser(), successCallback, getmFaildCallback());
         request.addParameter("voucher", voucher);
         request.addParameter("field_id", String.valueOf(field_id));

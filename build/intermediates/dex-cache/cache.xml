@@ -2,328 +2,598 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\picasso-2.5.2_8194d82793b91ba091882c52becdb3b7edf8d9bb\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-23.3.0_03e888c3adbed051675dcf9f30da0b97d592d43a\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="cc178928721f3222b3b06bdfbd9497378ccb9792">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-9.0.0_4bad4abec6c98933e2eb5c9b8bee34fbb9854b15\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="debf30ce0a7560396b6235edef77e447006454c2">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-23.3.0_0715d8a58b58d0102d0898f24db8f5c1b7fbbb6b\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\libs\internal_impl-23.3.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.3.0_07039caf916ac5b88ea45b992f678ea05da771e0\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="59cca9b91688dc2467754d36793b3d23bebd21a9">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-location-9.0.0_e7cb9cd12874f60fcdde604d1705279930f55712\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="2cb29455028e92e024bbad0d41c6ec772f2433d1">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-ads-9.0.0_a95c46d1f883634ed74fdef3453ca47bc27866ed\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.7\751f548c85fa49f330cecbb1875893f971b33c4e\gson-2.7.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.7_5aebc82a4c80fa5e0ee4fce4bb98607415ddf6b8\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-23.3.0_2f1a29593d7a5b8a50a9c777dd877b6ba285447b\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth-base\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="7a23185c9b1c100e7d1a32275017e4712e31c796">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-auth-base-9.0.0_20cc2486f4715266d5e26001f1644cf0c84129e2\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\multidex\1.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-multidex-1.0.1_12f4b140c69c7e00bddf5e7beb77934816afbfd9\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.3.0\support-annotations-23.3.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.3.0_6ad12a72478af567b18a3e0626de4d034e078ea4\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="cc52f924f6f66f24caf4d404ea862aa07cb0b41f">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_eb060c4ad59cf0a94f84399b2b955ed87ad8ee3d\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="4ef8ab5fee042023018249474bc93bd4b2b9c17e">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-analytics-9.0.0_c0cd560455aec3aca228c86c92d2fa8c43e480a2\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpclient-android\4.3.5\82edcaec6c7b4599eaeaaf11167ceea41db42f33\httpclient-android-4.3.5.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="82edcaec6c7b4599eaeaaf11167ceea41db42f33">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\httpclient-android-4.3.5_a31a7757b76788e291be57623b921f2927bc35b7\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\cn.aigestudio.wheelpicker\WheelPicker\1.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="5617b1601fbc7976254953dbb2640262ecf781b4">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\cn.aigestudio.wheelpicker-WheelPicker-1.1.0_7170d807345dcee05a8998f425faa70ab3bd018d\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.7.0\9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4\glide-3.7.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\glide-3.7.0_86867d07a33b4e71eaeeedd798dbf791032553d1\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="0dc8ab07eeceda5e99b305c8069765056b6e5c9d">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-analytics-impl-9.0.0_e544a8465e822f08a739240f40a95fdaf41c9015\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-iid\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="ea4b54dcbfe5ac05efb0a314105f07258118d3a7">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-iid-9.0.0_6fd5d405c5605acf6cafae938da49862d6fe3c08\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpmime\4.3.5\1dd0d38df9c6d21e893f2e52403f1cd99e91cd81\httpmime-4.3.5.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="1dd0d38df9c6d21e893f2e52403f1cd99e91cd81">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\httpmime-4.3.5_e1ef6dfd2fc9ab676b00c4431c435e54c4029058\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="a819aae4f0c711e50b4fd633922a3c1a176cb51e">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-maps-9.0.0_51db692deef8246b4bac0cdff3a4790e941f371e\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="4431efe5d0f67fab36a698dde725946b33a6bf4a">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-9.0.0_c06aba449c05d74ed507430f684262ccc2f39dcb\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="1941832901fc4e7a93300b53762e9f65d7650b99">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tasks-9.0.0_2b1152311228a4448c98d6ce10fc464f054adf57\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.mcxiaoke.volley\library-aar\1.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="cf9754bfa8484f88f26e45d28fe298daa544d4f0">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.mcxiaoke.volley-library-aar-1.0.1_5de3f8ff38d51aee4fb735c40ba8d4de007c5eef\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-23.3.0_bc2d787590693ade2afb2d3ef6371023a92e3d5a\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="42df48c7305b08b14fa0e84561091b0c24d70d26">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-common-9.0.0_80756102c495903b368e0c8dda9164796180787e\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="6f65c144283b31b4b9a70e6e7aa4c4a1c897d4b8">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-9.0.0_c031790885877a7a3265b6b395a5c7ba41b04dfa\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads-lite\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="79e4b41db41d4dbbf364c7bd6aaeee5b876c9d8b">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-ads-lite-9.0.0_f76c754f48beb651be3881e117e9c02d2c1408a6\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.github.alamkanak\android-week-view\1.2.6\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="393eb85d65baa2c3702efdf699832498f8b51bf1">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.github.alamkanak-android-week-view-1.2.6_0a72ae52c2dad9271de44d38d2254a9afa060924\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.3.0_10e8ff9a3b6aa1ac219499fe0049509f4136b2de\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.3.0_437f9d22d5bd213c223d4e310598f29cdc6dac58\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="f28a0c07c585e7ee47d2f0a07a6490c341125ce3">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_7be9cfd0950ec6145751242d2cb81b2fe885985c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.1.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-cardview-v7-23.1.1_edf2bcd73d0759805223e0e1a2bc9d40fb18fc72\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="005786793d72c6deacbbbfd38177ed58e1aa6653">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-messaging-9.0.0_e888928afa19ea024ebe53aa20b52e6e54c921ea\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth\9.0.0\jars\classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth\9.0.0\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.1"
         sha1="7da84426d876216ed4cdddd85e739be5ecabdd04">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-auth-9.0.0_baf40f594f11add2ba8f511e91de0cf9096358c2\classes.dex" />
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-auth-9.0.0_43b2d726388dbf11df03cf47d2834757082341ae.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\exploded-aar\com.chauthai.swipereveallayout\swipe-reveal-layout\1.4.0\jars\classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4431efe5d0f67fab36a698dde725946b33a6bf4a">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-appindexing-9.0.0_4510a71cf1f18792d608309bffaf2d4d5b7fc71d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="59cca9b91688dc2467754d36793b3d23bebd21a9">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-location-9.0.0_925a9c39b3ac7efa0b1b14bc66ad644cc8a8d057.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.7.0\9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4\glide-3.7.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\glide-3.7.0_86867d07a33b4e71eaeeedd798dbf791032553d1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.ramotion.foldingcell\folding-cell\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="48dbdfcaaa731f11ff6a9fcbee3cc0c96feded6e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.ramotion.foldingcell-folding-cell-1.1.0_ee2f028e455cf665d962b2f1be49859be2a4ba37.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\libs\internal_impl-23.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\internal_impl-23.3.0_1b5e0d508be9a412a9e323a8cf2cd40f5388cb33.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\Fieldium-android\circleindicator\1.2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="729f9ded59a828776410ece2d3cb877b0511f736">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\Fieldium-android-circleindicator-1.2.1_ff08c88bae881ef83faae129b289ec46aaa28991.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpmime\4.3.5\1dd0d38df9c6d21e893f2e52403f1cd99e91cd81\httpmime-4.3.5.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1dd0d38df9c6d21e893f2e52403f1cd99e91cd81">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\httpmime-4.3.5_e1ef6dfd2fc9ab676b00c4431c435e54c4029058.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2cb29455028e92e024bbad0d41c6ec772f2433d1">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-9.0.0_fd7cb2b86835c4644e4912821de6b3ab61834480.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-23.3.0_490110f39053223cd71363ef32fb1b274fcf34a7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-iid\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="ea4b54dcbfe5ac05efb0a314105f07258118d3a7">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-iid-9.0.0_b7be1fcc83d296ec4973a24227a9bf6658060b27.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="cc178928721f3222b3b06bdfbd9497378ccb9792">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-9.0.0_123449d23075be19144df34752821bce10176c65.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1941832901fc4e7a93300b53762e9f65d7650b99">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tasks-9.0.0_4fa4d729af2c2e6e2be0bab28d8c9ab4d0ad1228.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2cb29455028e92e024bbad0d41c6ec772f2433d1">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-9.0.0_625146e357751c74cedbf95dbd1bf4f4e686b4bb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\Fieldium\circleindicator\1.2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="729f9ded59a828776410ece2d3cb877b0511f736">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\Fieldium-circleindicator-1.2.1_9fdbe8d66808ff9c907dacaf28483c16b7db60fa.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-cardview-v7-23.1.1_3713a2f74b0ad9c0ad4ca4478174a34e3fc2b48b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0dc8ab07eeceda5e99b305c8069765056b6e5c9d">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-impl-9.0.0_d96a4bd1d53a135d9b52a7a5fb4837a53927639e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.chauthai.swipereveallayout\swipe-reveal-layout\1.4.0\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.1"
         sha1="0383ea061ff92aff86cc8e899378170e19319a2c">
-        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.chauthai.swipereveallayout-swipe-reveal-layout-1.4.0_0102f2ef9d7f8376b443348ecad9cd534769e582\classes.dex" />
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.chauthai.swipereveallayout-swipe-reveal-layout-1.4.0_c45862b5ccf3057a79c72f92b8a5e12d0c551986.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.ramotion.foldingcell\folding-cell\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="48dbdfcaaa731f11ff6a9fcbee3cc0c96feded6e">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.ramotion.foldingcell-folding-cell-1.1.0_b9db3cbd0eeda12d64ece8bbd4568fcb70cd6e0b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.3.0_44edfddc314cbd1401c142876822ba76d4f22b52.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.mcxiaoke.volley\library-aar\1.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="cf9754bfa8484f88f26e45d28fe298daa544d4f0">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.mcxiaoke.volley-library-aar-1.0.1_11b7cbba47b4d614764b4808f83c90c00964d782.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\Fieldium-android\TradinosCore\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f90e32fdf00e3077743687b6b5ce9154de0340e4">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\Fieldium-android-TradinosCore-unspecified_7bede2d604a5cbb86c3f9ab6b50e6e3b4e497970.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a819aae4f0c711e50b4fd633922a3c1a176cb51e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-maps-9.0.0_379e8ea9367c25bb98937be8b6faf123b3d69a95.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-23.3.0_168c3728485b4c494d2f9640270d3cd960d6a343.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="005786793d72c6deacbbbfd38177ed58e1aa6653">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-messaging-9.0.0_97cfcbd5373a99b0c14d89307445733706b369dc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1941832901fc4e7a93300b53762e9f65d7650b99">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tasks-9.0.0_652a2016e1f40ec662006dde62116ed4e631f122.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a819aae4f0c711e50b4fd633922a3c1a176cb51e">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-maps-9.0.0_7409d9ae3a8e8b859cb83dc4a5ae295bbdf6ff98.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\libs\internal_impl-23.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\internal_impl-23.3.0_3fd6b005f11dfe71c6437d55d950d9f2ad9065c9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="42df48c7305b08b14fa0e84561091b0c24d70d26">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-common-9.0.0_b04cfd4b1d632fddb57257cd9bdb023369557b66.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.github.alamkanak\android-week-view\1.2.6\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="393eb85d65baa2c3702efdf699832498f8b51bf1">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.github.alamkanak-android-week-view-1.2.6_8fd7b9f35643bdd7e33f5c8ad485ed699cadb002.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\picasso-2.5.2_8194d82793b91ba091882c52becdb3b7edf8d9bb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="7da84426d876216ed4cdddd85e739be5ecabdd04">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-auth-9.0.0_78d2ed94a5d2a8f9aa602ca4d82a2538e6b0a550.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\Fieldium\TradinosCore\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f90e32fdf00e3077743687b6b5ce9154de0340e4">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\Fieldium-TradinosCore-unspecified_4ff0c5be551e12b48e2916aaa7c74ae7788579bc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="59cca9b91688dc2467754d36793b3d23bebd21a9">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-location-9.0.0_53f919cc797ca55d98032b3cf520eb82ad9c4cc1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.3.0_35a5ac5b1a98f535f506b6cfb2095ee0e314d5f3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.mcxiaoke.volley\library-aar\1.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="cf9754bfa8484f88f26e45d28fe298daa544d4f0">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.mcxiaoke.volley-library-aar-1.0.1_061e51386374e5708f489edd04aaeb8d4fcba950.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads-lite\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="79e4b41db41d4dbbf364c7bd6aaeee5b876c9d8b">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-lite-9.0.0_503ad050f06cb3a8c170d2f9f2d5ea223820d847.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="cc178928721f3222b3b06bdfbd9497378ccb9792">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-9.0.0_d214ff3c83eaa52258a41bd19521426167cfca6f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.github.alamkanak\android-week-view\1.2.6\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="393eb85d65baa2c3702efdf699832498f8b51bf1">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.github.alamkanak-android-week-view-1.2.6_eaf18e67cefe3060cc4a96e6950809441c647bce.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.3.0_9ea992cc1190be862c326e3c536f87d43d22befa.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6f65c144283b31b4b9a70e6e7aa4c4a1c897d4b8">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-9.0.0_1604567362b0294f14e779a1919b4a159f2eec61.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="debf30ce0a7560396b6235edef77e447006454c2">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.3.0_8c1871cc9a0791216946bbf8f552917408d95b08.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6f65c144283b31b4b9a70e6e7aa4c4a1c897d4b8">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-9.0.0_5a7af2c59f2d9dfafefcc953ea954f9f660893a3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth-base\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="7a23185c9b1c100e7d1a32275017e4712e31c796">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-auth-base-9.0.0_8abb098e725a01114f47749edd4601103e3ac18e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4ef8ab5fee042023018249474bc93bd4b2b9c17e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-9.0.0_d22ca5c06492fb70d9d83ce1313d7f8a9bde034d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="42df48c7305b08b14fa0e84561091b0c24d70d26">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-common-9.0.0_3fbe5a196e929f2dcdff914e2421f11a7749ac0e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\cn.aigestudio.wheelpicker\WheelPicker\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5617b1601fbc7976254953dbb2640262ecf781b4">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\cn.aigestudio.wheelpicker-WheelPicker-1.1.0_2d68d0fcbd8fb4f42f2ffffd650760c512729e4c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0dc8ab07eeceda5e99b305c8069765056b6e5c9d">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-impl-9.0.0_2099ccf8fb8b37282cea62d1090639484e09351a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.firebase\firebase-iid\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="ea4b54dcbfe5ac05efb0a314105f07258118d3a7">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-iid-9.0.0_dd8cca22f07f38cf94e7b87136af1f8833c2756a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.3.0_23769ac266618f146161bc68ec6940358fa3cf44.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.7\751f548c85fa49f330cecbb1875893f971b33c4e\gson-2.7.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\gson-2.7_5aebc82a4c80fa5e0ee4fce4bb98607415ddf6b8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.3.0_394199079a8fdd47446d0196560790da59557228.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="debf30ce0a7560396b6235edef77e447006454c2">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.3.0_dba990ffd5db199cf514f0db757fb6f50793a47b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.chauthai.swipereveallayout\swipe-reveal-layout\1.4.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0383ea061ff92aff86cc8e899378170e19319a2c">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.chauthai.swipereveallayout-swipe-reveal-layout-1.4.0_26a21e808dc2c540aa3a91aa1d2ac4757b33eef1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.3.0\support-annotations-23.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\support-annotations-23.3.0_6ad12a72478af567b18a3e0626de4d034e078ea4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-23.3.0_836e5b7c3619cb05d4ac0d71889f06fccfa10231.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-23.3.0_54594789b9fa1aa67e78cba65152ba5337eeabcf.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpclient-android\4.3.5\82edcaec6c7b4599eaeaaf11167ceea41db42f33\httpclient-android-4.3.5.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="82edcaec6c7b4599eaeaaf11167ceea41db42f33">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\httpclient-android-4.3.5_a31a7757b76788e291be57623b921f2927bc35b7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.3.0_b53ebcfdd86ff452987cf308e1cd100eff073cad.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.android.support-cardview-v7-23.1.1_8ccf7c28384fbd450fe58fdb8a4d7a260274a2df.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth-base\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="7a23185c9b1c100e7d1a32275017e4712e31c796">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-auth-base-9.0.0_5b5f086f46ade1e0aedc65649fb40f664e113d8e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\cn.aigestudio.wheelpicker\WheelPicker\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5617b1601fbc7976254953dbb2640262ecf781b4">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\cn.aigestudio.wheelpicker-WheelPicker-1.1.0_62e6ffcebb30b61770ed011ee1eadf8eb7ab1804.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads-lite\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="79e4b41db41d4dbbf364c7bd6aaeee5b876c9d8b">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-lite-9.0.0_a2eb34c54ab18fbdd4e6934b6b7f385d90667239.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4431efe5d0f67fab36a698dde725946b33a6bf4a">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-appindexing-9.0.0_6481cf28c17b76288d1c713894738efc51a43d2d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="005786793d72c6deacbbbfd38177ed58e1aa6653">
+        <dex dex="C:\Users\Developer19\Documents\Fieldium-android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-messaging-9.0.0_ed29b2ae2f87e91d2d8f815cc0600a5f70091393.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\9.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4ef8ab5fee042023018249474bc93bd4b2b9c17e">
+        <dex dex="C:\Users\Developer19\Documents\GitHub\Fieldium\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-9.0.0_c8012aeb5cf796353f66a190ce78adc7891af662.jar" />
     </item>
 
 </items>

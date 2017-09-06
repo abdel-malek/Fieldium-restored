@@ -13,6 +13,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.bluebrand.fieldium.FieldiumApplication;
 import com.bluebrand.fieldium.R;
 import com.bluebrand.fieldium.core.controller.BookingController;
+import com.bluebrand.fieldium.core.controller.UserUtils;
 import com.bluebrand.fieldium.core.model.Booking;
 import com.bluebrand.fieldium.core.model.BookingStatus;
 import com.bluebrand.fieldium.core.model.Field;
@@ -38,6 +39,7 @@ public class BookingDetailActivity
     Field field;
     FieldiumApplication fieldiumApplication;
     String cancelReason;
+    String currency = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class BookingDetailActivity
 //        textView_startTime.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 //        textView_duration.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
         getData();
+
     }
 
     @Override
@@ -72,6 +75,7 @@ public class BookingDetailActivity
             public void OnSuccess(Booking result) {
                 showProgress(false);
                 booking = result;
+                currency = getCurrency();
                 showData();
             }
         });
@@ -101,7 +105,7 @@ public class BookingDetailActivity
         textView_duration.setText(hDuration + ":" + mDuration);
 //        textView_duration.setText(intDuration/60 + ":"+intDuration%60);
 //        textView_duration.setText(booking.getDuration() + " Hour");
-        textView_total.setText(booking.getTotal() + " " +getCurrency() );
+        textView_total.setText(booking.getTotal() + " " +currency );
 
         if (booking.getState() == BookingStatus.Canceled) {
             findViewById(R.id.cancel_reason_panel).setVisibility(View.VISIBLE);
@@ -130,9 +134,9 @@ public class BookingDetailActivity
                 BigDecimal discountValue = subTotal.multiply(new BigDecimal(booking.getVoucher().getValue())).divide(new BigDecimal(100));
                 String lang = Locale.getDefault().getLanguage();
                 if (lang.equals("ar"))
-                    discount_textView.setText(discountValue + "-");
+                    discount_textView.setText(discountValue + "-"+" "+currency);
                 else
-                    discount_textView.setText("-" + discountValue);
+                    discount_textView.setText("-" + discountValue+" "+currency);
                 discount_textView.setPaintFlags(discount_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
             else {
@@ -150,15 +154,15 @@ public class BookingDetailActivity
                     Log.d("Error bigdecimal", e.toString());
                     divideRes = new BigDecimal((booking.getField().getHourRate()).doubleValue() / m60.doubleValue());
                 }
-                discountValue = divideRes.multiply(discountValue);
+                discountValue = divideRes.multiply(discountValue).setScale(0, BigDecimal.ROUND_UP);
                 String lang = Locale.getDefault().getLanguage();
                 if (lang.equals("ar"))
-                    discount_textView.setText(discountValue + "-");
+                    discount_textView.setText(discountValue + "-"+" "+currency);
                 else
-                    discount_textView.setText("-" + discountValue);
+                    discount_textView.setText("-" + discountValue+" "+currency);
                 discount_textView.setPaintFlags(discount_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
-            ((TextView)findViewById(R.id.subtotal_value)).setText(booking.getSubTotal()+" "+getCurrency());
+            ((TextView)findViewById(R.id.subtotal_value)).setText(booking.getSubTotal()+" "+currency);
         }
 
 
@@ -191,5 +195,16 @@ public class BookingDetailActivity
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public String getCurrency() {
+        String lang = Locale.getDefault().getLanguage();
+        String currency = "";
+        if (lang.equals("ar"))
+            currency = booking.getArCurrency();
+        else
+            currency = booking.getEnCurrency();
+        return currency;
     }
 }

@@ -77,6 +77,9 @@ public class BookingParser implements TradinosParser<Booking> {
             booking.setVoucher(voucher);
             booking.setSubTotal(jsonObject.optString("subtotal"));
         }
+
+        booking.setArCurrency(jsonObject.optString("ar_currency_symbol",""));
+        booking.setEnCurrency(jsonObject.optString("en_currency_symbol",""));
         return booking;
     }
 

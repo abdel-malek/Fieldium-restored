@@ -96,9 +96,10 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
         fieldiumApplication = (FieldiumApplication) getApplication();
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+        currency = getCurrency();
         getData();
         setTitle(getResources().getString(R.string.booking));
-        currency=getCurrency();
+
     }
 
     @Override
@@ -322,9 +323,9 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
                     setScale(0, BigDecimal.ROUND_HALF_EVEN) + " " + currency);
             String lang = Locale.getDefault().getLanguage();
             if (lang.equals("ar"))
-                discount_textView.setText(discountValue + "-");
+                discount_textView.setText(discountValue + "-"+" "+currency);
             else
-                discount_textView.setText("-" + discountValue);
+                discount_textView.setText("-" + discountValue+" "+currency);
             discount_textView.setPaintFlags(discount_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         } else if (mVoucher.getType() == 1) {
@@ -342,9 +343,9 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
             BigDecimal discountValue = subTotal.multiply(new BigDecimal(mVoucher.getValue())).divide(new BigDecimal(100));
             String lang = Locale.getDefault().getLanguage();
             if (lang.equals("ar"))
-                discount_textView.setText(discountValue + "-");
+                discount_textView.setText(discountValue + "-"+ " " + currency);
             else
-                discount_textView.setText("-" + discountValue);
+                discount_textView.setText("-" + discountValue+ " " + currency);
             discount_textView.setPaintFlags(discount_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
             BigDecimal total = subTotal.subtract(discountValue);
@@ -601,7 +602,7 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
                 if (!isVoucherChecked) {
                     final EditText voucherCode = (EditText) myDialog.findViewById(R.id.textView_voucher_code);
                     final TextView voucherMessage = (TextView) myDialog.findViewById(R.id.voucher_message);
-                    voucher_code = String.valueOf(voucherCode.getText());
+                    voucher_code = voucherCode.getText().toString();
                     ///
                     EditText focusView = null;
                     try {
@@ -704,19 +705,18 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
     public void showSnackBar(String Message) {
         View view = findViewById(R.id.parent_panel);
 
-        if (myDialog != null)
-            if (myDialog.isShowing()) {
-                view = myDialog.findViewById(R.id.parent_panel);
-                mFormView = myDialog.findViewById(R.id.form_container);
-                mProgressView = myDialog.findViewById(R.id.proccess_indicator);
-            }
+        if (myDialog != null && myDialog.isShowing()) {
+            view = myDialog.findViewById(R.id.parent_panel);
+            mFormView = myDialog.findViewById(R.id.form_container);
+            mProgressView = myDialog.findViewById(R.id.proccess_indicator);
+        }
         Snackbar snackbar = Snackbar
                 .make(view/*getWindow().getDecorView().getRootView()*/, Message, Snackbar.LENGTH_INDEFINITE)
                 .setActionTextColor(getResources().getColor(R.color.color_primary))
                 .setAction(getResources().getString(R.string.refresh), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (myDialog.isShowing()) {
+                        if (/*myDialog != null &&*/ myDialog.isShowing()) {
                             myDialog.findViewById(R.id.proccess_indicator).setVisibility(View.GONE);
                             myDialog.findViewById(R.id.form_container).setVisibility(View.VISIBLE);
                         } else
@@ -729,6 +729,7 @@ public class BookingActivity extends MasterFormActivity implements DatePickerFra
 
     public void viewMyVouchers() {
         if (vouchers.size() != 0) {
+            ((LinearLayout) findViewById(R.id.my_vouchers_panel)).removeAllViews();
             for (int i = 0; i < vouchers.size(); i++) {
                 TextView imageView = new TextView(this);
                 TextView textView = new TextView(this);

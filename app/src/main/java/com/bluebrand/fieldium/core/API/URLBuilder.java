@@ -5,8 +5,9 @@ package com.bluebrand.fieldium.core.API;
  */
  public class URLBuilder {
 
+    private static final String SERVER_URL ="http://fieldium2.tradinos.com/index.php";
 
-    private static final String SERVER_URL ="http://field-dash.tradinos.com/index.php";
+//    private static final String SERVER_URL ="http://field-dash.tradinos.com/index.php";
 //    private static final String SERVER_URL ="http://blog.tradinos.com/index.php";
 //    private static final String SERVER_URL ="http://192.168.1.7/fieldium-server/index.php";
 

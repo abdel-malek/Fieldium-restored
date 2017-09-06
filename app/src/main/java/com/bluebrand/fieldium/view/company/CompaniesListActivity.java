@@ -133,7 +133,7 @@ public class CompaniesListActivity
             public boolean onQueryTextSubmit(String queryString) {
                 query = queryString;
                 showProgress(true);
-                BookingController.getInstance(getmController()).Search(0, query, 0, new Booking()/*, UserUtils.getInstance(getmContext()).getCountry().getId()*/,"", new SuccessCallback<ArrayList<Company>>() {
+                BookingController.getInstance(getmController()).Search(0, query, 0, new Booking()/*, UserUtils.getInstance(getmContext()).getCountry().getId()*/, "", new SuccessCallback<ArrayList<Company>>() {
                     @Override
                     public void OnSuccess(ArrayList<Company> result) {
                         showProgress(false);
@@ -197,7 +197,13 @@ public class CompaniesListActivity
             if (!player.getProfileImage().getName().equals("deleted") && !player.getProfileImage().getName().equals("") && !player.getProfileImage().getName().equals("null")) {
 
                 File f = new File(getFilesDir(), "image.jpg");
-                Picasso.with(getmContext()).load(f).memoryPolicy(MemoryPolicy.NO_STORE).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
+                try {
+                    Picasso.with(getmContext()).load(f).memoryPolicy(MemoryPolicy.NO_STORE)
+                            .error(R.drawable.profile_blue)
+                            .placeholder(R.drawable.profile_blue).into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image));
+                } catch (Exception e) {
+                    ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageResource(R.drawable.profile_blue);
+                }
             } else {
                 ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageResource(R.drawable.profile_blue);
             }
@@ -248,7 +254,7 @@ public class CompaniesListActivity
         } else if (id == R.id.nav_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
-        }else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.side_menu_my_contact_us) {
@@ -273,7 +279,7 @@ public class CompaniesListActivity
             Intent intent = new Intent(this, NotificationActivity.class);
 //            intent.putExtra("skip", false);
             startActivity(intent);
-        }else if (id == R.id.nav_vouchers) {
+        } else if (id == R.id.nav_vouchers) {
             Intent intent = new Intent(this, MyVouchersActivity.class);
 //            intent.putExtra("skip", false);
             startActivity(intent);

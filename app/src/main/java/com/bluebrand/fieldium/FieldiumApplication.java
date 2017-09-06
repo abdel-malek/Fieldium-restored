@@ -61,7 +61,6 @@ public class FieldiumApplication extends Application {
         String json = gson.toJson(booking);
         prefsEditor.putString("booking", json);
         prefsEditor.commit();
-
     }
 
 

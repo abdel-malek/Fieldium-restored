@@ -22,6 +22,8 @@ public class Booking implements Serializable {
     private Game game;
     private String subTotal;
     private Voucher voucher=new Voucher();
+    private String arCurrency;
+    private String enCurrency;
 
 
     public Booking() {
@@ -131,5 +133,21 @@ public class Booking implements Serializable {
 
     public void setSubTotal(String subTotal) {
         this.subTotal = subTotal;
+    }
+
+    public String getArCurrency() {
+        return arCurrency;
+    }
+
+    public void setArCurrency(String arCurrency) {
+        this.arCurrency = arCurrency;
+    }
+
+    public String getEnCurrency() {
+        return enCurrency;
+    }
+
+    public void setEnCurrency(String enCurrency) {
+        this.enCurrency = enCurrency;
     }
 }

@@ -328,6 +328,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fadeScrollbars="false"
+                    android:scrollbarSize="2dp"
                     >
 
                     <LinearLayout
