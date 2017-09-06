@@ -3,7 +3,7 @@
 //  Fieldium
 //
 //  Created by Yahya Tabba on 6/12/17.
-//  Copyright © 2017 Yahya Tabba. All rights reserved.
+//  Copyright © 2017 Tradinos UG. All rights reserved.
 //
 
 import UIKit
@@ -19,7 +19,6 @@ class BookViewController: UITableViewController {
     
     var book = Book()
     var id = 0 // show book or book now, 0 for book
-    
     
     @IBOutlet weak var imgLogo: UIImageView!
     @IBOutlet weak var nameLbl: UILabel!
@@ -355,7 +354,10 @@ class BookViewController: UITableViewController {
                 print("DISCOUNT : \(discount)")
                 
                 
-                let dis = "-\(discount) \(Provider.currancy())"
+                var dis = "-\(discount) \(Provider.currancy())"
+                if Provider.isArabic{
+                    dis = "\(discount)- \(Provider.currancy())"
+                }
                 
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.alignment = Provider.isArabic ? .left : .right
@@ -788,7 +790,10 @@ extension BookViewController {
                         self.subtotalLbl.text = "\(subtotal) \(Provider.currancy())"
                         self.costLbl.text = "\(total) \(Provider.currancy())"
                         
-                        let dis = "-\(discount) \(Provider.currancy())"
+                        var dis = "-\(discount) \(Provider.currancy())"
+                        if Provider.isArabic{
+                            dis = "\(discount)- \(Provider.currancy())"
+                        }
                         
                         let paragraph = NSMutableParagraphStyle()
                         paragraph.alignment = Provider.isArabic ? .left : .right
@@ -840,7 +845,11 @@ extension BookViewController {
             self.subtotalLbl.text = "\(subtotal) \(Provider.currancy())"
             self.costLbl.text = "\(total) \(Provider.currancy())"
             
-            let dis = "-\(discount) \(Provider.currancy())"
+            var dis = "-\(discount) \(Provider.currancy())"
+            if Provider.isArabic{
+                dis = "\(discount)- \(Provider.currancy())"
+            }
+                
             
             let paragraph = NSMutableParagraphStyle()
             paragraph.alignment = Provider.isArabic ? .left : .right

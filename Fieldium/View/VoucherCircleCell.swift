@@ -3,7 +3,7 @@
 //  Fieldium
 //
 //  Created by Yahya Tabba on 6/14/17.
-//  Copyright © 2017 Yahya Tabba. All rights reserved.
+//  Copyright © 2017 Tradinos UG. All rights reserved.
 //
 
 import UIKit

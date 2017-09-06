@@ -655,8 +655,13 @@ extension AvailabilityViewController2 : refreshTime{
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == _goToBooking{
-            let des = segue.destination as! BookViewController
-            des.field = self.field
+            
+//            let des = segue.destination as! BookViewController
+//            des.field = self.field
+            
+            let des = segue.destination as! BookBaseViewController
+            des.vcBook.field = self.field
+
             
             var tt = [String]()
             var tt3 = [String]()

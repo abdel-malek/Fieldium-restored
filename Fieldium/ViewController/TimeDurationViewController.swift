@@ -422,13 +422,15 @@ extension TimeDurationViewController : UIPickerViewDelegate, UIPickerViewDataSou
             Time.selected.duration = selectedDuration.toString
             
             let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-            let vc = storyBoard.instantiateViewController(withIdentifier: "BookViewController") as! BookViewController
+//            let vc = storyBoard.instantiateViewController(withIdentifier: "BookViewController") as! BookViewController
+//            
+//            vc.field = self.field
             
-            vc.field = self.field
-//            vc.fromAvailabilitly = true
+            let vc = storyBoard.instantiateViewController(withIdentifier: "BookBaseViewController") as! BookBaseViewController
+            
+            vc.vcBook.field = self.field
             
             self.navigationController?.pushViewController(vc, animated: true)
-            
         }
         
     }

@@ -15,6 +15,7 @@
 		821CB2921E1BEAA600BA20E4 /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821CB2911E1BEAA600BA20E4 /* BookCell.swift */; };
 		821CB2941E1BEAB300BA20E4 /* BookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 821CB2931E1BEAB300BA20E4 /* BookCell.xib */; };
 		822E178A1EDEF4B900409FA7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 822E178C1EDEF4B900409FA7 /* Localizable.strings */; };
+		8231EE501F5FD0D700E23DD7 /* BookBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8231EE4F1F5FD0D700E23DD7 /* BookBaseViewController.swift */; };
 		824008F31EEFFD2F008F4044 /* VoucherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824008F11EEFFD2F008F4044 /* VoucherCell.swift */; };
 		824008F41EEFFD2F008F4044 /* VoucherCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 824008F21EEFFD2F008F4044 /* VoucherCell.xib */; };
 		8240099B1EF01690008F4044 /* FoldingCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824009941EF01635008F4044 /* FoldingCell.framework */; };
@@ -71,6 +72,8 @@
 		82B6AC081EE965600005745E /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B6AC061EE965600005745E /* CountryCell.swift */; };
 		82B6AC091EE965600005745E /* CountryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82B6AC071EE965600005745E /* CountryCell.xib */; };
 		82B6AC0B1EE96F390005745E /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B6AC0A1EE96F390005745E /* CustomView.swift */; };
+		82C454E41F600CF2000FA0CA /* CountryCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C454E21F600CF2000FA0CA /* CountryCell2.swift */; };
+		82C454E51F600CF2000FA0CA /* CountryCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C454E31F600CF2000FA0CA /* CountryCell2.xib */; };
 		82CA767A1F2DC7F40084B839 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CA76791F2DC7F40084B839 /* Country.swift */; };
 		82CA89C71EE01911007E6D1A /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CA89C61EE01911007E6D1A /* ProfileCell.swift */; };
 		82D683451E49C45F0053DEAE /* Search2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D683441E49C45F0053DEAE /* Search2ViewController.swift */; };
@@ -241,6 +244,7 @@
 		821CB2931E1BEAB300BA20E4 /* BookCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookCell.xib; sourceTree = "<group>"; };
 		822E178B1EDEF4B900409FA7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		822E178D1EDEF4BC00409FA7 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
+		8231EE4F1F5FD0D700E23DD7 /* BookBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookBaseViewController.swift; sourceTree = "<group>"; };
 		824008F11EEFFD2F008F4044 /* VoucherCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoucherCell.swift; sourceTree = "<group>"; };
 		824008F21EEFFD2F008F4044 /* VoucherCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VoucherCell.xib; sourceTree = "<group>"; };
 		8240098C1EF01635008F4044 /* FoldingCell.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FoldingCell.xcodeproj; path = FoldingCell/FoldingCell.xcodeproj; sourceTree = "<group>"; };
@@ -303,6 +307,8 @@
 		82B6AC061EE965600005745E /* CountryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
 		82B6AC071EE965600005745E /* CountryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CountryCell.xib; sourceTree = "<group>"; };
 		82B6AC0A1EE96F390005745E /* CustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
+		82C454E21F600CF2000FA0CA /* CountryCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCell2.swift; sourceTree = "<group>"; };
+		82C454E31F600CF2000FA0CA /* CountryCell2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CountryCell2.xib; sourceTree = "<group>"; };
 		82C5045B1E27C2C70070D6B9 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "DerivedData333/Fieldium/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
 		82CA76791F2DC7F40084B839 /* Country.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		82CA89C61EE01911007E6D1A /* ProfileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ProfileCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -700,6 +706,8 @@
 				82842FE01EF6B07D00840B93 /* VoucherCell2.xib */,
 				825C67BC1EF150BE003073ED /* VoucherCircleCell.swift */,
 				825C67BD1EF150BE003073ED /* VoucherCircleCell.xib */,
+				82C454E21F600CF2000FA0CA /* CountryCell2.swift */,
+				82C454E31F600CF2000FA0CA /* CountryCell2.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -717,6 +725,7 @@
 				84A16D981E0A76EE00D6E9CF /* CompaniesViewController.swift */,
 				8420D5E71E0BF1030078B7FE /* FieldDetailsViewController.swift */,
 				8275A71C1EEE948800C470BA /* BookViewController.swift */,
+				8231EE4F1F5FD0D700E23DD7 /* BookBaseViewController.swift */,
 				8426E2561E12A10D00697835 /* BookViewController3.swift */,
 				8426E2581E12A92100697835 /* SideBarViewController23.swift */,
 				8426E25A1E12B78A00697835 /* ProfileViewController.swift */,
@@ -941,6 +950,7 @@
 				829257AD1E2FB4F00018603E /* pic.png in Resources */,
 				825C67BF1EF150BE003073ED /* VoucherCircleCell.xib in Resources */,
 				82842FE21EF6B07D00840B93 /* VoucherCell2.xib in Resources */,
+				82C454E51F600CF2000FA0CA /* CountryCell2.xib in Resources */,
 				826B9DFC1E4204CC00A5BF79 /* home.jpg in Resources */,
 				82E6B8DD1E24C7040036D148 /* SourceSansPro-BlackItalic.ttf in Resources */,
 				8455B1931E07C9480053B162 /* Podfile in Resources */,
@@ -1056,6 +1066,7 @@
 				82CA89C71EE01911007E6D1A /* ProfileCell.swift in Sources */,
 				825C67D21EF15147003073ED /* UITextFieldX.swift in Sources */,
 				82726EF81EE81BBA00F66668 /* PointCell2.swift in Sources */,
+				8231EE501F5FD0D700E23DD7 /* BookBaseViewController.swift in Sources */,
 				8471C5381E0962C500A89D95 /* FieldCell1.swift in Sources */,
 				840BC2701E06BF8A005A5EA7 /* ThemeManager.swift in Sources */,
 				825C67CF1EF15147003073ED /* UIImageViewX.swift in Sources */,
@@ -1099,6 +1110,7 @@
 				825C67D71EF15147003073ED /* UIVisualEffectViewX.swift in Sources */,
 				8420D5E61E0BDE260078B7FE /* IMG.swift in Sources */,
 				8420D5E81E0BF1030078B7FE /* FieldDetailsViewController.swift in Sources */,
+				82C454E41F600CF2000FA0CA /* CountryCell2.swift in Sources */,
 				840BC2721E06C061005A5EA7 /* UIColorExtension.swift in Sources */,
 				821CB28E1E1BC37600BA20E4 /* Time.swift in Sources */,
 				84C111781E0936E300EDFE35 /* Notificat.swift in Sources */,

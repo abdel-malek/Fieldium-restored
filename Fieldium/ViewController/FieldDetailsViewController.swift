@@ -322,8 +322,11 @@ class FieldDetailsViewController: UITableViewController {
             des.field = self.field
             
         }else if segue.identifier == _goToBooking{
-            let des = segue.destination as! BookViewController
-            des.field = sender as! Field
+//            let des = segue.destination as! BookViewController
+//            des.field = sender as! Field
+            let des = segue.destination as! BookBaseViewController
+            des.vcBook.field = sender as! Field
+            
         }else if segue.identifier == "goToAvailability"{
             let vc = segue.destination as! AvailabilityViewController2
             

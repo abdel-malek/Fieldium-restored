@@ -39,7 +39,7 @@ class FirstViewController: BaseViewController {
         self.vv.clipsToBounds = true
         self.vv.layer.cornerRadius = 10
         
-        
+        self.tableView.register(UINib.init(nibName: "CountryCell2", bundle: nil), forCellReuseIdentifier: "CountryCell2")
         self.tableView.indicatorStyle = .white
         self.tableView.separatorColor = .white
         self.vv.isHidden = true
@@ -77,11 +77,13 @@ extension FirstViewController : UITableViewDelegate , UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell2", for: indexPath) as! CountryCell2
         cell.selectionStyle = .none
         
         if indexPath.section == 0{
-            cell.textLabel?.text = self.countries[indexPath.row].name.stringValue
+            
+            cell.country = self.countries[indexPath.row]
+            /*cell.textLabel?.text = self.countries[indexPath.row].name.stringValue
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             if let img = self.countries[indexPath.row].image_url, img != ""{
 
@@ -89,12 +91,8 @@ extension FirstViewController : UITableViewDelegate , UITableViewDataSource{
                 cell.imageView?.setIndicatorStyle(.gray)
                 
                 cell.imageView?.sd_setImage(with: URL(string : img)!, placeholderImage: nil, options: SDWebImageOptions.refreshCached)
-
-                //                sd_setImage(with: URL(string: img)!)
-            }
-            //            cell.imageView?.image = imageWithImage(image: #imageLiteral(resourceName: "c1.png"), scaledToSize: CGSize.init(width: 11, height: 11))
-            //            cell.imageView?.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
-            //list[indexPath.row].0
+            }*/
+            
         }else if indexPath.section == 1{
             cell.imageView?.image = nil
             cell.textLabel?.text = "GO"

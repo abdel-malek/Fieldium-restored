@@ -290,9 +290,13 @@ extension BookingsViewController : UITableViewDelegate, UITableViewDataSource, B
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == _goToBooking{
-            let vc = segue.destination as! BookViewController
-            vc.book = sender as! Book
-            vc.id = 1
+//            let vc = segue.destination as! BookViewController
+//            vc.book = sender as! Book
+//            vc.id = 1
+            let vc = segue.destination as! BookBaseViewController
+            vc.vcBook.book = sender as! Book
+            vc.vcBook.id = 1
+            
         }
     }
     

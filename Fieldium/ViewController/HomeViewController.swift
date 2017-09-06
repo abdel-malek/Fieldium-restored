@@ -81,12 +81,17 @@ class HomeViewController: BaseViewController,FieldProtocol {
             cell0.setup()
         }
         
-        
+//        self.tableView.reloadData()
+
+
         self.tableView.reloadRows(at: [IndexPath.init(row: 1, section: 0)], with: .fade)
         self.tableView.reloadRows(at: [IndexPath.init(row: 2, section: 0)], with: .fade)
         self.tableView.reloadRows(at: [IndexPath.init(row: 3, section: 0)], with: .fade)
         self.tableView.reloadRows(at: [IndexPath.init(row: 4, section: 0)], with: .fade)
         
+        self.tableView.beginUpdates()
+        self.tableView.endUpdates()
+
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -200,9 +205,11 @@ class HomeViewController: BaseViewController,FieldProtocol {
         }else if me.statues_key == User.USER_STATUES.USER_REGISTERED.rawValue{
             self.count = 5
             
+            
             lastBooking.removeAll()
             myVouchers.removeAll()
             myOffers.removeAll()
+            self.up_book = nil
             var upcoming : Book!
             
             /*Provider.shared.get_upcoming_and_last_bookings { (res, err) in
@@ -536,6 +543,8 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource{
             
             if let t = up_book{
                 cell.book = t
+            }else{
+                cell.book = nil
             }
             
             cell.isRefreshed = self.isRefreshed
@@ -683,9 +692,14 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource{
             let vc = segue.destination as! FieldDetailsViewController
             vc.field = sender as! Field
         }else if segue.identifier == _goToBooking{
-            let vc = segue.destination as! BookViewController
-            vc.id = 1
-            vc.book = sender as! Book
+            
+//            let vc = segue.destination as! BookViewController
+//            vc.id = 1
+//            vc.book = sender as! Book
+            let vc = segue.destination as! BookBaseViewController
+            vc.vcBook.id = 1
+            vc.vcBook.book = sender as! Book            
+            
         }else if segue.identifier == "goToFields2"{
             let des = segue.destination as! FieldsViewController
             let company = Company()

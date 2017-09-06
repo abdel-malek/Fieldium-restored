@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="72" id="KGk-i7-Jjw" customClass="CountryCell2" customModule="Fieldium" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="71.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bRX-sj-5xi">
+                        <rect key="frame" x="16" y="12" width="47.5" height="47.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="bRX-sj-5xi" secondAttribute="height" id="lqZ-Ko-eZE"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="XNX-0H-GAA">
+                        <rect key="frame" x="71.5" y="12" width="232.5" height="47.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                <constraints>
+                    <constraint firstItem="bRX-sj-5xi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="L13-jD-gH3"/>
+                    <constraint firstItem="XNX-0H-GAA" firstAttribute="top" secondItem="bRX-sj-5xi" secondAttribute="top" id="N39-Le-f5L"/>
+                    <constraint firstItem="XNX-0H-GAA" firstAttribute="bottom" secondItem="bRX-sj-5xi" secondAttribute="bottom" id="XPW-Hj-0xN"/>
+                    <constraint firstItem="XNX-0H-GAA" firstAttribute="leading" secondItem="bRX-sj-5xi" secondAttribute="trailing" constant="8" id="dJR-mw-VCs"/>
+                    <constraint firstItem="bRX-sj-5xi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="sbI-Wc-oE8"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="XNX-0H-GAA" secondAttribute="trailing" constant="8" id="sm8-Sn-XHm"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="bRX-sj-5xi" secondAttribute="bottom" constant="4" id="uQS-8F-eWn"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <connections>
+                <outlet property="img" destination="bRX-sj-5xi" id="fYU-uJ-LY3"/>
+                <outlet property="lbl" destination="XNX-0H-GAA" id="SRf-G5-IWs"/>
+            </connections>
+            <point key="canvasLocation" x="53" y="68"/>
+        </tableViewCell>
+    </objects>
+</document>

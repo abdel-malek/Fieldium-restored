@@ -55,15 +55,21 @@ class OfferProgressCell2: UITableViewCell {
                     val = (h == 1) ? "\(h) \("Hour".localized)" : "\(h) \("Hours".localized)"
                 }
                 
-                let days = (offer.valid_days.intValue == 1) ? "\(offer.valid_days.intValue) \("day".localized)" : "\(offer.valid_days.intValue) \("days".localized)"
+                
+                /*let days = (offer.valid_days.intValue == 1) ? "\(offer.valid_days.intValue) \("day".localized)" : "\(offer.valid_days.intValue) \("days".localized)"
                 
                 var tt = "book \(c - 1) hours to get \(val) for free!\nHurry up it only for \(days)"
                 
                 if Provider.isArabic{
                 tt = "احجز \(c - 1) ساعات لتحصل على \(val) مجانية!\nأسرع بالحجز فالعرض متوفر لمدة \(days)"
 
-                }
+                }*/
                 
+                var tt = self.offer.description_en
+
+                if Provider.isArabic{
+                    tt = self.offer.description_ar
+                }
                 
                 self.lbl.text = tt
             }
