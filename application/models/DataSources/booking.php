@@ -9,7 +9,7 @@ class booking extends CI_Model {
     public function get($booking_id, $lang = "en") {
         return $this->db->select(
                                 "booking.*, voucher.value as voucher_value, voucher.type as voucher_type,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, player.name as player_name,"
                                 . " player.phone as player_phone, company." . $lang . "_address as address,"
@@ -61,7 +61,7 @@ class booking extends CI_Model {
     public function get_my_bookings($player_id, $lang = "en") {
         return $this->db->select(
                                 "booking.*,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total,  " . ENTITY::FIELD . ", "
                                 . "field.$lang" . "_name as field_name, company." . $lang . "_name as company_name, "
                                 . "company." . $lang . "_address as address, company.logo"
@@ -80,7 +80,7 @@ class booking extends CI_Model {
     public function pending_bookings($lang = "en") {
         return $this->db->select(
                                 "booking.*,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name, "
                                 . "player.name as player_name, player.phone as player_phone"
@@ -99,7 +99,7 @@ class booking extends CI_Model {
 
     public function company_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name,"
                                 . " player.name as player_name, player.phone as player_phone"
@@ -120,7 +120,7 @@ class booking extends CI_Model {
 
     public function company_pending_bookings($company_id, $lang = "en") {
         return $this->db->select("booking.*,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, company.$lang" . "_name as company_name,"
                                 . " player.name as player_name, player.phone as player_phone"
@@ -157,7 +157,7 @@ class booking extends CI_Model {
 
     public function field_bookings($field_id, $lang = "en") {
         return $this->db->select("booking.*,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name, player.name as player_name,"
                                 . " player.phone as player_phone")
@@ -173,7 +173,7 @@ class booking extends CI_Model {
 
     public function bookings_by_date_qry($field_id, $date, $lang = "en") {
         return $this->db->select("booking.*,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.total, " . ENTITY::FIELD . ","
                                 . " field.$lang" . "_name as field_name")
                         ->from('booking')
@@ -188,23 +188,26 @@ class booking extends CI_Model {
                         ->get()->result();
     }
 
-    public function field_bookings_by_date($field_id, $date, $lang = "en", &$bookings, $root = null) {
+    public function field_bookings_by_date($field_id, $date, $lang = "en", &$bookings, &$root = array()) {
+
         $b = $this->bookings_by_date_qry($field_id, $date, $lang = "en");
-        $bookings = array_merge($bookings,$b);
-		//var_dump($b);
+        $bookings = array_merge($bookings, $b);
+        //var_dump($b);
+        $root[] = $field_id;
         $parents = $this->field->get_parents($field_id, $root);
         foreach ($parents as $parent) {
-            $this->field_bookings_by_date($parent->field_id, $date, $lang, $bookings, $field_id);
-            //$bookings = array_merge($bookings, $b);
+            $b = $this->bookings_by_date_qry($parent->field_id, $date, $lang = "en");
+            $bookings = array_merge($bookings, $b);
+            $root[] = $parent->field_id;
         }
         $children = $this->field->get_children($field_id, $root);
         foreach ($children as $child) {
-            $this->field_bookings_by_date($child->field_id, $date, $lang, $bookings, $field_id);
+            $this->field_bookings_by_date($child->field_id, $date, $lang, $bookings, $root);
             //$bookings = array_merge($bookings, $b);
         }
         return $bookings;
     }
-    
+
 //    public function field_bookings_by_date($field_id, $date, $lang = "en") {
 //        return $this->db->select("booking.*,"
 //                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
@@ -245,7 +248,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
         $date = date('Y-m-d');
         $time = date("H:i:s");
         return $this->db->query("
-            SELECT booking.*,game_type.en_name as game_type_name, game_type.image as game_image,booking.total,  field.$lang" . "_name as field_name, company." . $lang . "_name as comapny_name, company." . $lang . "_address as address, company.logo,
+            SELECT booking.*,game_type.".$lang."_name as game_type_name, game_type.image as game_image,booking.total,  field.$lang" . "_name as field_name, company." . $lang . "_name as comapny_name, company." . $lang . "_address as address, company.logo,
                 company.company_id FROM booking
                 JOIN field on field.field_id = booking.field_id
                 JOIN game_type on game_type.game_type_id = booking.game_type_id 
@@ -264,7 +267,7 @@ WHERE $where booking.field_id =$field_id and booking.date = '$date' and booking.
         $date = date('Y-m-d');
         $time = date("H:i:s");
         return $this->db->select("DISTINCT(`booking`.`field_id`),booking.booking_id, company.company_id ,"
-                                . "game_type.en_name as game_type_name, game_type.image as game_image,"
+                                . "game_type.".$lang."_name as game_type_name, game_type.image as game_image,"
                                 . "booking.player_id,(booking.date) as date, (booking.start),"
                                 . " booking.duration, booking.state_id,booking.total, booking.notes,"
                                 . "  field.$lang" . "_name as field_name, company." . $lang . "_address as address, "

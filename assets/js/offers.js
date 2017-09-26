@@ -114,7 +114,8 @@ function save_offer() {
         'all_fields': $('#all_fields').prop("checked") == true ? 1 : 0,
         'all_games': $('#all_games').prop("checked") == true ? 1 : 0,
         'games': $('#games').val(),
-        'companies': $('#companies').val()
+        'companies': $('#companies').val(),
+        "country_id": $('#Country').val()
     };
     HoldOn.open({
         theme: "sk-bounce"

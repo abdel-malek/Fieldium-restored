@@ -322,7 +322,7 @@ class vouchers extends REST_Controller {
     }
 
     public function _callback_date_render($value, $row) {
-        $row->actions = "<button class='btn btn-success' onclick='edit_voucher(\"" . $row->voucher . "\")'><span class='glyphicon glyphicon-pencil'></span></button>";
+        $row->actions = "<button class='btn btn-success' onclick='edit_voucher(\"" . $row->voucher . "\")'><span class='glyphicon glyphicon-eye-open'></span></button>";
         $row->actions .= "<button class='btn btn-danger' onclick='delete_voucher(\"" . $row->voucher . "\")'>X</button>";
         $row->from_hour = date('H:i A', strtotime($row->from_hour));
         $row->to_hour = date('H:i A', strtotime($row->to_hour));

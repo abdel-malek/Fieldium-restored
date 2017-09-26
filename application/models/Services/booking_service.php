@@ -18,7 +18,7 @@ class booking_service extends CI_Model {
         if ($voucher) {
             $this->load->model("Services/voucher_service");
             $check_voucher = $this->voucher_service->check_validity($voucher, $field_id, $player_id, $date, $start, $duration);
-            if ($check_voucher->valid == 0)
+            if ((is_array($check_voucher) && $check_voucher['valid'] == 0) || (!is_array($check_voucher) && $check_voucher->valid == 0))
                 throw new Parent_Exception("It is not a valid voucher");
         }
         $field = $this->field->get($field_id);
@@ -85,24 +85,27 @@ class booking_service extends CI_Model {
 //            $message = "You have received a new booking No." . $booking_id . " for company \"" . $booking->company_name . "\" field \"" . $booking->field_name . "\"";
 //            $this->notification_service->send_notification_support($message, array("booking" => $booking), "booking_created_message");
 //        }
-//        if ($manually == true || $field->auto_confirm == 1) {
-        $this->check_for_offers($player_id);
-//        }
+        if ($manually == true || $field->auto_confirm == 1) {
+            $this->check_for_offers($player_id);
+        }
         return $booking;
     }
 
-    function check_for_offers($player_id) {
+    function check_for_offers($player_id, $booking_id) {
         $this->load->model("Services/offer_service");
         $offers = $this->offer_service->check_for_offers($player_id);
         $this->load->model("Services/voucher_service");
+
         foreach ($offers as $value) {
+            //var_dump($value);
             $offer = $this->offer_service->get($value->offer_id);
-            for ($i = 1; $i < $value->vouchers; $i++) {
+            for ($i = 1; $i <= $value->vouchers; $i++) {
+
                 $info = array(
                     'type' => $offer->voucher_type,
                     'voucher' => $this->voucher_service->generate_voucher(),
                     'value' => $offer->voucher_value,
-                    'user_id' => $user_id,
+                    //        'user_id' => $user_id,
                     'country_id' => $offer->country_id,
                     'start_date' => date('Y-m-d', strtotime("+" . $offer->voucher_start_after . " day")),
                     'expiry_date' => date('Y-m-d', strtotime("+" . ($offer->voucher_start_after + $offer->valid_days) . " day")),
@@ -133,23 +136,26 @@ class booking_service extends CI_Model {
         }
     }
 
-    private function field_validity($field, $date, $start, $duration, $end, $root = null) {
+    private function field_validity($field, $date, $start, $duration, $end, &$root = array()) {
         //check validity start
         $this->check_validity($field, $date, $start, $duration, $end);
+        $root[] = $field->field_id;
         $parents = $this->field->get_parents($field->field_id, $root);
         foreach ($parents as $parent) {
-            $this->field_validity($parent, $date, $start, $duration, $end, $field->field_id);
+//            $this->field_validity($parent, $date, $start, $duration, $end, $root);
+            $this->check_validity($parent, $date, $start, $duration, $end);
+            $root[] = $parent->field_id;
         }
         $children = $this->field->get_children($field->field_id, $root);
         foreach ($children as $child) {
-            $this->field_validity($child, $date, $start, $duration, $end, $field->field_id);
+            $this->field_validity($child, $date, $start, $duration, $end, $root);
         }
         //check validity end
     }
 
     private function check_validity($field, $date, $start, $duration, $end) {
         $bookings = $this->booking->field_bookings_by_timing($field->field_id, $date, $start, $duration);
-
+//var_dump($bookings);
         $accepted = true;
         if ($field->close_time < $field->open_time) {
 
@@ -315,8 +321,8 @@ class booking_service extends CI_Model {
             if ($player->active == 1) {
                 $this->load->model('Services/notification_service');
                 $message = array();
-                $message['en'] = "لقد تم قبول طلبك " . $booking_id;
-                $message['ar'] = "Your booking No." . $booking_id . " has been approved. ";
+                $message['ar'] = "لقد تم قبول طلبك " . $booking_id;
+                $message['en'] = "Your booking No." . $booking_id . " has been approved. ";
                 $this->notification_service->send_notification_4customer($booking->player_id, $message, array("booking" => $this->notification_object($booking)), "booking_confirmed_message");
             }
         } catch (Player_Not_Found_Exception $e) {
@@ -332,7 +338,7 @@ class booking_service extends CI_Model {
                 . "Enjoy the Game,%0A"
                 . "Fieldium";
         $this->send_sms->send_sms($booking->player_phone, $msg);
-        $this->check_for_offers($booking->player_id);
+        $this->check_for_offers($booking->player_id, $booking_id);
         return $booking;
     }
 
@@ -374,7 +380,7 @@ class booking_service extends CI_Model {
         return $this->booking->field_bookings($field_id, $lang);
     }
 
-    public function field_bookings_by_date($field_id, $date, $lang = "en", $bookings, $root = null) {
+    public function field_bookings_by_date($field_id, $date, $lang = "en", $bookings, $root = array()) {
         return $this->booking->field_bookings_by_date($field_id, $date, $lang, $bookings, $root);
     }
 
@@ -393,7 +399,7 @@ class booking_service extends CI_Model {
             if (isset($booking->logo) && $booking->logo != "")
                 $booking->logo_url = base_url() . UPLOADED_IMAGES_PATH_URL . $booking->logo;
         }
-//        return $bookings;
+        return $bookings;
     }
 
     public function last_bookings($palyer_id, $lang) {

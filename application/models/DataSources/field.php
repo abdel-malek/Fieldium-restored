@@ -55,7 +55,7 @@ class field extends CI_Model {
                                 . "company.latitude,"
                                 . "company.longitude,"
                                 . "company.logo,"
-                                . "company.en_address as address"
+                                . "company.en_address as address,area.country_id"
                         )
                         ->from('field')
                         ->join('company', 'company.company_id = field.company_id')
@@ -127,7 +127,11 @@ class field extends CI_Model {
         }
         $where .= ") ";
         $where .= "and NOT EXISTS (SELECT booking.* FROM booking
-                    WHERE booking.field_id =field.field_id and booking.date = '$date' and booking.deleted = 0 and ("
+                    WHERE (
+                    booking.field_id =field.field_id OR 
+                    booking.field_id IN(SELECT child_id from field_child where parent_id = field.field_id) OR 
+                    booking.field_id IN(SELECT parent_id from field_child where child_id = field.field_id)
+                    ) and booking.date = '$date' and booking.deleted = 0 and ("
                 . "( "
                 . "booking.start >= time('$start')"
                 . " and booking.start < (time('$start') + INTERVAL $duration MINUTE)"
@@ -307,15 +311,17 @@ class field extends CI_Model {
                 ->join('field', 'field_child.child_id = field.field_id')
                 ->join('company', 'company.company_id = field.company_id')
                 ->join('area', 'company.area_id = area.area_id')
-                ->where('area.country_id', $this->country)
                 ->where('field_child.parent_id', $field_id);
-        if ($root != null)
-            $this->db->where('field.field_id !=', $root);
+        if (count($root) != 0) {
+            $root = implode("','", $root);
+            $this->db->where("field.field_id NOT IN ('$root')");
+        }
         return $this->db->where('field.deleted', 0)
                         ->get()->result();
     }
 
-    public function get_parents($field_id, $root = null) {
+    public function get_parents($field_id, $root = array()) {
+
         $this->db->select(ENTITY::FIELD . ", "
                         . "company.en_name as company_name,"
                         . "company.latitude,"
@@ -327,16 +333,24 @@ class field extends CI_Model {
                 ->join('field', 'field_child.parent_id = field.field_id')
                 ->join('company', 'company.company_id = field.company_id')
                 ->join('area', 'company.area_id = area.area_id')
-                ->where('area.country_id', $this->country)
                 ->where('field_child.child_id', $field_id);
-        if ($root != null)
-            $this->db->where('field.field_id !=', $root);
+        if (count($root) != 0) {
+            $root = implode("','", $root);
+            $this->db->where("field.field_id NOT IN ('$root')");
+        }
         return $this->db->where('field.deleted', 0)
                         ->get()->result();
     }
 
     public function add_child($parent, $child) {
         $this->db->insert('field_child', array('parent_id' => $parent, 'child_id' => $child));
+    }
+
+    public function delete($field_id) {
+        $this->db
+                ->where(array('parent_id' => $field_id))
+                ->delete('field_child');
+        
     }
 
 }

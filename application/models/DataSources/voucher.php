@@ -164,8 +164,12 @@ class voucher extends CI_Model {
             $this->db->where('voucher.expiry_date >=', $date);
         }
 
-        if ($field_id != null && $field_id!='')
-            $this->db->where('(voucher.public_field = 1 OR \'' . $field_id . '\' IN ('
+        if ($field_id != null && $field_id != '')
+            $this->db->where('((voucher.public_field = 1 and \'' . $field_id . '\' IN ('
+                    . 'select field_id from field '
+                    . 'join company on company.company_id = field.company_id '
+                    . 'join area on company.area_id = area.area_id where area.country_id = voucher.country_id'
+                    . ')) OR \'' . $field_id . '\' IN ('
                     . 'select field.field_id from voucher_company '
                     . 'join field on field.company_id = voucher_company.company_id '
                     . 'where voucher_company.voucher_id = voucher.voucher_id )) ');

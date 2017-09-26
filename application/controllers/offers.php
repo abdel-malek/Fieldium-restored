@@ -211,7 +211,7 @@ class offers extends REST_Controller {
     }
 
     public function _callback_date_render($value, $row) {
-        $row->actions = "<button class='btn btn-success' onclick='edit_offer(\"" . $row->offer_id . "\")'><span class='glyphicon glyphicon-pencil'></span></button>";
+        $row->actions = "<button class='btn btn-success' onclick='edit_offer(\"" . $row->offer_id . "\")'><span class='glyphicon glyphicon-eye-open'></span></button>";
         $row->actions .= "<button class='btn btn-danger' onclick='delete_offer(\"" . $row->offer_id . "\")'>X</button>";
         return date('Y-m-d', strtotime($value));
     }

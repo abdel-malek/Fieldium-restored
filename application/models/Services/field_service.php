@@ -332,6 +332,7 @@ class field_service extends CI_Model {
         foreach ($bookings as $booking) {
             $this->booking_service->cancel($booking->booking_id, 'Your booking has been canceled. Sorry for the inconvienve but the field is undergoing maintenance.');
         }
+        $this->field->delete($field_id);
         $this->field->update($field_id, array('deleted' => 1));
     }
 
@@ -587,11 +588,11 @@ class field_service extends CI_Model {
         return $result;
     }
 
-    public function get_children($field_id, $root = null) {
+    public function get_children($field_id, $root = array()) {
         return $this->field->get_children($field_id, $root);
     }
 
-    public function get_parents($field_id, $rot = null) {
+    public function get_parents($field_id, $root = array()) {
         return $this->field->get_parents($field_id, $root);
     }
 

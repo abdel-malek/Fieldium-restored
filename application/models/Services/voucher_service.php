@@ -41,14 +41,14 @@ class voucher_service extends CI_Model {
         }
 
 //The voucher is not valid for the selected date
-        if ($date != null) {
-            if ($res->expiry_date != null && strtotime($res->expiry_date) < strtotime($date)) {
-                return array(
-                    'valid' => 0,
-                    'message' => $this->lang->line('It is not a valid voucher')
-                );
-            }
-        }
+//        if ($date != null) {
+//            if ($res->expiry_date != null && strtotime($res->expiry_date) < strtotime($date)) {
+//                return array(
+//                    'valid' => 0,
+//                    'message' => $this->lang->line('It is not a valid voucher')
+//                );
+//            }
+//        }
 
 //The voucher is not valid for the selected time
         if ($start != null) {
@@ -77,14 +77,24 @@ class voucher_service extends CI_Model {
                 );
         }
 //The voucher is not available for selectd field
-        if ($field_id != null && $res->public_field != 1) {
-            $this->load->model("Services/field_service");
-            $f = $this->field_service->get($field_id);
-            if (!$this->voucher->check_company($res->voucher_id, $f->company_id))
-                return array(
-                    'valid' => 0,
-                    'message' => $this->lang->line('It is not a valid voucher')
-                );
+        if ($field_id != null) {
+            if ($res->public_field != 1) {
+                $this->load->model("Services/field_service");
+                $f = $this->field_service->get($field_id);
+                if (!$this->voucher->check_company($res->voucher_id, $f->company_id))
+                    return array(
+                        'valid' => 0,
+                        'message' => $this->lang->line('It is not a valid voucher')
+                    );
+            } else if ($res->public_field == 1) {
+                $this->load->model("Services/field_service");
+                $f = $this->field_service->get($field_id);
+                if ($f->country_id != $res->country_id)
+                    return array(
+                        'valid' => 0,
+                        'message' => $this->lang->line('It is not a valid voucher')
+                    );
+            }
         }
 
 //The voucher is not available for selectd game
