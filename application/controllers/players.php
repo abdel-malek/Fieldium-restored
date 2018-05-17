@@ -110,34 +110,74 @@ class players extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
+            if ($this->session->userdata('lang') == 'arabic') {
+                $crud->set_language('Arabic');
+                $crud->set_theme('datatables')
+                        ->set_table('player')
+                        ->set_subject('لاعب')
+                        ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'lang', 'country_id', 'prefered_games', 'active')
+                        ->display_as('player_id', 'لاعب')
+                        ->display_as('country_id', 'البلد')
+                        ->display_as('name', 'الاسم')
+                        ->display_as('phone', 'رقم الهاتف')
+                        ->display_as('email', 'ايميل')
+                        ->display_as('profile_picture', 'الصور الشخصية')
+                        ->display_as('address', 'العنوان')
+                        ->display_as('os', 'النظام')
+                        ->display_as('lang', 'الغة')
+                        ->display_as('active', 'مفعل')
+                        ->display_as('prefered_games', 'الاعب')
+                        ->set_relation('country_id', 'country', 'en_name')
+                        ->set_relation_n_n('prefered_games', 'prefered_game', 'game_type', 'player_id', 'game_type_id', 'en_name')
+                        ->callback_column('active', array($this, '_callback_active_render'))
+                        ->callback_before_insert(array($this, 'encrypt_password_callback'))
+                        ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
+                        ->set_field_upload('profile_picture', 'assets/uploaded_images/')
+                        ->unset_export()
+                        ->unset_read()
+                        ->unset_print()
+                        ->unset_add()
+                        ->unset_edit()
+                        ->unset_delete();
+                $output = $crud->render();
 
-            $crud->set_theme('datatables')
-                    ->set_table('player')
-                    ->set_subject('player')
-                    ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'lang', 'country_id', 'prefered_games', 'active')
-                    ->display_as('player_id', 'Player')
-                    ->display_as('country_id', 'Country')
-                    ->set_relation('country_id', 'country', 'en_name')
-                    ->set_relation_n_n('prefered_games', 'prefered_game', 'game_type', 'player_id', 'game_type_id', 'en_name')
-                    ->callback_column('active', array($this, '_callback_active_render'))
-                    ->callback_before_insert(array($this, 'encrypt_password_callback'))
-                    ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
-                    ->set_field_upload('profile_picture', 'assets/uploaded_images/')
-                    ->unset_export()
-                    ->unset_read()
-                    ->unset_print()
-                    ->unset_add()
-                    ->unset_edit()
-                    ->unset_delete();
-            $output = $crud->render();
+                $this->load->view('template.php', array(
+                    'view' => 'players_management',
+                    'output' => $output->output,
+                    'js_files' => $output->js_files,
+                    'css_files' => $output->css_files
+                        )
+                );
+            } else {
+                $crud->set_language('English');
+                $crud->set_theme('datatables')
+                        ->set_table('player')
+                        ->set_subject('player')
+                        ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'lang', 'country_id', 'prefered_games', 'active')
+                        ->display_as('player_id', 'Player')
+                        ->display_as('country_id', 'Country')
+                        ->set_relation('country_id', 'country', 'en_name')
+                        ->set_relation_n_n('prefered_games', 'prefered_game', 'game_type', 'player_id', 'game_type_id', 'en_name')
+                        ->callback_column('active', array($this, '_callback_active_render'))
+                        ->callback_before_insert(array($this, 'encrypt_password_callback'))
+                        ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
+                        ->set_field_upload('profile_picture', 'assets/uploaded_images/')
+                        ->unset_export()
+                        ->unset_read()
+                        ->unset_print()
+                        ->unset_add()
+                        ->unset_edit()
+                        ->unset_delete();
+                $output = $crud->render();
 
-            $this->load->view('template.php', array(
-                'view' => 'players_management',
-                'output' => $output->output,
-                'js_files' => $output->js_files,
-                'css_files' => $output->css_files
-                    )
-            );
+                $this->load->view('template.php', array(
+                    'view' => 'players_management',
+                    'output' => $output->output,
+                    'js_files' => $output->js_files,
+                    'css_files' => $output->css_files
+                        )
+                );
+            }
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }
@@ -151,9 +191,11 @@ class players extends REST_Controller {
         if ($value == 1) {
             return ""
                     . "<p class='active'>Active</p>";
+              
         } else if ($value == 0) {
             return ""
                     . "<p class='hide_tr'>Not Active</p>";
+             
         }
     }
 

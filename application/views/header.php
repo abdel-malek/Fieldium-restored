@@ -27,6 +27,16 @@
 
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/sideMenu.css') ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/style.css') ?>" />
+ 
+    <?php
+    if($this->session->userdata('lang') == 'arabic'){
+    ?>
+    <!--*******************  Style for template arabic **********************-->
+       <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/style_ar.css') ?>" />
+    <!--*********************************************************************-->
+    <?php
+    }
+    ?>
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/scrollbar.css') ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/alertify.min.css') ?>" />
     <script type="text/javascript" src="<?php echo base_url('assets/js/alertify.min.js') ?>"></script>
@@ -45,6 +55,7 @@
         {
             text-decoration: underline;
         }
+ 
     </style>
     <script type="text/javascript">
         var site_url = "<?php echo site_url() ?>";

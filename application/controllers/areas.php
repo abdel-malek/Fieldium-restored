@@ -21,8 +21,35 @@ class areas extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-
-            $crud->set_theme('datatables')
+              if($this->session->userdata('lang') == 'arabic'){
+              $crud->set_language('Arabic'); 
+                    $crud->set_theme('datatables')
+                    ->set_table('area')
+                    ->where('area.country_id', $country)
+                    ->set_subject('مكان')
+                    ->columns('area_id', 'country_id', 'en_name')
+                    ->display_as('area_id', 'id')
+                    ->display_as('country_id', 'البلد')
+                    ->display_as('en_name', 'الاسم')
+                    ->set_relation('country_id', 'country', 'en_name')
+                    ->unset_edit_fields('ar_name')
+                    ->unset_add_fields('ar_name')
+                    ->required_fields('en_name')
+                    ->unset_export()
+                    ->unset_read()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->view('template.php', array(
+                'view' => 'areas_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files,
+                'country' => $country
+                    )
+            );
+            }else{
+              $crud->set_language('English'); 
+                    $crud->set_theme('datatables')
                     ->set_table('area')
                     ->where('area.country_id', $country)
                     ->set_subject('area')
@@ -46,6 +73,8 @@ class areas extends REST_Controller {
                 'country' => $country
                     )
             );
+            }
+      
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }

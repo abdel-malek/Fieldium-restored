@@ -21,8 +21,38 @@ class games extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-
-            $crud->set_theme('datatables')
+            
+               if($this->session->userdata('lang') == 'arabic'){
+              $crud->set_language('Arabic'); 
+               $crud->set_theme('datatables')
+                    ->set_table('game_type')
+                    ->set_subject('لعبة')
+                    ->columns('game_id', 'en_name', 'image', 'minimum_duration', 'increament_factor', 'en_description')
+                    ->display_as('game_id', 'id')
+                    ->display_as('en_name', 'الاسم')
+                    ->display_as('en_description', 'الوصف')
+                       ->display_as('image', 'الصور')
+                       ->display_as('minimum_duration', 'اقل مدة زمني')
+                       ->display_as('increament_factor', 'مقدار الزيادة')
+                    ->unset_edit_fields('ar_name', 'ar_description')
+                    ->unset_add_fields('ar_name', 'ar_description')
+                    ->required_fields('en_name')
+                    ->callback_column('minimum_duration', array($this, '_callback_duration_render'))
+                    ->set_field_upload('image', 'assets/uploaded_images/')
+                    ->unset_export()
+                    ->unset_read()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->view('template.php', array(
+                'view' => 'games_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+            }else{
+              $crud->set_language('English');  
+               $crud->set_theme('datatables')
                     ->set_table('game_type')
                     ->set_subject('game')
                     ->columns('game_id', 'en_name', 'image', 'minimum_duration', 'increament_factor', 'en_description')
@@ -45,6 +75,9 @@ class games extends REST_Controller {
                 'css_files' => $output->css_files
                     )
             );
+            }
+
+           
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }

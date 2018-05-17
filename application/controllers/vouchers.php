@@ -259,7 +259,47 @@ class vouchers extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-            $crud->set_theme('datatables')
+            
+             if($this->session->userdata('lang') == 'arabic'){
+              $crud->set_language('Arabic'); 
+              $crud->set_theme('datatables')
+                    ->set_table('voucher')
+                    ->set_subject('إيصال')
+                    ->order_by('voucher_id', 'desc')
+                    ->columns('voucher', 'type', 'value', 'user_id', 'players', 'companies', 'start_date', 'expiry_date', 'from_hour', 'to_hour', 'actions')
+                    ->set_relation_n_n('players', 'voucher_player', 'player', 'voucher_id', 'player_id', 'name')
+                    ->set_relation('user_id', 'user', 'name', array('deleted' => 0))
+                    ->display_as('user_id', 'تم أنشائه بواسطة')
+                      ->display_as('voucher', 'كود الإيصال')
+                      ->display_as('type', 'النوع')
+                      ->display_as('value', 'القيمة')
+                      ->display_as('players', 'الاعب')
+                      ->display_as('companies', 'تم أنشائه بواسطة')
+                      ->display_as('start_date', 'وقت الانشاء')
+                       ->display_as('expiry_date', 'وقت الانتهاء')
+                       ->display_as('from_hour', 'من ساعة')
+                       ->display_as('to_hour', 'الى ساعة')
+                       ->display_as('actions', 'الاوامر')
+                    ->callback_column('players', array($this, '_callback_players_render'))
+                    ->callback_column('start_date', array($this, '_callback_date_render'))
+                    ->field_type('type', 'dropdown', array(1 => 'discount', 2 => 'free hours'))
+                    ->unset_export()
+                    ->unset_add()
+                    ->unset_edit()
+                    ->unset_delete()
+                    ->unset_read()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->view('template.php', array(
+                'view' => 'vouchers_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+            }else{
+              $crud->set_language('English');   
+              $crud->set_theme('datatables')
                     ->set_table('voucher')
                     ->set_subject('voucher')
                     ->order_by('voucher_id', 'desc')
@@ -284,6 +324,8 @@ class vouchers extends REST_Controller {
                 'css_files' => $output->css_files
                     )
             );
+            }
+            
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }

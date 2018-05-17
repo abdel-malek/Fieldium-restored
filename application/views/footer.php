@@ -1,24 +1,36 @@
 <script type="text/javascript" src="<?php echo base_url('assets/js/bootstrap.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.touchSwipe.min.js') ?>"></script>
 <script type="text/javascript">
-    $(window).load(function() {
+    $(window).load(function () {
         $("#sidebar-toggle").click(function () {
+//            var url = site_url + '/dashboard/language';
+//            $.ajax({
+//                url: url,
+//                type: 'GET',
+//                async: false,
+//                success: function (response) {
+//                    console.log(response);
+//                    lang = response;
+//                }
+//            });
             var toggle_el = $(this).data("toggle");
             $(toggle_el).toggleClass("open-sidebar");
+            lang = "<?php echo $this->session->userdata('lang') ?>";
+//alert("<?php echo $this->session->userdata('lang') ?>");
             if (lang == "arabic") {
                 if ($('#sidebar').css("right") == "0px") {
                     $('#sidebar').animate(
                             {
                                 right: "-240px"
                             },
-                    500
+                            500
                             );
                 } else {
                     $('#sidebar').animate(
                             {
                                 right: "0px"
                             },
-                    900
+                            900
                             );
                 }
             } else {
@@ -27,14 +39,14 @@
                             {
                                 left: "-240px"
                             },
-                    500
+                            500
                             );
                 } else {
                     $('#sidebar').animate(
                             {
                                 left: "0px"
                             },
-                    900
+                            900
                             );
                 }
             }
@@ -42,6 +54,18 @@
         $(".swipe-area").swipe({
             swipeStatus: function (event, phase, direction, distance, duration, fingers)
             {
+//                var url = site_url + '/dashboard/language';
+//                $.ajax({
+//                    url: url,
+//                    type: 'GET',
+//                    async: false,
+//                    success: function (response) {
+//                        console.log(response);
+//                        lang = response;
+//                    }
+//                });
+//                lang = "arabic";
+lang = "<?php echo $this->session->userdata('lang') ?>";
                 if (lang == "arabic") {
                     if (phase == "move" && direction == "left") {
                         $(".container").addClass("open-sidebar");
@@ -49,7 +73,7 @@
                                 {
                                     right: "0px"
                                 },
-                        500
+                                500
                                 );
                         return false;
                     }
@@ -59,7 +83,7 @@
                                 {
                                     right: "-240px"
                                 },
-                        500
+                                500
                                 );
                         return false;
                     }
@@ -70,7 +94,7 @@
                                 {
                                     left: "0px"
                                 },
-                        500
+                                500
                                 );
                         return false;
                     }
@@ -80,7 +104,7 @@
                                 {
                                     left: "-240px"
                                 },
-                        500
+                                500
                                 );
                         return false;
                     }
@@ -88,6 +112,6 @@
             }
         });
     });
-    
+
 </script>
- 
+

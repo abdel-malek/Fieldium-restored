@@ -9,6 +9,9 @@
         width:500px;
         height:480px;
     }
+    .title_page{
+        text-align: left;
+    }
 </style>
 <body> 
     <div class="container" style="">
@@ -25,12 +28,12 @@
                  margin-left:5%;
                  
                  "> 
-                <br><br>
-                <h1 style="text-align: left">
-                    Games Management:
+                <br>
+                <h1 class="title_page">
+                    <?php echo $this->lang->line('games_management'); ?>:
                 </h1>
                 <div style="clear: both"></div>
-                <br><br>
+               
                 <?php echo $output; ?>
             </div>
         </div>

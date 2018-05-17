@@ -48,7 +48,7 @@ function clear_offer() {
     $("#companies").select2({
         placeholder: "Select company"
     });
-    $('#offer_header').text("New Offer");
+//    $('#offer_header').text("New Offer");
     form.find('.create-btn').show();
 }
 

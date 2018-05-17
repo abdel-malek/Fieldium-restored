@@ -1,0 +1,98 @@
+.main-content #sidebar-toggle {
+    float: right;
+}
+#sidebar {
+    left: unset;
+    right: -240px;
+}
+.swipe-area{
+    direction: rtl;
+}
+.open-sidebar{
+    left:-240px !important;
+    direction: rtl;
+}
+.datatables-add-button .ui-state-default{
+    float: right;
+}
+.title_page{
+    text-align: right !important;
+    direction:  rtl;
+}
+.dataTables_wrapper{
+    direction:  rtl;
+}
+.dataTables_length label{
+    float: left;
+}
+table.dataTable thead tr th {
+    text-align: right;
+}
+table.display thead th div.DataTables_sort_wrapper {
+    padding-right: 0px;
+    padding-left: 20px;
+}
+table.display thead th div.DataTables_sort_wrapper span {
+    right: unset;
+    left: 0;
+}
+table.dataTable thead tr th.actions {
+    text-align: right;
+}
+.ui-widget-content{
+    float: right;
+}
+.form-field-box.odd ,.form-field-box.even {
+    direction: rtl;
+}
+.form-display-as-box {
+    float: right;
+}
+.form-input-box , .qq-upload-button , div.form-button-box , .form-title-left{
+    float: right;
+}
+div.form-button-box{
+    margin-left: 0px;
+    margin-right: 10px;
+}
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12{
+    float: right;
+    direction: rtl;
+}
+label {
+    left: 10px;
+}
+input[type="radio"], input[type="checkbox"]{
+    float: left;
+}
+.modal-header{
+    text-align: right;
+}
+.modal-header button{
+    float: left;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered li{
+    float: right;
+}
+.select2-results__option{
+    text-align: right;
+}
+.chosen-container-multi .chosen-choices li.search-choice{
+    float: right;
+    text-align: right;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+    padding: 3px 6px 3px 18px;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+    left: 3px;
+    right: unset;
+}
+.dataTables_filter label{
+    padding-right: 10px;
+}
+
+.block_language button{
+    float: right;
+    margin-right: 10px;
+}

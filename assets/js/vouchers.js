@@ -63,7 +63,7 @@ function clear_voucher() {
         placeholder: "Select company"
     });
     $('#phones').tagsinput('removeAll');
-    $('#voucher_header').text("Voucher");
+//    $('#voucher_header').text("Voucher");
     form.find('.create-btn').show();
 }
 

@@ -46,6 +46,10 @@
         color: #000;
         background-color: #4e4;
     }
+    .title_page{
+        text-align: left;
+        margin-top: 30px;
+    }
 </style>
 <body> 
     <div class="container" style="">
@@ -58,14 +62,9 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </a>
+            <div > 
 
-            <div style="
-/*                 width:90%; 
-                 margin-left:5%;*/
-
-                 "> 
-
-                <h1 style="text-align: left">
+                <h1  class="title_page">
                     <?php echo $company->name ?> fields:
                 </h1>
                 <!--<a style="cursor: pointer" href="<?php echo site_url('companies/companies_management') ?>">< Back to companies list</a>-->
@@ -101,7 +100,7 @@
             </div>
         </div>
     </div>
-     <div  class="modal" id="fields_show_modal" >
+    <div  class="modal" id="fields_show_modal" >
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
                 <div class="modal-header">
@@ -136,8 +135,6 @@
         function select_fields() {
             $('#fields_modal').modal("show");
         }
-
-
     </script>
     <script type="text/javascript" src="<?php echo base_url('assets/js/interact.js') ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/js/aggregate_fields.js') ?>"></script>

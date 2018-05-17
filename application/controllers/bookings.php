@@ -364,7 +364,48 @@ class bookings extends REST_Controller {
         try {
             $crud = new grocery_CRUD();
 
-            $crud->set_theme('datatables')
+            if ($this->session->userdata('lang') == 'arabic') {
+                $crud->set_language('Arabic');
+                 $crud->set_theme('datatables')
+                    ->set_table('booking')
+                    ->set_subject('الحجوز')
+                    ->where('booking.deleted', 0)
+                    ->columns('booking_id', 'field_id', 'player_id', 'state_id', 'creation_date', 'date', 'start', 'duration', 'total')
+                    ->order_by('booking_id')
+                    ->set_relation('field_id', 'field', 'en_name', array('deleted' => 0))
+                    ->set_relation('player_id', 'player', '{name} <br> {phone}')
+                    ->set_relation('state_id', 'state', 'en_name')
+                    ->edit_fields('state_id', 'date', 'start', 'duration', 'notes')
+                    ->display_as('field_id', 'الحقل')
+                    ->display_as('player_id', 'الاعب')
+                         ->display_as('start', 'الوقت')
+                         ->display_as('creation_date', 'وقت الحجز')
+                         ->display_as('date', 'وقت المبارة')
+                         ->display_as('duration', 'المدة الزمني')
+                         ->display_as('total', 'المجموع')
+                    ->display_as('state_id', 'الحالة')
+                    ->display_as('booking_id', 'ID')
+                    ->field_type('start', 'time')
+                    ->callback_column('duration', array($this, '_callback_duration_render'))
+                    ->callback_column('total', array($this, '_callback_total_render'))
+                    ->required_fields('date', 'start', 'duration', 'state_id')
+                    ->callback_delete(array($this, 'delete_booking'))
+                    ->unset_export()
+                    ->unset_add()
+                    ->unset_read()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->model("Services/booking_service");
+            $this->load->view('template.php', array(
+                'view' => 'bookings_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+            } else {
+                $crud->set_language('English');
+                 $crud->set_theme('datatables')
                     ->set_table('booking')
                     ->set_subject('booking')
                     ->where('booking.deleted', 0)
@@ -396,6 +437,9 @@ class bookings extends REST_Controller {
                 'css_files' => $output->css_files
                     )
             );
+            }
+
+           
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }

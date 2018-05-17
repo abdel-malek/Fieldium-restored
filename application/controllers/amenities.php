@@ -21,8 +21,33 @@ class amenities extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-
-            $crud->set_theme('datatables')
+               if($this->session->userdata('lang') == 'arabic'){
+              $crud->set_language('Arabic'); 
+                 $crud->set_theme('datatables')
+                    ->set_table('amenity')
+                    ->set_subject('وسائل الراحة')
+                    ->columns('amenity_id', 'en_name', 'image')
+                    ->display_as('amenity_id', 'id')
+                    ->display_as('en_name', 'الاسم')
+                         ->display_as('image', 'الصور')
+                    ->set_field_upload('image', 'assets/uploaded_images/')
+                    ->unset_edit_fields('ar_name')
+                    ->unset_add_fields('ar_name')
+                    ->required_fields('en_name')
+                    ->unset_export()
+                    ->unset_read()
+                    ->unset_print();
+            $output = $crud->render();
+            $this->load->view('template.php', array(
+                'view' => 'amenities_management',
+                'output' => $output->output,
+                'js_files' => $output->js_files,
+                'css_files' => $output->css_files
+                    )
+            );
+            }else{
+              $crud->set_language('English'); 
+                 $crud->set_theme('datatables')
                     ->set_table('amenity')
                     ->set_subject('amenity')
                     ->columns('amenity_id', 'en_name', 'image')
@@ -43,6 +68,8 @@ class amenities extends REST_Controller {
                 'css_files' => $output->css_files
                     )
             );
+            }
+         
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }

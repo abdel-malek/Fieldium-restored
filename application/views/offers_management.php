@@ -40,6 +40,9 @@
     .select2-container--default .select2-selection--multiple, .select2-container--default.select2-container--focus .select2-selection--multiple{
         border: none
     }
+    .title_page{
+        text-align: left;
+    }
 </style>
 
 <body> 
@@ -58,8 +61,8 @@
 
                  "> 
                 <br>
-                <h1 style="text-align: left">
-                    Offers Management: <button class="btn btn-info" onclick="clear_offer();$('#offer_modal').modal('show')">New Offer</button>
+                <h1 class="title_page" >
+                    <?php echo $this->lang->line('offers_management') ?>: <button class="btn btn-info" onclick="clear_offer();$('#offer_modal').modal('show')"><?php echo $this->lang->line('new_offer'); ?></button>
                 </h1>
                 <div style="clear: both"></div>
                 <?php echo $output; ?>

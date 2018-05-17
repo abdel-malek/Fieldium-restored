@@ -9,6 +9,9 @@
         width:500px;
         height:480px;
     }
+    .title_page{
+        text-align: left;
+    }
 </style>
 <body> 
     <div class="container" style="">
@@ -26,8 +29,8 @@
                  
                  "> 
                 <br>
-                <h1 style="text-align: left">
-                    Users Management:
+                <h1 class="title_page" >
+                    <?php echo $this->lang->line('users_management') ?>:
                 </h1>
                 <div style="clear: both"></div>
                 <?php echo $output; ?>

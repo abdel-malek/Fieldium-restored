@@ -181,35 +181,78 @@ class users extends REST_Controller {
         try {
             $crud = new grocery_CRUD();
 
-            $crud->set_theme('datatables')
-                    ->set_table('user')
-                    ->where("user_id != " . $this->current_user->user_id)
-                    ->where('active', 1)
-                    ->set_subject('user')
-                    ->columns('user_id', 'name', 'username', 'phone', 'mobile', 'email', 'role_id','country_id', 'company_id', 'active')
-                    ->order_by('user_id')
-                    ->set_relation('role_id', 'role', 'en_name')
-                    ->set_relation('country_id', 'country', 'en_name')
-                    ->set_relation('company_id', 'company', 'en_name', null, null, array('company.deleted' => 0))
-                    ->display_as('role_id', 'Role')
-                    ->display_as('company_id', 'Company')
-                    ->display_as('user_id', 'User')
-                    ->edit_fields('name', 'phone', 'password', 'role_id', 'company_id')
-                    ->add_fields('name', 'username', 'phone', 'email', 'password', 'role_id', 'company_id')
-                    ->required_fields('name', 'username', 'role_id')
-                    ->unique_fields('email')
-                    ->field_type('phone', 'integer')
-                    ->set_rules('name', 'Name', 'required|min_length[3]|max_length[30]')
-                    ->callback_before_update(array($this, 'encrypt_password_callback'))
-                    ->callback_edit_field('password', array($this, '_callback_password'))
-                    ->callback_column('active', array($this, '_callback_active_render'))
-                    ->callback_before_insert(array($this, 'encrypt_password_callback'))
-                    ->callback_delete(array($this, 'delete_user'))
-                    ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
-                    ->unset_export()
-                    ->unset_read()
-                    ->unset_print()
-                    ->unset_delete();
+            if ($this->session->userdata('lang') == 'arabic') {
+                $crud->set_language('Arabic');
+                $crud->set_theme('datatables')
+                        ->set_table('user')
+                        ->where("user_id != " . $this->current_user->user_id)
+                        ->where('active', 1)
+                        ->set_subject('مستخدم')
+                        ->columns('user_id', 'name', 'username', 'phone', 'mobile', 'email', 'role_id', 'country_id', 'company_id', 'active')
+                        ->order_by('user_id')
+                        ->set_relation('role_id', 'role', 'en_name')
+                        ->set_relation('country_id', 'country', 'en_name')
+                        ->set_relation('company_id', 'company', 'en_name', null, null, array('company.deleted' => 0))
+                        ->display_as('role_id', 'نوع المستخدم')
+                        ->display_as('company_id', 'الشركة')
+                        ->display_as('user_id', 'id')
+                        ->display_as('username', 'اسم المستخدم')
+                        ->display_as('name', 'الاسم')
+                        ->display_as('phone', 'رقم الهاتف')
+                        ->display_as('mobile', 'رقم الموبايل')
+                        ->display_as('email', 'أيميل')
+                        ->display_as('country_id', 'البلد')
+                        ->display_as('password', 'كلمة المرور')
+                        ->display_as('active', 'مفعل')
+                        ->edit_fields('name', 'phone', 'password', 'role_id', 'company_id')
+                        ->add_fields('name', 'username', 'phone', 'email', 'password', 'role_id', 'company_id')
+                        ->required_fields('name', 'username', 'role_id')
+                        ->unique_fields('email')
+                        ->field_type('phone', 'integer')
+                        ->set_rules('name', 'Name', 'required|min_length[3]|max_length[30]')
+                        ->callback_before_update(array($this, 'encrypt_password_callback'))
+                        ->callback_edit_field('password', array($this, '_callback_password'))
+                        ->callback_column('active', array($this, '_callback_active_render'))
+                        ->callback_before_insert(array($this, 'encrypt_password_callback'))
+                        ->callback_delete(array($this, 'delete_user'))
+                        ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
+                        ->unset_export()
+                        ->unset_read()
+                        ->unset_print()
+                        ->unset_delete();
+            } else {
+                $crud->set_language('English');
+                $crud->set_theme('datatables')
+                        ->set_table('user')
+                        ->where("user_id != " . $this->current_user->user_id)
+                        ->where('active', 1)
+                        ->set_subject('user')
+                        ->columns('user_id', 'name', 'username', 'phone', 'mobile', 'email', 'role_id', 'country_id', 'company_id', 'active')
+                        ->order_by('user_id')
+                        ->set_relation('role_id', 'role', 'en_name')
+                        ->set_relation('country_id', 'country', 'en_name')
+                        ->set_relation('company_id', 'company', 'en_name', null, null, array('company.deleted' => 0))
+                        ->display_as('role_id', 'Role')
+                        ->display_as('company_id', 'Company')
+                        ->display_as('user_id', 'User')
+                        ->edit_fields('name', 'phone', 'password', 'role_id', 'company_id')
+                        ->add_fields('name', 'username', 'phone', 'email', 'password', 'role_id', 'company_id')
+                        ->required_fields('name', 'username', 'role_id')
+                        ->unique_fields('email')
+                        ->field_type('phone', 'integer')
+                        ->set_rules('name', 'Name', 'required|min_length[3]|max_length[30]')
+                        ->callback_before_update(array($this, 'encrypt_password_callback'))
+                        ->callback_edit_field('password', array($this, '_callback_password'))
+                        ->callback_column('active', array($this, '_callback_active_render'))
+                        ->callback_before_insert(array($this, 'encrypt_password_callback'))
+                        ->callback_delete(array($this, 'delete_user'))
+                        ->add_action('Deactivate', base_url() . 'assets/images/close.png', '', 'delete-icon', array($this, 'delete_user_callback'))
+                        ->unset_export()
+                        ->unset_read()
+                        ->unset_print()
+                        ->unset_delete();
+            }
+
 
             if ($operation == 'insert_validation' || $operation == 'insert' || $operation == 'add') {
                 if ($this->current_user->role_id != ROLE::SUPPORT)
@@ -290,36 +333,76 @@ class users extends REST_Controller {
             try {
                 $crud = new grocery_CRUD();
 
-                $crud->set_theme('datatables')
-                        ->where('user_id', $this->current_user->user_id)
-                        ->set_table('user')
-                        ->set_subject('user')
+                if ($this->session->userdata('lang') == 'arabic') {
+                    $crud->set_language('Arabic');
+                    $crud->set_theme('datatables')
+                            ->where('user_id', $this->current_user->user_id)
+                            ->set_table('user')
+                            ->set_subject('المستخدم')
+
 //                        ->columns('user_id', 'name', 'email', 'role_id', 'active', 'creation_date')
-                        ->order_by('user_id')
-                        ->set_relation('role_id', 'role', 'en_name')
-                        ->display_as('role_id', 'User Type')
+                            ->order_by('user_id')
+                            ->set_relation('role_id', 'role', 'en_name')
+                            ->display_as('role_id', 'نوع المستخدم')
+                            ->display_as('email', 'نوع المستخدم')
+                            ->display_as('phone', 'رقم الموبايل')
+                            ->display_as('name', 'اسم المستخدم')
+                            ->display_as('password', 'كلمة المرور')
 //                        ->field_type('phone', 'integer')
-                        ->edit_fields('name', 'email', 'phone', 'password')
+                            ->edit_fields('name', 'email', 'phone', 'password')
 //                        ->add_fields('name', 'email', 'password')
 //                        ->required_fields('name', 'role_id')
 //                        ->set_rules('name', 'Name', 'required|min_length[3]|max_length[16]')
-                        ->callback_before_update(array($this, 'confirm_password_edit_profile_callback'))
-                        ->callback_edit_field('password', array($this, '_callback_password'))
-                        ->callback_after_update(array($this, 'after_edit_profile_callback'))
-                        ->set_lang_string('update_success_message', 'Your data has been successfully stored into the database.<br/>Please wait while you are redirecting to the list page.
+                            ->callback_before_update(array($this, 'confirm_password_edit_profile_callback'))
+                            ->callback_edit_field('password', array($this, '_callback_password'))
+                            ->callback_after_update(array($this, 'after_edit_profile_callback'))
+                            ->set_lang_string('update_success_message', 'Your data has been successfully stored into the database.<br/>Please wait while you are redirecting to the list page.
 		 <script type="text/javascript">
                  setTimeout(func, 3000);
 		  function func() {window.location = "' . site_url('users/edit_profile/edit/' . $this->current_user->user_id) . '"; }
 		 </script>
 		 <div style="display:none">
 		 '
-                        )
-                        ->unset_export()
-                        ->unset_print()
-                        ->unset_texteditor('address')
-                        ->unset_read()
-                        ->unset_back_to_list()
-                        ->unset_delete();
+                            )
+                            ->unset_export()
+                            ->unset_print()
+                            ->unset_texteditor('address')
+                            ->unset_read()
+                            ->unset_back_to_list()
+                            ->unset_delete();
+                } else {
+                    $crud->set_language('English');
+                    $crud->set_theme('datatables')
+                            ->where('user_id', $this->current_user->user_id)
+                            ->set_table('user')
+                            ->set_subject('user')
+//                        ->columns('user_id', 'name', 'email', 'role_id', 'active', 'creation_date')
+                            ->order_by('user_id')
+                            ->set_relation('role_id', 'role', 'en_name')
+                            ->display_as('role_id', 'User Type')
+//                        ->field_type('phone', 'integer')
+                            ->edit_fields('name', 'email', 'phone', 'password')
+//                        ->add_fields('name', 'email', 'password')
+//                        ->required_fields('name', 'role_id')
+//                        ->set_rules('name', 'Name', 'required|min_length[3]|max_length[16]')
+                            ->callback_before_update(array($this, 'confirm_password_edit_profile_callback'))
+                            ->callback_edit_field('password', array($this, '_callback_password'))
+                            ->callback_after_update(array($this, 'after_edit_profile_callback'))
+                            ->set_lang_string('update_success_message', 'Your data has been successfully stored into the database.<br/>Please wait while you are redirecting to the list page.
+		 <script type="text/javascript">
+                 setTimeout(func, 3000);
+		  function func() {window.location = "' . site_url('users/edit_profile/edit/' . $this->current_user->user_id) . '"; }
+		 </script>
+		 <div style="display:none">
+		 '
+                            )
+                            ->unset_export()
+                            ->unset_print()
+                            ->unset_texteditor('address')
+                            ->unset_read()
+                            ->unset_back_to_list()
+                            ->unset_delete();
+                }
 
                 if ($operation == 'update_validation' || $operation == 'edit' || $operation == 'update') {
 

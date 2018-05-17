@@ -15,5 +15,16 @@ class dashboard extends REST_Controller {
         else
             $this->load->view('index');
     }
-
+    
+    public function language_post(){
+        $this->session->set_userdata('lang', $this->input->post('lang'));
+        $this->session->set_userdata('language', 'arabic');
+        $this->response(array(
+            'status' => true,
+            'data' => $this->session->userdata('lang'),
+            'message' => ''
+                )
+        );
+    }
+    
 }

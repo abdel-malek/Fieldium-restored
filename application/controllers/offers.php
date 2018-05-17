@@ -153,30 +153,67 @@ class offers extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-            $crud->set_theme('datatables')
-                    ->set_table('offer')
-                    ->set_subject('offer')
-                    ->order_by('offer_id', 'desc')
-                    ->columns('offer_id', 'title_en', 'set_of_minutes', 'voucher_type', 'voucher_value', 'games', 'companies', 'start_date', 'expiry_date', 'actions')
-                    ->set_relation_n_n('games', 'offer_game', 'game_type', 'offer_id', 'game_type_id', 'en_name')
-                    ->display_as('title_en', 'Title')
-                    ->callback_column('games', array($this, '_callback_games_render'))
-                    ->callback_column('start_date', array($this, '_callback_date_render'))
-                    ->field_type('voucher_type', 'dropdown', array(1 => 'discount', 2 => 'free hours'))
-                    ->unset_export()
-                    ->unset_add()
-                    ->unset_edit()
-                    ->unset_delete()
-                    ->unset_read()
-                    ->unset_print();
-            $output = $crud->render();
-            $this->load->view('template.php', array(
-                'view' => 'offers_management',
-                'output' => $output->output,
-                'js_files' => $output->js_files,
-                'css_files' => $output->css_files
-                    )
-            );
+            if ($this->session->userdata('lang') == 'arabic') {
+                $crud->set_language('Arabic');
+                $crud->set_theme('datatables')
+                        ->set_table('offer')
+                        ->set_subject('العروض')
+                        ->order_by('offer_id', 'desc')
+                        ->columns('offer_id', 'title_en', 'set_of_minutes', 'voucher_type', 'voucher_value', 'games', 'companies', 'start_date', 'expiry_date', 'actions')
+                        ->set_relation_n_n('games', 'offer_game', 'game_type', 'offer_id', 'game_type_id', 'en_name')
+                        ->display_as('title_en', 'الاسم')
+                        ->display_as('set_of_minutes', 'الوقت')
+                        ->display_as('voucher_type', 'نوع الايصال')
+                        ->display_as('voucher_value', 'قيمة الايصال')
+                        ->display_as('games', 'العبة')
+                        ->display_as('companies', 'الشركات')
+                        ->display_as('start_date', 'تاريخ الانشاء')
+                        ->display_as('expiry_date', 'تاريخ الانتهاء')
+                        ->display_as('actions', '')
+                        ->callback_column('games', array($this, '_callback_games_render'))
+                        ->callback_column('start_date', array($this, '_callback_date_render'))
+                        ->field_type('voucher_type', 'dropdown', array(1 => 'discount', 2 => 'free hours'))
+                        ->unset_export()
+                        ->unset_add()
+                        ->unset_edit()
+                        ->unset_delete()
+                        ->unset_read()
+                        ->unset_print();
+                $output = $crud->render();
+                $this->load->view('template.php', array(
+                    'view' => 'offers_management',
+                    'output' => $output->output,
+                    'js_files' => $output->js_files,
+                    'css_files' => $output->css_files
+                        )
+                );
+            } else {
+                $crud->set_language('English');
+                $crud->set_theme('datatables')
+                        ->set_table('offer')
+                        ->set_subject('offer')
+                        ->order_by('offer_id', 'desc')
+                        ->columns('offer_id', 'title_en', 'set_of_minutes', 'voucher_type', 'voucher_value', 'games', 'companies', 'start_date', 'expiry_date', 'actions')
+                        ->set_relation_n_n('games', 'offer_game', 'game_type', 'offer_id', 'game_type_id', 'en_name')
+                        ->display_as('title_en', 'Title')
+                        ->callback_column('games', array($this, '_callback_games_render'))
+                        ->callback_column('start_date', array($this, '_callback_date_render'))
+                        ->field_type('voucher_type', 'dropdown', array(1 => 'discount', 2 => 'free hours'))
+                        ->unset_export()
+                        ->unset_add()
+                        ->unset_edit()
+                        ->unset_delete()
+                        ->unset_read()
+                        ->unset_print();
+                $output = $crud->render();
+                $this->load->view('template.php', array(
+                    'view' => 'offers_management',
+                    'output' => $output->output,
+                    'js_files' => $output->js_files,
+                    'css_files' => $output->css_files
+                        )
+                );
+            }
         } catch (Exception $e) {
             show_error($e->getMessage() . ' --- ' . $e->getTraceAsString());
         }
@@ -190,7 +227,7 @@ class offers extends REST_Controller {
         if ($row->voucher_type == "discount")
             $row->voucher_value = $row->voucher_value . " %";
         else
-            $row->voucher_value = round($row->voucher_value/60) . " h";
+            $row->voucher_value = round($row->voucher_value / 60) . " h";
         if ($row->public_field == 1)
             $row->fields = "Public";
         if ($row->all_games == 1)

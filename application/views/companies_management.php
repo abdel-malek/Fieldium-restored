@@ -9,8 +9,12 @@
         width:500px;
         height:480px;
     }
+    .title_page{
+        text-align: left;
+    }
 </style>
 <body> 
+
     <div class="container" style="">
         <?php $this->load->view('sideMenu') ?>
         <div class="main-content">
@@ -26,8 +30,11 @@
                  direction: <?php echo ($this->session->userdata('language') == "arabic") ? "rtl" : "ltr"; ?>
                  "> 
                 <br>
-                <h1 style="text-align: left">
-                    <?php echo $this->lang->line('companies_management') ?>:
+                <h1 class="title_page">
+                    <?php //echo $this->lang->line('companies_management') 
+//                    echo $lang['companies_management'];
+                    echo $this->lang->line('companies_management');
+                    ?>:
                     <select id="country" class="form-control" 
                             value="<?php echo $country ?>" 
                             style="
@@ -38,7 +45,7 @@
                         <?php echo $country == UAE ? ' selected ' : '' ?>
                                 >UAE</option>
                         <option 
-                            <?php echo $country == SYRIA ? ' selected ' : '' ?>
+                        <?php echo $country == SYRIA ? ' selected ' : '' ?>
                             value="<?php echo SYRIA ?>">SYRIA</option>
                     </select>
                 </h1>
@@ -66,98 +73,93 @@
             </div>
         </div>
     </div>
-
-    <script 
-        type="text/javascript" 
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgM1aEGmWi1lLqYbNYqkS8lxlhDpP-1lI&sensor=false&language=ar"
-        >
-    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgM1aEGmWi1lLqYbNYqkS8lxlhDpP-1lI&sensor=false&language=ar" ></script>
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            $('.read-icon').attr("onclick", "console.log('clicked');");
-            $('.hide_tr').each(function () {
-                $(this).parent('td').parent('tr').find('.actions a').not(':first').hide();
-            });
-        });
-        var map;
-        var myCenter = new google.maps.LatLng(36.275447979569435, 33.51073851345376);
-        var marker = new google.maps.Marker({
-            position: myCenter
-        });
+                    $(document).ready(function () {
+                        $('.read-icon').attr("onclick", "console.log('clicked');");
+                        $('.hide_tr').each(function () {
+                            $(this).parent('td').parent('tr').find('.actions a').not(':first').hide();
+                        });
+                    });
+                    var map;
+                    var myCenter = new google.maps.LatLng(36.275447979569435, 33.51073851345376);
+                    var marker = new google.maps.Marker({
+                        position: myCenter
+                    });
 
-        function initialize() {
-            var mapProp = {
-                center: myCenter,
-                zoom: 14,
-                draggable: true,
-                scrollwheel: false,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
+                    function initialize() {
+                        var mapProp = {
+                            center: myCenter,
+                            zoom: 14,
+                            draggable: true,
+                            scrollwheel: false,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
 
-            map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
+                        map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
 
-            google.maps.event.addListener(marker, 'click', function () {
+                        google.maps.event.addListener(marker, 'click', function () {
 
-                infowindow.setContent(contentString);
-                infowindow.open(map, marker);
+                            infowindow.setContent(contentString);
+                            infowindow.open(map, marker);
 
-            });
-        }
-        ;
-        google.maps.event.addDomListener(window, 'load', initialize);
+                        });
+                    }
+                    ;
+                    google.maps.event.addDomListener(window, 'load', initialize);
 
-        google.maps.event.addDomListener(window, "resize", resizingMap());
+                    google.maps.event.addDomListener(window, "resize", resizingMap());
 
-        $('#map_modal').on('show.bs.modal', function () {
-            resizeMap();
-        })
+                    $('#map_modal').on('show.bs.modal', function () {
+                        resizeMap();
+                    })
 
-        function resizeMap() {
-            if (typeof map == "undefined")
-                return;
-            setTimeout(function () {
-                resizingMap();
-            }, 400);
-        }
+                    function resizeMap() {
+                        if (typeof map == "undefined")
+                            return;
+                        setTimeout(function () {
+                            resizingMap();
+                        }, 400);
+                    }
 
-        function resizingMap() {
-            if (typeof map == "undefined")
-                return;
-            var center = map.getCenter();
-            google.maps.event.trigger(map, "resize");
-            map.setCenter(center);
-        }
+                    function resizingMap() {
+                        if (typeof map == "undefined")
+                            return;
+                        var center = map.getCenter();
+                        google.maps.event.trigger(map, "resize");
+                        map.setCenter(center);
+                    }
 
-        var latt, longg, company_id;
-        var gmarkers = [];
-        function pan(lng, lat, company) {
-            $('#addressText').html("");
-            var latLng = new google.maps.LatLng(lat, lng);
-            map.setCenter(latLng);
-            for (i = 0; i < gmarkers.length; i++) {
-                gmarkers[i].setMap(null);
-            }
-            var marker = new google.maps.Marker({
-                position: latLng,
-                title: 'Point A',
-                map: map,
-                draggable: true
-            });
-            gmarkers.push(marker);
-            google.maps.event.addListener(marker, 'dragend', function (ev) {
-                latt = marker.getPosition().lat();
-                longg = marker.getPosition().lng();
-                company_id = company;
-            });
-        }
+                    var latt, longg, company_id;
+                    var gmarkers = [];
+                    function pan(lng, lat, company) {
+                        $('#addressText').html("");
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        map.setCenter(latLng);
+                        for (i = 0; i < gmarkers.length; i++) {
+                            gmarkers[i].setMap(null);
+                        }
+                        var marker = new google.maps.Marker({
+                            position: latLng,
+                            title: 'Point A',
+                            map: map,
+                            draggable: true
+                        });
+                        gmarkers.push(marker);
+                        google.maps.event.addListener(marker, 'dragend', function (ev) {
+                            latt = marker.getPosition().lat();
+                            longg = marker.getPosition().lng();
+                            company_id = company;
+                        });
+                    }
 
-        function save_location() {
-            location.href = site_url + "/companies/update_location/" + company_id + "/" + longg + "/" + latt;
-        }
-        $('#country').change(function () {
-            location.href = '<?php echo site_url() ?>/companies/companies_management/' + $(this).val();
-        });
+                    function save_location() {
+                        location.href = site_url + "/companies/update_location/" + company_id + "/" + longg + "/" + latt;
+                    }
+                    $('#country').change(function () {
+                        location.href = '<?php echo site_url() ?>/companies/companies_management/' + $(this).val();
+                    });
     </script>
 </body>
 
