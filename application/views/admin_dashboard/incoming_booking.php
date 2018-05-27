@@ -6,7 +6,7 @@
     <button type="button" class="close close_pending" onclick="closeNav();" >&times</button>
     <div style="clear: both"></div>
     <h2 id="incoming_header">
-        Incoming Bookings
+        <?php echo $this->lang->line('incoming_bookings'); ?>
     </h2>
     <div id="pending_bookings_list">
     </div>

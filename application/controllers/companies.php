@@ -9,6 +9,7 @@ class companies extends REST_Controller {
         parent::__construct();
         $this->load->model("Services/company_service");
         $this->load->model('Permissions/user_permissions');
+       
     }
 
     public function create_post() {
@@ -175,6 +176,7 @@ class companies extends REST_Controller {
 
             $crud->set_theme('datatables');
             $crud->set_table('company');
+            
             if ($this->session->userdata('lang') == 'arabic') {
                 $crud->set_language('Arabic');
             } else {
@@ -253,7 +255,6 @@ class companies extends REST_Controller {
 //            $this->config->set_item('language', 'arabic');
 //              $ci =& get_instance();
 //            $ci->load->helper('language');
-            $this->load->language(array('views'), 'arabic');
 //           $this->lang->load(array('views', 'controllers','form_validation'), 'arabic');
             $lang["companies_management"] = $this->lang->line('companies_management');
 

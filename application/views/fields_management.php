@@ -65,7 +65,7 @@
             <div > 
 
                 <h1  class="title_page">
-                    <?php echo $company->name ?> fields:
+                    <?php echo $company->name ?> <?php echo $this->lang->line('field_one') ?>:
                 </h1>
                 <!--<a style="cursor: pointer" href="<?php echo site_url('companies/companies_management') ?>">< Back to companies list</a>-->
                 <div style="clear: both"></div>
@@ -77,7 +77,7 @@
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3  style="display: inline;">Aggregate Field</h3>
+                    <h3  style="display: inline;"><?php echo $this->lang->line('aggregate_field'); ?></h3>
                     <button type="button" class="close" data-dismiss="modal" >&times</button>
                 </div>
                 <div class="modal-body" >
@@ -90,11 +90,11 @@
                 </div>
                 <div class="modal-footer">
                     <div class="col-md-6 left">
-                        <button class="btn btn-info create-btn" onclick='create_aggregate_field()'>Create</button>
+                        <button class="btn btn-info create-btn" onclick='create_aggregate_field()'><?php echo $this->lang->line('create'); ?></button>
                     </div>
 
                     <div class="col-md-6 right">
-                        <button class="btn btn-warning"class="close" data-dismiss="modal">Close</button>
+                        <button class="btn btn-warning"class="close" data-dismiss="modal"><?php echo $this->lang->line('close') ?></button>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3  style="display: inline;" id="aggregate_field_name">Aggregate Field</h3>
+                    <h3  style="display: inline;" id="aggregate_field_name"><?php echo $this->lang->line('aggregate_field') ?></h3>
                     <button type="button" class="close" data-dismiss="modal" >&times</button>
                 </div>
                 <div class="modal-body" >
@@ -130,7 +130,7 @@
                 'role="button" class="add_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" ' +
 //                'href="http://localhost/fieldium-server/index.php/fields/fields_management/2/add">' +
                 '<span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span>' +
-                '<span class="ui-button-text">Add aggregate field</span>' +
+                "<span class='ui-button-text'><?php echo $this->lang->line('add_aggregate_field') ?> </span>" +
                 '</a>');
         function select_fields() {
             $('#fields_modal').modal("show");

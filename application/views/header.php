@@ -33,6 +33,7 @@
     ?>
     <!--*******************  Style for template arabic **********************-->
        <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/style_ar.css') ?>" />
+       
     <!--*********************************************************************-->
     <?php
     }

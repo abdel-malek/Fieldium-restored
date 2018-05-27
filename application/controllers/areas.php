@@ -28,7 +28,7 @@ class areas extends REST_Controller {
                     ->where('area.country_id', $country)
                     ->set_subject('مكان')
                     ->columns('area_id', 'country_id', 'en_name')
-                    ->display_as('area_id', 'id')
+                    ->display_as('area_id', 'الرقم تسلسلي')
                     ->display_as('country_id', 'البلد')
                     ->display_as('en_name', 'الاسم')
                     ->set_relation('country_id', 'country', 'en_name')

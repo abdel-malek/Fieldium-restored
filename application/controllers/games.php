@@ -28,7 +28,7 @@ class games extends REST_Controller {
                     ->set_table('game_type')
                     ->set_subject('لعبة')
                     ->columns('game_id', 'en_name', 'image', 'minimum_duration', 'increament_factor', 'en_description')
-                    ->display_as('game_id', 'id')
+                    ->display_as('game_id', 'الرقم تسلسلي')
                     ->display_as('en_name', 'الاسم')
                     ->display_as('en_description', 'الوصف')
                        ->display_as('image', 'الصور')

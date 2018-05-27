@@ -116,7 +116,7 @@ class players extends REST_Controller {
                         ->set_table('player')
                         ->set_subject('لاعب')
                         ->columns('player_id', 'name', 'phone', 'email', 'profile_picture', 'address', 'os', 'lang', 'country_id', 'prefered_games', 'active')
-                        ->display_as('player_id', 'لاعب')
+                        ->display_as('player_id', 'الرقم تسلسلي')
                         ->display_as('country_id', 'البلد')
                         ->display_as('name', 'الاسم')
                         ->display_as('phone', 'رقم الهاتف')

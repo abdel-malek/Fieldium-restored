@@ -13,6 +13,9 @@
 
 
 } 
+.title_page{
+    text-align: left;
+}
 .block_language{
     width: 88%;
     position: absolute;

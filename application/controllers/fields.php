@@ -263,8 +263,61 @@ class fields extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
-
-            $crud->set_theme('datatables')
+              if ($this->session->userdata('lang') == 'arabic') {
+                $crud->set_language('Arabic');
+                 $crud->set_theme('datatables')
+                    ->set_table('field')
+                    ->set_subject('ملعب')
+                    ->where('field.company_id', $primary_key)
+                    ->where('field.deleted', 0)
+                    ->columns('field_id', 'en_name', 'children', 'phone', 'open_time', 'close_time', 'games', 'amenities', 'featured_place')
+                    ->order_by('field_id')
+                    ->set_relation('company_id', 'company', 'en_name', array('deleted' => 0))
+                    ->set_relation_n_n('games', 'field_game_type', 'game_type', 'field_id', 'game_type_id', 'en_name')
+                    ->set_relation_n_n('amenities', 'field_amenity', 'amenity', 'field_id', 'amenity_id', 'en_name')
+//                    ->set_relation_n_n('fields', 'field', 'field', 'parent_field', 'field_id', 'en_name', null, array('field.company_id' => $primary_key, 'field.deleted' => 0))
+                    ->display_as('field_id', 'الرقم تسلسلي')
+                    ->display_as('company_id', 'الشركة')
+                    ->display_as('en_description', 'الوصف')
+                         ->display_as('ar_description', 'الوصف بالعربي')
+                         ->display_as('deleted', 'محذوف')
+                         ->display_as('auto_confirm', 'الموافقة تلقائيا')
+                    ->display_as('en_name', 'الاسم')
+                         ->display_as('ar_name', 'الاسم بالعربي')
+                         ->display_as('phone', 'رقم الهاتف')
+                         ->display_as('open_time', 'وقت الفتح')
+                         ->display_as('close_time', 'وقت الاغلاق')
+                          ->display_as('games', 'الالعاب')
+                         ->display_as('amenities', 'وسائل الراحة')
+                         ->display_as('featured_place', 'مكان مميز')
+                         ->display_as('hour_rate', 'معدل الساعات')
+                          ->display_as('children', 'ملعب فرعي')
+                         ->display_as('area_x', 'المكان (أ)')
+                          ->display_as('area_y', 'المكان (ب)')
+                      
+                    ->display_as('max_capacity', 'السعة')
+                    ->unset_edit_fields('parent_field', 'ar_name', 'auto_confirm', 'ar_description', 'deleted', 'company_id', 'featured_place')
+                    ->unset_add_fields('parent_field', 'ar_name', 'ar_description', 'auto_confirm', 'deleted', 'featured_place')
+                    ->field_type('open_time', 'time')
+                    ->field_type('close_time', 'time')
+                    ->field_type('hour_rate', 'integer')
+                    ->field_type('phone', 'integer')
+                    ->field_type('area_x', 'integer')
+                    ->field_type('area_y', 'integer')
+                    ->field_type('max_capacity', 'integer')
+                    ->callback_before_insert(array($this, 'add_update_callback'))
+                    ->callback_before_update(array($this, 'add_update_callback'))
+                    ->required_fields('company_id', 'en_name', 'phone', 'open_time', 'close_time', 'games', 'max_capacity', 'hour_rate')
+                    ->callback_delete(array($this, 'delete_field'))
+                    ->callback_column('children', array($this, '_callback_children_render'))
+//                    ->add_action('active', '', '', 'recieve-icon', array($this, 'active_callback'))
+                    ->add_action('المعرض', base_url() . 'assets/images/gallery.png', '', '', array($this, 'view_images'))
+                    ->unset_export()
+//                    ->unset_add()
+                    ->unset_print();
+            } else {
+                $crud->set_language('English');
+                 $crud->set_theme('datatables')
                     ->set_table('field')
                     ->set_subject('field')
                     ->where('field.company_id', $primary_key)
@@ -299,6 +352,8 @@ class fields extends REST_Controller {
                     ->unset_export()
 //                    ->unset_add()
                     ->unset_print();
+            }
+           
             if (!($operation == 'insert_validation' || $operation == 'insert' || $operation == 'add')) {
                 $this->session->unset_userdata('fields');
             } else {

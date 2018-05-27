@@ -27,7 +27,7 @@ class amenities extends REST_Controller {
                     ->set_table('amenity')
                     ->set_subject('وسائل الراحة')
                     ->columns('amenity_id', 'en_name', 'image')
-                    ->display_as('amenity_id', 'id')
+                    ->display_as('amenity_id', 'الرقم تسلسلي')
                     ->display_as('en_name', 'الاسم')
                          ->display_as('image', 'الصور')
                     ->set_field_upload('image', 'assets/uploaded_images/')

@@ -293,7 +293,7 @@ abstract class REST_Controller extends CI_Controller {
             $this->user_country = $this->current_user->country_id;
         }
         $this->response->lang = $this->_detect_lang();
-        $this->load->language(array('controllers', 'views', 'form_validation'), ($this->session->userdata('lang') == "english") ? "english" : "arabic");
+        $this->load->language(array('controllers', 'views', 'form_validation'), ($this->session->userdata('lang') == "arabic") ? "arabic" : "english");
         $this->language = $this->response->lang;
         $this->rest = new StdClass();
         // Load DB if its enabled

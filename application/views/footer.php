@@ -3,16 +3,6 @@
 <script type="text/javascript">
     $(window).load(function () {
         $("#sidebar-toggle").click(function () {
-//            var url = site_url + '/dashboard/language';
-//            $.ajax({
-//                url: url,
-//                type: 'GET',
-//                async: false,
-//                success: function (response) {
-//                    console.log(response);
-//                    lang = response;
-//                }
-//            });
             var toggle_el = $(this).data("toggle");
             $(toggle_el).toggleClass("open-sidebar");
             lang = "<?php echo $this->session->userdata('lang') ?>";
@@ -54,17 +44,6 @@
         $(".swipe-area").swipe({
             swipeStatus: function (event, phase, direction, distance, duration, fingers)
             {
-//                var url = site_url + '/dashboard/language';
-//                $.ajax({
-//                    url: url,
-//                    type: 'GET',
-//                    async: false,
-//                    success: function (response) {
-//                        console.log(response);
-//                        lang = response;
-//                    }
-//                });
-//                lang = "arabic";
 lang = "<?php echo $this->session->userdata('lang') ?>";
                 if (lang == "arabic") {
                     if (phase == "move" && direction == "left") {

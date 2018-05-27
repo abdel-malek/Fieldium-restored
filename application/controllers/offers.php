@@ -164,6 +164,7 @@ class offers extends REST_Controller {
                         ->display_as('title_en', 'الاسم')
                         ->display_as('set_of_minutes', 'الوقت')
                         ->display_as('voucher_type', 'نوع الايصال')
+                         ->display_as('offer_id', 'الرقم تسلسلي')
                         ->display_as('voucher_value', 'قيمة الايصال')
                         ->display_as('games', 'العبة')
                         ->display_as('companies', 'الشركات')

@@ -20,6 +20,7 @@
     console.log(max_time,min_time,"a");
     var approved = "<?php echo BOOKING_STATE::APPROVED ?>";
 </script>
+
 <body> 
     <div class="container" style="">
         <?php $this->load->view('sideMenu') ?>
@@ -35,7 +36,7 @@
                  width: 96%;
                  margin-left: 2%;
                  "> 
-                <h1 style="text-align: left">
+                <h1 class="title_page">
                     <?php echo $fields[0]->company_name ?>:
                     <span onclick="print_calender();" class="export fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right">Export</span>
                 </h1>

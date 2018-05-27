@@ -19,6 +19,9 @@
     text-align: right !important;
     direction:  rtl;
 }
+.dataTable{
+        direction: rtl !important;
+}
 .dataTables_wrapper{
     direction:  rtl;
 }
@@ -95,4 +98,12 @@ input[type="radio"], input[type="checkbox"]{
 .block_language button{
     float: right;
     margin-right: 10px;
+}
+.item{
+    float: left !important;
+}
+.sidenav{
+    right: unset !important;
+    left: 0px !important;
+    
 }
