@@ -21,17 +21,23 @@ class areas extends REST_Controller {
         $this->load->library('grocery_CRUD');
         try {
             $crud = new grocery_CRUD();
+            $country_data = "";
+              if ($this->session->userdata('country') == '2') {
+                $country_data = "ar_name";
+            }else{
+                $country_data = "en_name";
+            }
               if($this->session->userdata('lang') == 'arabic'){
-              $crud->set_language('Arabic'); 
+              $crud->set_language('arabic'); 
                     $crud->set_theme('datatables')
                     ->set_table('area')
-                    ->where('area.country_id', $country)
+                    ->where('area.country_id', 'ar_name')
                     ->set_subject('مكان')
                     ->columns('area_id', 'country_id', 'en_name')
                     ->display_as('area_id', 'الرقم تسلسلي')
                     ->display_as('country_id', 'البلد')
                     ->display_as('en_name', 'الاسم')
-                    ->set_relation('country_id', 'country', 'en_name')
+                    ->set_relation('country_id', 'country', $country_data)
                     ->unset_edit_fields('ar_name')
                     ->unset_add_fields('ar_name')
                     ->required_fields('en_name')
@@ -57,7 +63,7 @@ class areas extends REST_Controller {
                     ->display_as('area_id', 'id')
                     ->display_as('country_id', 'Country')
                     ->display_as('en_name', 'name')
-                    ->set_relation('country_id', 'country', 'en_name')
+                    ->set_relation('country_id', 'country', $country_data)
                     ->unset_edit_fields('ar_name')
                     ->unset_add_fields('ar_name')
                     ->required_fields('en_name')

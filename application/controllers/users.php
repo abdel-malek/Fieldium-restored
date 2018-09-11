@@ -182,7 +182,7 @@ class users extends REST_Controller {
             $crud = new grocery_CRUD();
 
             if ($this->session->userdata('lang') == 'arabic') {
-                $crud->set_language('Arabic');
+                $crud->set_language('arabic');
                 $crud->set_theme('datatables')
                         ->set_table('user')
                         ->where("user_id != " . $this->current_user->user_id)
@@ -221,7 +221,7 @@ class users extends REST_Controller {
                         ->unset_print()
                         ->unset_delete();
             } else {
-                $crud->set_language('English');
+                $crud->set_language('english');
                 $crud->set_theme('datatables')
                         ->set_table('user')
                         ->where("user_id != " . $this->current_user->user_id)
@@ -334,7 +334,7 @@ class users extends REST_Controller {
                 $crud = new grocery_CRUD();
 
                 if ($this->session->userdata('lang') == 'arabic') {
-                    $crud->set_language('Arabic');
+                    $crud->set_language('arabic');
                     $crud->set_theme('datatables')
                             ->where('user_id', $this->current_user->user_id)
                             ->set_table('user')
@@ -371,7 +371,7 @@ class users extends REST_Controller {
                             ->unset_back_to_list()
                             ->unset_delete();
                 } else {
-                    $crud->set_language('English');
+                    $crud->set_language('english');
                     $crud->set_theme('datatables')
                             ->where('user_id', $this->current_user->user_id)
                             ->set_table('user')

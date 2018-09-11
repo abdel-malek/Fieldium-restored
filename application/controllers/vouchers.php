@@ -261,7 +261,7 @@ class vouchers extends REST_Controller {
             $crud = new grocery_CRUD();
             
              if($this->session->userdata('lang') == 'arabic'){
-              $crud->set_language('Arabic'); 
+              $crud->set_language('arabic'); 
               $crud->set_theme('datatables')
                     ->set_table('voucher')
                     ->set_subject('إيصال')
@@ -298,7 +298,7 @@ class vouchers extends REST_Controller {
                     )
             );
             }else{
-              $crud->set_language('English');   
+              $crud->set_language('english');   
               $crud->set_theme('datatables')
                     ->set_table('voucher')
                     ->set_subject('voucher')

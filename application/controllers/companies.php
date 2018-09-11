@@ -155,9 +155,9 @@ class companies extends REST_Controller {
         }
     }
 
-    protected $country_select = UAE;
+    protected $country_select = SYRIA;
 
-    public function companies_management_post($country = UAE, $operation = null) {
+    public function companies_management_post($country = SYRIA, $operation = null) {
         if ($operation == "edit" || $operation == "update" || $operation == "update_validation" || $operation == "upload_file") {
             try {
                 $this->user_permissions->is_company($this->current_user);
@@ -167,6 +167,8 @@ class companies extends REST_Controller {
         } else {
             $this->user_permissions->support_permission($this->current_user);
         }
+       
+        $this->session->set_userdata('country_lang', $country);
         $this->country_select = $country;
         $this->load->model("Services/area_service");
         $areas = $this->area_service->get_by_country("en", $country);
@@ -178,15 +180,25 @@ class companies extends REST_Controller {
             $crud->set_table('company');
             
             if ($this->session->userdata('lang') == 'arabic') {
-                $crud->set_language('Arabic');
+                $crud->set_language('arabic');
             } else {
-                $crud->set_language('English');
+                $crud->set_language('english');
             }
             if (count($areas) > 0) {
                 $crud->where('(company.deleted = 0 and company.area_id =' . $areas[0]->area_id . ")");
                 foreach ($areas as $area) {
                     $crud->or_where('(company.deleted = 0 and company.area_id =' . $area->area_id . ")");
                 }
+            }
+            $country_data = "";
+            $address_data = "";
+             if ($country == '2') {
+                $country_data = "en_name";
+                 $address_data = "ar_address";
+            }else{
+                
+                 $country_data = "ar_name";
+                $address_data = "en_address";
             }
             if ($this->session->userdata('lang') == 'arabic') {
                 $crud->where("company.deleted", 0)
@@ -204,12 +216,12 @@ class companies extends REST_Controller {
                         ->display_as('image', 'صورة')
                         ->display_as('location', 'الموقع')
 //                    ->field_type('area_id', 'dropdown', $areas_array)
-                        ->set_relation('area_id', 'area', 'en_name', array('country_id' => $country))
+                        ->set_relation('area_id', 'area', $country_data, array('country_id' => $country))
                         ->field_type('phone', 'integer')
 //                    ->set_lang_string('list_delete', '')
 //                    ->set_lang_string('list_edit', '')
-                        ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
-                        ->unset_add_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
+                        ->unset_edit_fields('ar_description', 'deleted', $address_data, 'ar_name', 'longitude', 'latitude')
+                        ->unset_add_fields('ar_description', 'deleted', $address_data, 'ar_name', 'longitude', 'latitude')
 //                    ->set_relation('area_id', 'area', 'en_name')
                         ->set_field_upload('image', 'assets/uploaded_images/')
                         ->set_field_upload('logo', 'assets/uploaded_images/')
@@ -232,12 +244,12 @@ class companies extends REST_Controller {
                         ->display_as('en_description', 'Description')
                         ->display_as('area_id', 'Area')
 //                    ->field_type('area_id', 'dropdown', $areas_array)
-                        ->set_relation('area_id', 'area', 'en_name', array('country_id' => $country))
+                        ->set_relation('area_id', 'area', $country_data, array('country_id' => $country))
                         ->field_type('phone', 'integer')
 //                    ->set_lang_string('list_delete', '')
 //                    ->set_lang_string('list_edit', '')
-                        ->unset_edit_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
-                        ->unset_add_fields('ar_description', 'deleted', 'ar_address', 'ar_name', 'longitude', 'latitude')
+                        ->unset_edit_fields('ar_description', 'deleted', $address_data, 'ar_name', 'longitude', 'latitude')
+                        ->unset_add_fields('ar_description', 'deleted', $address_data, 'ar_name', 'longitude', 'latitude')
 //                    ->set_relation('area_id', 'area', 'en_name')
                         ->set_field_upload('image', 'assets/uploaded_images/')
                         ->set_field_upload('logo', 'assets/uploaded_images/')
@@ -275,7 +287,7 @@ class companies extends REST_Controller {
         }
     }
 
-    public function companies_management_get($country = UAE, $operation = null) {
+    public function companies_management_get($country = SYRIA, $operation = null) {
         $lang = $this->session->userdata('lang');
 
         $this->companies_management_post($country, $operation);

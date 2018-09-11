@@ -264,7 +264,7 @@ class fields extends REST_Controller {
         try {
             $crud = new grocery_CRUD();
               if ($this->session->userdata('lang') == 'arabic') {
-                $crud->set_language('Arabic');
+                $crud->set_language('arabic');
                  $crud->set_theme('datatables')
                     ->set_table('field')
                     ->set_subject('ملعب')
@@ -316,7 +316,7 @@ class fields extends REST_Controller {
 //                    ->unset_add()
                     ->unset_print();
             } else {
-                $crud->set_language('English');
+                $crud->set_language('english');
                  $crud->set_theme('datatables')
                     ->set_table('field')
                     ->set_subject('field')

@@ -27,4 +27,15 @@ class dashboard extends REST_Controller {
         );
     }
     
+     public function data_country_post(){
+        $this->session->set_userdata('country', $this->input->post('country'));
+//        $this->session->set_userdata('language', 'arabic');
+        $this->response(array(
+            'status' => true,
+            'data' => $this->session->userdata('country'),
+            'message' => ''
+                )
+        );
+    }
+    
 }

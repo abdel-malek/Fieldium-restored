@@ -12,6 +12,9 @@
     .title_page{
         text-align: left;
     }
+    table.dataTable thead tr th{
+        padding-right: 0px !important;
+    }
 </style>
 <body> 
     <div class="container" style="">

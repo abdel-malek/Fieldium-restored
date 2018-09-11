@@ -18,7 +18,7 @@ class site extends REST_Controller {
                 redirect('dashboard');
             else if ($this->current_user->role_id == ROLE::ADMIN) {
                 $this->session->set_userdata(array('company_id' => $this->current_user->company_id));
-                redirect('bookings/calendar');
+                   redirect('bookings/calendar');
             }
         } else {
             $featured_places = $this->field_service->get_featured_places();

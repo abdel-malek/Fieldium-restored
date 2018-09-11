@@ -40,11 +40,15 @@
                             style="
                             width: 80px !important;
                             display: inline;
-                            ">
+                            " onchange="data_country(this)">
                         <option value="<?php echo UAE ?>" 
                         <?php echo $country == UAE ? ' selected ' : '' ?>
+                                <?php echo $this->session->userdata('country') == 2 ? ' selected ' : '' ?>
+                                
                                 >UAE</option>
                         <option 
+                            <?php echo $this->session->userdata('country') == 1 ? ' selected ' : '' ?>
+                            
                         <?php echo $country == SYRIA ? ' selected ' : '' ?>
                             value="<?php echo SYRIA ?>">SYRIA</option>
                     </select>
@@ -155,11 +159,29 @@
                     }
 
                     function save_location() {
-                        location.href = site_url + "/companies/update_location/" + company_id + "/" + longg + "/" + latt;
+//                        location.href = site_url + "/companies/update_location/" + company_id + "/" + longg + "/" + latt;
                     }
-                    $('#country').change(function () {
-                        location.href = '<?php echo site_url() ?>/companies/companies_management/' + $(this).val();
-                    });
+                    
+                   
     </script>
+    <?php
+    if($this->uri->segment(4) == 'edit'){
+    ?>
+    <script>
+     $('#country').change(function () {    
+        location.href = '<?php echo site_url() ?>/companies/companies_management/' + $(this).val() + '/edit/' + <?php echo $this->uri->segment(5) ?>;
+     });
+    </script>
+    <?php
+    }else{
+    ?>
+     <script>
+     $('#country').change(function () {    
+        location.href = '<?php echo site_url() ?>/companies/companies_management/' + $(this).val();
+     });
+    </script>
+    <?php
+    }
+    ?>
 </body>
 

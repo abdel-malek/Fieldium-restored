@@ -23,7 +23,7 @@ class games extends REST_Controller {
             $crud = new grocery_CRUD();
             
                if($this->session->userdata('lang') == 'arabic'){
-              $crud->set_language('Arabic'); 
+              $crud->set_language('arabic'); 
                $crud->set_theme('datatables')
                     ->set_table('game_type')
                     ->set_subject('لعبة')
@@ -36,7 +36,7 @@ class games extends REST_Controller {
                        ->display_as('increament_factor', 'مقدار الزيادة')
                     ->unset_edit_fields('ar_name', 'ar_description')
                     ->unset_add_fields('ar_name', 'ar_description')
-                    ->required_fields('en_name')
+                    ->required_fields('en_name','increament_factor')
                     ->callback_column('minimum_duration', array($this, '_callback_duration_render'))
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->unset_export()
@@ -51,7 +51,7 @@ class games extends REST_Controller {
                     )
             );
             }else{
-              $crud->set_language('English');  
+              $crud->set_language('english');  
                $crud->set_theme('datatables')
                     ->set_table('game_type')
                     ->set_subject('game')
@@ -61,7 +61,7 @@ class games extends REST_Controller {
                     ->display_as('en_description', 'description')
                     ->unset_edit_fields('ar_name', 'ar_description')
                     ->unset_add_fields('ar_name', 'ar_description')
-                    ->required_fields('en_name')
+                    ->required_fields('en_name','increament_factor')
                     ->callback_column('minimum_duration', array($this, '_callback_duration_render'))
                     ->set_field_upload('image', 'assets/uploaded_images/')
                     ->unset_export()
@@ -89,7 +89,9 @@ class games extends REST_Controller {
 
     public function _callback_duration_render($value, $row) {
         $row->increament_factor = $row->increament_factor . " mins";
+
         return $value . " mins";
+        
     }
 
 }
